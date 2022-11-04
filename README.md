@@ -11,3 +11,7 @@ https://api.docs.cpanel.net/openapi/cpanel/operation/clear_cache/
 WP - Add to admin bar:
 
 https://developer.wordpress.org/reference/hooks/admin_bar_menu/
+
+WP - Plugin Handbook:
+
+https://developer.wordpress.org/plugins/
