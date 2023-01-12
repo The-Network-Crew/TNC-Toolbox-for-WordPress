@@ -1,17 +1,15 @@
-# NGINX Cache Purge for WordPress (cPanel-only)
+# TNC WP Toolbox (inc. NGINX Cache Purge)
 
-Feature Request:
+We asked cPanel to build this and apparently WordPress Toolkit's team might do it.
 
 https://features.cpanel.net/topic/22571-nginx-user-cache-simple-plugin-to-purge-from-within-wordpress-wp
 
-UAPI - Clear Cache:
+### Docs for Function & Location of key feature:
 
-https://api.docs.cpanel.net/openapi/cpanel/operation/clear_cache/
+- https://api.docs.cpanel.net/openapi/cpanel/operation/clear_cache/
+- https://developer.wordpress.org/reference/hooks/admin_bar_menu/
 
-WP - Add to admin bar:
+### Developer Docs & Boilerplate Plugin tool:
 
-https://developer.wordpress.org/reference/hooks/admin_bar_menu/
-
-WP - Plugin Handbook:
-
-https://developer.wordpress.org/plugins/
+= https://developer.wordpress.org/plugins/
+- https://pluginplate.com/plugin-boilerplate/
