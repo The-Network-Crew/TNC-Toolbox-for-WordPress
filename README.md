@@ -11,5 +11,5 @@ https://features.cpanel.net/topic/22571-nginx-user-cache-simple-plugin-to-purge-
 
 ### Developer Docs & Boilerplate Plugin tool:
 
-= https://developer.wordpress.org/plugins/
+- https://developer.wordpress.org/plugins/
 - https://pluginplate.com/plugin-boilerplate/
