@@ -71,7 +71,8 @@ class Tnc_Wp_Toolbox_Run{
 	private function add_hooks(){
 	
 		add_action( 'plugin_action_links_' . TNCWPTBOX_PLUGIN_BASE, array( $this, 'add_plugin_action_link' ), 20 );
-		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu_items' ), 100, 1 );
+		add_action( 'admin_bar_menu', 'add_clear_cache_button', 100 );
+		add_action( 'admin_post_clear_nginx_cache', 'clear_nginx_cache' );
 		add_action( 'plugins_loaded', array( $this, 'add_wp_webhooks_integrations' ), 9 );
 	
 	}
@@ -96,7 +97,7 @@ class Tnc_Wp_Toolbox_Run{
 	*/
 	public function add_plugin_action_link( $links ) {
 
-		$links['our_shop'] = sprintf( '<a href="%s" title="Custom Link" style="font-weight:700;">%s</a>', 'https://test.test', __( 'Custom Link', 'tnc-wp-toolbox' ) );
+		$links['our_shop'] = sprintf( '<a href="%s" title="my.LEOPARD" style="font-weight:700;">%s</a>', 'https://my.leopard.host', __( 'my.LEOPARD', 'tnc-wp-toolbox' ) );
 
 		return $links;
 	}
@@ -111,42 +112,58 @@ class Tnc_Wp_Toolbox_Run{
 	 *
 	 * @return	void
 	 */
-	public function add_admin_bar_menu_items( $admin_bar ) {
-
-		$admin_bar->add_menu( array(
-			'id'		=> 'tnc-wp-toolbox-id', // The ID of the node.
-			'title'		=> __( 'Demo Menu Item', 'tnc-wp-toolbox' ), // The text that will be visible in the Toolbar. Including html tags is allowed.
-			'parent'	=> false, // The ID of the parent node.
-			'href'		=> '#', // The ‘href’ attribute for the link. If ‘href’ is not set the node will be a text node.
-			'group'		=> false, // This will make the node a group (node) if set to ‘true’. Group nodes are not visible in the Toolbar, but nodes added to it are.
-			'meta'		=> array(
-				'title'		=> __( 'Demo Menu Item', 'tnc-wp-toolbox' ), // The title attribute. Will be set to the link or to a div containing a text node.
-				'target'	=> '_blank', // The target attribute for the link. This will only be set if the ‘href’ argument is present.
-				'class'		=> 'tnc-wp-toolbox-class', // The class attribute for the list item containing the link or text node.
-				'html'		=> false, // The html used for the node.
-				'rel'		=> false, // The rel attribute.
-				'onclick'	=> false, // The onclick attribute for the link. This will only be set if the ‘href’ argument is present.
-				'tabindex'	=> false, // The tabindex attribute. Will be set to the link or to a div containing a text node.
-			),
-		));
-
-		$admin_bar->add_menu( array(
-			'id'		=> 'tnc-wp-toolbox-sub-id',
-			'title'		=> __( 'My sub menu title', 'tnc-wp-toolbox' ),
-			'parent'	=> 'tnc-wp-toolbox-id',
-			'href'		=> '#',
-			'group'		=> false,
-			'meta'		=> array(
-				'title'		=> __( 'My sub menu title', 'tnc-wp-toolbox' ),
-				'target'	=> '_blank',
-				'class'		=> 'tnc-wp-toolbox-sub-class',
-				'html'		=> false,    
-				'rel'		=> false,
-				'onclick'	=> false,
-				'tabindex'	=> false,
-			),
-		));
-
+	public function add_clear_cache_button( $wp_admin_bar ) {
+	    $args = array(
+		'id'    => 'clear_nginx_cache',
+		'title' => 'Clear NGINX Cache',
+		'href'  => admin_url( 'admin-post.php?action=clear_nginx_cache' ),
+		'meta'  => array( 'class' => 'clear-nginx-cache' ),
+	    );
+	    $wp_admin_bar->add_node( $args );
+	}
+	
+	/**
+	 * Function to handle the NGINX User Cache purging
+	 *
+	 * @access	public
+	 * @since	1.0.0
+	 *
+	 * @return	Success/Failure
+	 */
+	function clear_nginx_cache() {
+	    // Get the cPanel username
+	    $cpanel_username = get_current_user();
+	    // Get the API token
+	    $api_token = file_get_contents("/home/".$cpanel_username."/.tnc/cp-api-key");
+	    // Get the server hostname
+	    $server_hostname = gethostname();
+	    // Build the headers for the request
+	    $headers = array(
+		'Authorization' => 'cpanel '. $cpanel_username . ':' . $api_token,
+	    );
+	    // Build the body for the request
+	    $body = array(
+		'parameter' => 'value',
+	    );
+	    // Build the URL for the request
+	    $url = 'https://' . $server_hostname . ':2083/execute/Module/function';
+	    // Make the request
+	    $response = wp_remote_post( $url, array(
+		'headers' => $headers,
+		'body' => $body,
+	    ) );
+	    // Check for a successful response
+	    if ( ! is_wp_error( $response ) && $response['response']['code'] === 200 ) {
+		// Display a message to the user
+		echo '<div class="notice notice-success is-dismissible">';
+		echo '<p>Cache cleared successfully!</p>';
+		echo '</div>';
+	    } else {
+		// Display an error message to the user
+		echo '<div class="notice notice-error is-dismissible">';
+		echo '<p>An error occurred while trying to clear the cache. Please try again later.</p>';
+		echo '</div>';
+	    }
 	}
 
 	/**
