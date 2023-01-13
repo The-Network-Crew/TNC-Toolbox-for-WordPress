@@ -60,13 +60,6 @@ class Tnc_Wp_Toolbox_Run{
 	 * ###
 	 * ######################
 	 */
-
-	function tnc_wp_toolbox_clear_cache_success_notice() {
-	    if ( $success_message = get_transient( 'tnc_wp_toolbox_clear_cache_success' ) ) {
-		echo '<div class="notice notice-success is-dismissible"><p>' . $success_message . '</p></div>';
-		delete_transient( 'tnc_wp_toolbox_clear_cache_success' );
-	    }
-	}
 	
 	/**
 	 * Registers all WordPress and plugin related hooks
@@ -81,7 +74,6 @@ class Tnc_Wp_Toolbox_Run{
 		add_action( 'admin_bar_menu', array( $this, 'add_clear_cache_button' ), 100 );
 		add_action( 'admin_post_clear_nginx_cache', array( $this, 'clear_nginx_cache' ) );
 		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_clear_cache_success_notice') );
-		add_action( 'plugins_loaded', array( $this, 'add_wp_webhooks_integrations' ), 9 );
 	
 	}
 
@@ -93,6 +85,13 @@ class Tnc_Wp_Toolbox_Run{
 	 * ######################
 	 */
 
+	function tnc_wp_toolbox_clear_cache_success_notice() {
+	    if ( $success_message = get_transient( 'tnc_wp_toolbox_clear_cache_success' ) ) {
+		echo '<div class="notice notice-success is-dismissible"><p>' . $success_message . '</p></div>';
+		delete_transient( 'tnc_wp_toolbox_clear_cache_success' );
+	    }
+	}
+	
 	/**
 	* Adds action links to the plugin list table
 	*
@@ -173,49 +172,6 @@ class Tnc_Wp_Toolbox_Run{
 		wp_redirect( admin_url() );
 		exit;
 	    }		
-	}
-
-	/**
-	 * ####################
-	 * ### WP Webhooks 
-	 * ####################
-	 */
-
-	/*
-	 * Register dynamically all integrations
-	 * The integrations are available within core/includes/integrations.
-	 * A new folder is considered a new integration.
-	 *
-	 * @access	public
-	 * @since	1.0.0
-	 *
-	 * @return	void
-	 */
-	public function add_wp_webhooks_integrations(){
-
-		// Abort if WP Webhooks is not active
-		if( ! function_exists('WPWHPRO') ){
-			return;
-		}
-
-		$custom_integrations = array();
-		$folder = TNCWPTBOX_PLUGIN_DIR . 'core' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'integrations';
-
-		try {
-			$custom_integrations = WPWHPRO()->helpers->get_folders( $folder );
-		} catch ( Exception $e ) {
-			WPWHPRO()->helpers->log_issue( $e->getTraceAsString() );
-		}
-
-		if( ! empty( $custom_integrations ) ){
-			foreach( $custom_integrations as $integration ){
-				$file_path = $folder . DIRECTORY_SEPARATOR . $integration . DIRECTORY_SEPARATOR . $integration . '.php';
-				WPWHPRO()->integrations->register_integration( array(
-					'slug' => $integration,
-					'path' => $file_path,
-				) );
-			}
-		}
 	}
 
 }
