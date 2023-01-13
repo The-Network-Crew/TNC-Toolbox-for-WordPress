@@ -6,15 +6,19 @@ https://features.cpanel.net/topic/22571-nginx-user-cache-simple-plugin-to-purge-
 
 ### Docs for Function & Location of key feature:
 
-- https://api.docs.cpanel.net/openapi/cpanel/operation/clear_cache/
-- https://docs.cpanel.net/knowledge-base/security/how-to-use-cpanel-api-tokens/
-- https://developer.wordpress.org/reference/hooks/admin_bar_menu/ (in the plugin already)
+- https://developer.wordpress.org/reference/hooks/admin_bar_menu/ (where)
+- https://api.docs.cpanel.net/openapi/cpanel/operation/clear_cache/ (what)
+- https://developer.wordpress.org/reference/functions/wp_remote_post/ (how)
+- https://developer.wordpress.org/reference/classes/wp_admin_bar/add_node/ (button)
+- https://docs.cpanel.net/knowledge-base/security/how-to-use-cpanel-api-tokens/ (auth)
 
 ### Example call to OpenAPI to purge cache:
 
-- `curl -H'Authorization: cpanel username:APITOKEN' 'https://example.com:2083/execute/NginxCaching/clear_cache'`
-- Need to programatically create a cPanel API Token for each user, store to ~/.tnc/cp-api-token and use?
-- That way, plugin can find automatically, rather than also needing plugin configuration?
+`curl -H'Authorization: cpanel ${cpuser}:${cpkey}' 'https://{$server}:2083/execute/NginxCaching/clear_cache'`
+
+- Script needs running once per-server to create the requisite API key, etc.
+- That way the plugin will be able to authenticate with the API using key.
+- TODO: Need to work out a maintenance task to do this for those without?
 
 ### Developer Docs & Boilerplate Plugin tool:
 
