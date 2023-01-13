@@ -154,7 +154,7 @@ class Tnc_Wp_Toolbox_Run{
 		'parameter' => 'value',
 	    );
 	    // Build the URL for the request
-	    $url = 'https://' . $server_hostname . ':2083/execute/Module/function';
+	    $url = 'https://' . $server_hostname . ':2083/execute/NginxCaching/clear_cache';
 	    // Make the request
 	    $response = wp_remote_post( $url, array(
 		'headers' => $headers,
