@@ -71,7 +71,7 @@ class Tnc_Wp_Toolbox_Run{
 	private function add_hooks(){
 	
 		add_action( 'plugin_action_links_' . TNCWPTBOX_PLUGIN_BASE, array( $this, 'add_plugin_action_link' ), 20 );
-		add_action( 'admin_bar_menu', 'add_clear_cache_button', 100 );
+		add_action( 'admin_bar_menu', array( $this, 'add_clear_cache_button' ), 100 );
 		add_action( 'admin_post_clear_nginx_cache', 'clear_nginx_cache' );
 		add_action( 'plugins_loaded', array( $this, 'add_wp_webhooks_integrations' ), 9 );
 	
