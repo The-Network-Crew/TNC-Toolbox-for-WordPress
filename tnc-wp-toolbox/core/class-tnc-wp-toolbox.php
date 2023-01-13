@@ -80,6 +80,19 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 		public function __wakeup() {
 			_doing_it_wrong( __FUNCTION__, __( 'You are not allowed to unserialize this class.', 'tnc-wp-toolbox' ), '1.0.0' );
 		}
+		
+		/**
+		 * Include required files.
+		 *
+		 * @access  private
+		 * @since   1.0.0
+		 * @return  void
+		 */
+		private function includes() {
+			require_once TNCWPTBOX_PLUGIN_DIR . 'core/includes/classes/class-tnc-wp-toolbox-helpers.php';
+			require_once TNCWPTBOX_PLUGIN_DIR . 'core/includes/classes/class-tnc-wp-toolbox-settings.php';
+			require_once TNCWPTBOX_PLUGIN_DIR . 'core/includes/classes/class-tnc-wp-toolbox-run.php';
+		}
 
 		/**
 		 * Main Tnc_Wp_Toolbox Instance.
@@ -111,20 +124,6 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 			}
 
 			return self::$instance;
-		}
-
-		/**
-		 * Include required files.
-		 *
-		 * @access  private
-		 * @since   1.0.0
-		 * @return  void
-		 */
-		private function includes() {
-			require_once TNCWPTBOX_PLUGIN_DIR . 'core/includes/classes/class-tnc-wp-toolbox-helpers.php';
-			require_once TNCWPTBOX_PLUGIN_DIR . 'core/includes/classes/class-tnc-wp-toolbox-settings.php';
-
-			require_once TNCWPTBOX_PLUGIN_DIR . 'core/includes/classes/class-tnc-wp-toolbox-run.php';
 		}
 
 		/**
