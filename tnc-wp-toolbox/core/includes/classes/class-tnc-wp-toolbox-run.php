@@ -61,6 +61,13 @@ class Tnc_Wp_Toolbox_Run{
 	 * ######################
 	 */
 
+	function tnc_wp_toolbox_clear_cache_success_notice() {
+	    if ( $success_message = get_transient( 'tnc_wp_toolbox_clear_cache_success' ) ) {
+		echo '<div class="notice notice-success is-dismissible"><p>' . $success_message . '</p></div>';
+		delete_transient( 'tnc_wp_toolbox_clear_cache_success' );
+	    }
+	}
+	
 	/**
 	 * Registers all WordPress and plugin related hooks
 	 *
@@ -72,7 +79,8 @@ class Tnc_Wp_Toolbox_Run{
 	
 		add_action( 'plugin_action_links_' . TNCWPTBOX_PLUGIN_BASE, array( $this, 'add_plugin_action_link' ), 20 );
 		add_action( 'admin_bar_menu', array( $this, 'add_clear_cache_button' ), 100 );
-		add_action( 'admin_post_clear_nginx_cache', 'clear_nginx_cache' );
+		add_action( 'admin_post_clear_nginx_cache', array( $this, 'clear_nginx_cache' ) );
+		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_clear_cache_success_notice') );
 		add_action( 'plugins_loaded', array( $this, 'add_wp_webhooks_integrations' ), 9 );
 	
 	}
@@ -153,17 +161,18 @@ class Tnc_Wp_Toolbox_Run{
 		'body' => $body,
 	    ) );
 	    // Check for a successful response
-	    if ( ! is_wp_error( $response ) && $response['response']['code'] === 200 ) {
-		// Display a message to the user
-		echo '<div class="notice notice-success is-dismissible">';
-		echo '<p>Cache cleared successfully!</p>';
-		echo '</div>';
+	    if( is_wp_error( $response ) ) {
+		$error_message = $response->get_error_message();
+		wp_die( __( 'An error occurred while trying to clear the NGINX Cache. Error: ', 'tnc-wp-toolbox' ) . $error_message );
+	    } elseif( $response['response']['code'] != 200 ) {
+		wp_die( __( 'An error occurred while trying to clear the NGINX Cache. Error: ', 'tnc-wp-toolbox' ) . $response['body'] );
 	    } else {
-		// Display an error message to the user
-		echo '<div class="notice notice-error is-dismissible">';
-		echo '<p>An error occurred while trying to clear the cache. Please try again later.</p>';
-		echo '</div>';
-	    }
+		// Set a transient to store the success message
+		set_transient( 'tnc_wp_toolbox_clear_cache_success', __( 'NGINX User Cache was successfully emptied.', 'tnc-wp-toolbox' ), 30 );
+		// Redirect the user back to the WordPress admin area
+		wp_redirect( admin_url() );
+		exit;
+	    }		
 	}
 
 	/**
