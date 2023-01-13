@@ -1,25 +1,36 @@
-# TNC WP Toolbox (inc. NGINX Cache Purge)
+# 🐆 TNC WP Toolbox (inc. NGINX Cache Purge)
 
-### What the WordPress Plugin does for clients:
+### What the WordPress Plugin does:
 
-- Allows them to purge the NGINX Cache from within WordPress
-- Will expand to include other features as requested by them
+- Allows you to purge the EA-NGINX User Cache from within WordPress
+- Will expand to include other features as requested by community & clients
 
-### System Requirements for the TNC WP Toolbox:
+### System Requirements for the plugin:
 
-- /home/USERNAME/.tnc/cp-api-key file must contain a cPanel API Token
+- ~/.tnc/cp-api-key file must contain a cPanel API Token (on its own)
 - Hosting Environment must be cPanel+WHM, running NGINX+Apache stack
 
-### Docs for Function & Location of key feature:
+Note: EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implementations.
 
-- https://developer.wordpress.org/reference/hooks/admin_bar_menu/ (where)
-- https://api.docs.cpanel.net/openapi/cpanel/operation/clear_cache/ (what)
-- https://developer.wordpress.org/reference/functions/wp_remote_post/ (how)
-- https://developer.wordpress.org/reference/classes/wp_admin_bar/add_node/ (button)
-- https://docs.cpanel.net/knowledge-base/security/how-to-use-cpanel-api-tokens/ (auth)
+### Installing the Plugin (within WordPress CMS):
 
-### Official Feature Request - to avoid API auth:
+1. Download the latest version of the TNC WP Toolbox
+2. Extract the repository on your computer/server
+3. ZIP the tnc-wp-toolbox/ directory on its own
+4. WP-Admin > Plugins > Add New > Upload ZIP
 
-We asked cPanel to build this and apparently WordPress Toolkit's team might do it.
+### Configuring the API Key/s site- or server-wide:
 
-https://features.cpanel.net/topic/22571-nginx-user-cache-simple-plugin-to-purge-from-within-wordpress-wp
+- For single-site usage, create ~/.tnc/ and ~/.tnc/cp-api-key
+- Create a cPanel API Token and place it (nothing else) in that file
+- ROOT: Use prepare-users-for-tnc-wp.sh to prepare all users on the server
+
+https://docs.cpanel.net/knowledge-base/security/how-to-use-cpanel-api-tokens/#create-an-api-token
+
+### Feature Requests, Improvements, Bug Reports, etc:
+
+Please raise an Issue on the GitHub Repository! Include all info, screenshots, etc, to help our crew.
+
+https://github.com/LEOPARD-host/TNC-WP-Toolbox/issues
+
+**The Network Crew Pty Ltd (TNC)**
