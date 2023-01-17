@@ -1,6 +1,6 @@
 <?php
 /**
- * WP Toolbox by TNC
+ * TNC Toolbox
  *
  * @package       TNCWPTBOX
  * @author        The Network Crew Pty Ltd
@@ -8,13 +8,12 @@
  * @version       1.0.0
  *
  * @wordpress-plugin
- * Plugin Name:   WP Toolbox by TNC
+ * Plugin Name:   TNC Toolbox
  * Plugin URI:    https://leopard.host
  * Description:   Adds functionality to WP that ties into your high-performance hosting.
  * Version:       1.0.0
  * Author:        The Network Crew Pty Ltd
  * Author URI:    https://thenetworkcrew.com.au
- * Text Domain:   tnc-wp-toolbox
  * Domain Path:   /languages
  * License:       GPLv2
  * License URI:   https://www.gnu.org/licenses/gpl-2.0.html
@@ -44,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 
 // Plugin name
-define( 'TNCWPTBOX_NAME',			'WP Toolbox by TNC' );
+define( 'TNCWPTBOX_NAME',			'TNC Toolbox' );
 
 // Plugin version
 define( 'TNCWPTBOX_VERSION',		'1.0.0' );
