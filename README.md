@@ -9,7 +9,7 @@
 
 - ~/.tnc/cp-api-key file must contain a cPanel API Token (on its own)
 - Hosting Environment must be cPanel+WHM, running NGINX + Apache stack
-- For the bash script to fully complete, WP-in-functional-CageFS needed
+- Bash script needs: WP-in-functional-CageFS; shell->on for each cP user
 
 Note: EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implementations.
 
