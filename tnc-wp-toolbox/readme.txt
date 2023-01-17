@@ -1,4 +1,4 @@
-=== LEOPARD.host Toolbox for WP ===
+=== WP Toolbox by TNC ===
 Author URI: https://thenetworkcrew.com.au
 Plugin URI: https://leopard.host
 Donate link: 
@@ -15,9 +15,7 @@ Adds functionality to WP that ties into your TNC-powered infrastructure.
 
 == Description ==
 
-This plugin provides functionality that enhances your experience with us.
-
-Please contact your Account Manager or our Technical Support crew for help, or with any suggestions!
+This plugin provides functionality that enhances your WordPress experience.
 
 
 == Frequently Asked Questions ==
@@ -31,10 +29,10 @@ Yes, it does! This can easily be done via the button in the admin top bar.
 
 1. Go to `Plugins` in the Admin menu
 2. Click on the button `Add new`
-3. Search for `LEOPARD.host Toolbox for WP` and click 'Install Now' or click on the `upload` link to upload `tnc-wp-toolbox.zip`
+3. Search for `WP Toolbox by TNC` and click 'Install Now' or click on the `upload` link to upload the ZIP
 4. Click on `Activate plugin`
 
 == Changelog ==
 
 = 1.0.0: January 12, 2023 =
-* Birthday of LEOPARD.host Toolbox for WP
+* Birthday of WP Toolbox by TNC
