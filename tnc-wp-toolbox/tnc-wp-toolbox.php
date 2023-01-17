@@ -1,6 +1,6 @@
 <?php
 /**
- * LEOPARD.host Toolbox for WP
+ * WP Toolkit by TNC
  *
  * @package       TNCWPTBOX
  * @author        The Network Crew Pty Ltd
@@ -8,7 +8,7 @@
  * @version       1.0.0
  *
  * @wordpress-plugin
- * Plugin Name:   LEOPARD.host Toolbox for WP
+ * Plugin Name:   WP Toolbox by TNC
  * Plugin URI:    https://leopard.host
  * Description:   Adds functionality to WP that ties into your TNC-powered infrastructure.
  * Version:       1.0.0
@@ -20,7 +20,7 @@
  * License URI:   https://www.gnu.org/licenses/gpl-2.0.html
  *
  * You should have received a copy of the GNU General Public License
- * along with LEOPARD.host Toolbox for WP. If not, see <https://www.gnu.org/licenses/gpl-2.0.html/>.
+ * along with WP Toolbox by TNC. If not, see <https://www.gnu.org/licenses/gpl-2.0.html/>.
  */
 
 // Exit if accessed directly.
@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 
 // Plugin name
-define( 'TNCWPTBOX_NAME',			'LEOPARD.host Toolbox for WP' );
+define( 'TNCWPTBOX_NAME',			'WP Toolbox by TNC' );
 
 // Plugin version
 define( 'TNCWPTBOX_VERSION',		'1.0.0' );
