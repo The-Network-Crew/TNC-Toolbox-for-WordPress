@@ -8,7 +8,8 @@
 ### System Requirements for the plugin:
 
 - ~/.tnc/cp-api-key file must contain a cPanel API Token (on its own)
-- Hosting Environment must be cPanel+WHM, running NGINX+Apache stack
+- Hosting Environment must be cPanel+WHM, running NGINX + Apache stack
+- For the bash script to fully complete, WP-in-functional-CageFS needed
 
 Note: EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implementations.
 
@@ -19,11 +20,16 @@ Note: EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implemen
 3. ZIP the tnc-wp-toolbox/ directory on its own
 4. WP-Admin > Plugins > Add New > Upload ZIP
 
+Server-side: Use the bash script (read it firstly) to deploy the plugin server-wide!
+
+As always, restrict it suitably - add a WP-present check, etc - and run at your own risk.
+
 ### Configuring the API Key/s site- or server-wide:
 
 - For single-site usage, create ~/.tnc/ and ~/.tnc/cp-api-key
 - Create a cPanel API Token and place it (nothing else) in that file
-- ROOT: Use prepare-users-for-tnc-wp.sh to prepare all users on the server
+- ROOT: prep-users-and-install-tnc-wp.sh to prep and install for all sites
+- ROOT: Make sure you amend the "wp" URL as described in the script, to grab ZIP
 
 https://docs.cpanel.net/knowledge-base/security/how-to-use-cpanel-api-tokens/#create-an-api-token
 
