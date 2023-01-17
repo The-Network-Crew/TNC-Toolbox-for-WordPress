@@ -1,4 +1,4 @@
-=== WP Toolbox by TNC ===
+=== TNC Toolbox ===
 Author URI: https://thenetworkcrew.com.au
 Plugin URI: https://leopard.host
 Donate link: 
@@ -29,10 +29,10 @@ Yes, it does! This can be done easily via the button in the admin top bar.
 
 1. Go to `Plugins` in the Admin menu
 2. Click on the button `Add new`
-3. Search for `WP Toolbox by TNC` and click 'Install Now' or click on the `upload` link to upload the ZIP
+3. Search for `TNC Toolbox` and click 'Install Now' or click on the `upload` link to upload the ZIP
 4. Click on `Activate plugin`
 
 == Changelog ==
 
 = 1.0.0: January 12, 2023 =
-* Birthday of WP Toolbox by TNC
+* Birthday of TNC Toolbox
