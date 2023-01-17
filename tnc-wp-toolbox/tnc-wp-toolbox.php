@@ -1,6 +1,6 @@
 <?php
 /**
- * WP Toolkit by TNC
+ * WP Toolbox by TNC
  *
  * @package       TNCWPTBOX
  * @author        The Network Crew Pty Ltd
@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name:   WP Toolbox by TNC
  * Plugin URI:    https://leopard.host
- * Description:   Adds functionality to WP that ties into your TNC-powered infrastructure.
+ * Description:   Adds functionality to WP that ties into your high-performance hosting.
  * Version:       1.0.0
  * Author:        The Network Crew Pty Ltd
  * Author URI:    https://thenetworkcrew.com.au
