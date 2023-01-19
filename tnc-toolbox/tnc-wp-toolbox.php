@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name:   TNC Toolbox
  * Plugin URI:    https://leopard.host
- * Description:   Adds functionality to WP that ties into your high-performance hosting.
+ * Description:   Adds functionality to WP that ties into your NGINX-powered Hosting on cPanel.
  * Version:       1.1.0
  * Author:        The Network Crew Pty Ltd
  * Author URI:    https://thenetworkcrew.com.au
@@ -19,7 +19,7 @@
  * License URI:   https://www.gnu.org/licenses/gpl-2.0.html
  *
  * You should have received a copy of the GNU General Public License
- * along with WP Toolbox by TNC. If not, see <https://www.gnu.org/licenses/gpl-2.0.html/>.
+ * along with TNC Toolbox. If not, see <https://www.gnu.org/licenses/gpl-2.0.html/>.
  */
 
 // Exit if accessed directly.

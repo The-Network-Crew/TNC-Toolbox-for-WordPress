@@ -94,7 +94,7 @@ class Tnc_Wp_Toolbox_Run{
 	    if ( $error_message = get_transient( 'tnc_wp_toolbox_nginx_action_error' ) ) {
 		?>
 		<div class="notice notice-error">
-		    <p><?php echo $error_message; ?></p>
+		    <p><?php echo esc_html( $error_message ); ?></p>
 		</div>
 		<?php
 		delete_transient( 'tnc_wp_toolbox_nginx_action_error' );
@@ -105,7 +105,7 @@ class Tnc_Wp_Toolbox_Run{
 	    if ( $success_message = get_transient( 'tnc_wp_toolbox_nginx_action_success' ) ) {
 		?>
 		<div class="notice notice-success">
-		    <p><?php echo $success_message; ?></p>
+		    <p><?php echo esc_html( $success_message ); ?></p>
 		</div>
 		<?php
 		delete_transient( 'tnc_wp_toolbox_nginx_action_success' );

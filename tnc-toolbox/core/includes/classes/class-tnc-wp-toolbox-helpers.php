@@ -46,7 +46,7 @@ class Tnc_Wp_Toolbox_Helpers{
 	 * @return	void
 	 */
 	 public function output_text( $text = '' ){
-		 echo $text;
+		 echo esc_html( $text) ;
 	 }
 
 	 /**

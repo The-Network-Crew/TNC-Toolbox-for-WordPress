@@ -5,17 +5,17 @@ Donate link:
 Contributors: 
 Tags: 
 Requires at least: 
-Tested up to: 
+Tested up to: 6.0
 Requires PHP: 
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Adds functionality to WP that ties into your high-performance hosting.
+Adds functionality to WP that ties into your NGINX-powered Hosting on cPanel.
 
 == Description ==
 
-This plugin provides functionality that enhances your WordPress experience.
+This plugin provides functionality that enhances your WordPress experience when using NGINX-on-cPanel.
 
 
 == Frequently Asked Questions ==
@@ -23,6 +23,10 @@ This plugin provides functionality that enhances your WordPress experience.
 = Does the plugin allow me to purge the NGINX User Cache for an account? =
 
 Yes, it does! This can be done easily via the button in the admin top bar.
+
+= Does the plugin allow me to disable or enable NGINX User Caching? =
+
+Yes! You can disable or enable the cache from the top admin bar.
 
 
 == Installation ==
@@ -33,6 +37,9 @@ Yes, it does! This can be done easily via the button in the admin top bar.
 4. Click on `Activate plugin`
 
 == Changelog ==
+
+= 1.1.0: January 19, 2023 =
+* NGINX Cache disable/enable
 
 = 1.0.0: January 12, 2023 =
 * Birthday of TNC Toolbox
