@@ -71,10 +71,14 @@ class Tnc_Wp_Toolbox_Run{
 	private function add_hooks(){
 	
 		add_action( 'plugin_action_links_' . TNCWPTBOX_PLUGIN_BASE, array( $this, 'add_plugin_action_link' ), 20 );
-		add_action( 'admin_bar_menu', array( $this, 'add_clear_cache_button' ), 100 );
-		add_action( 'admin_post_clear_nginx_cache', array( $this, 'clear_nginx_cache' ) );
-		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_clear_cache_error_notice') );
-		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_clear_cache_success_notice') );
+		add_action( 'admin_bar_menu', array( $this, 'add_cache_purge_button' ), 100 );
+		add_action( 'admin_post_nginx_cache_purge', array( $this, 'nginx_cache_purge' ) );
+		add_action( 'admin_bar_menu', array( $this, 'add_cache_off_button' ), 100 );
+		add_action( 'admin_post_nginx_cache_off', array( $this, 'nginx_cache_off' ) );
+		add_action( 'admin_bar_menu', array( $this, 'add_cache_on_button' ), 100 );
+		add_action( 'admin_post_nginx_cache_on', array( $this, 'nginx_cache_on' ) );
+		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_nginx_action_error_notice') );
+		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_nginx_action_success_notice') );
 	
 	}
 
@@ -86,27 +90,28 @@ class Tnc_Wp_Toolbox_Run{
 	 * ######################
 	 */
 
-	function tnc_wp_toolbox_clear_cache_error_notice() {
-	    if ( $error_message = get_transient( 'tnc_wp_toolbox_clear_cache_error' ) ) {
+	function tnc_wp_toolbox_nginx_action_error_notice() {
+	    if ( $error_message = get_transient( 'tnc_wp_toolbox_nginx_action_error' ) ) {
 		?>
 		<div class="notice notice-error">
 		    <p><?php echo $error_message; ?></p>
 		</div>
 		<?php
-		delete_transient( 'tnc_wp_toolbox_clear_cache_error' );
+		delete_transient( 'tnc_wp_toolbox_nginx_action_error' );
 	    }
 	}
 
-	function tnc_wp_toolbox_clear_cache_success_notice() {
-	    if ( $success_message = get_transient( 'tnc_wp_toolbox_clear_cache_success' ) ) {
+	function tnc_wp_toolbox_nginx_action_success_notice() {
+	    if ( $success_message = get_transient( 'tnc_wp_toolbox_nginx_action_success' ) ) {
 		?>
 		<div class="notice notice-success">
 		    <p><?php echo $success_message; ?></p>
 		</div>
 		<?php
-		delete_transient( 'tnc_wp_toolbox_clear_cache_success' );
+		delete_transient( 'tnc_wp_toolbox_nginx_action_success' );
 	    }
 	}
+
 	
 	/**
 	* Adds action links to the plugin list table
@@ -126,7 +131,7 @@ class Tnc_Wp_Toolbox_Run{
 	}
 
 	/**
-	 * Add a new menu item to the WordPress topbar
+	 * Add the menu items to the WordPress topbar
 	 *
 	 * @access	public
 	 * @since	1.0.0
@@ -135,12 +140,32 @@ class Tnc_Wp_Toolbox_Run{
 	 *
 	 * @return	void
 	 */
-	public function add_clear_cache_button( $wp_admin_bar ) {
+	public function add_cache_purge_button( $wp_admin_bar ) {
 	    $args = array(
-		'id'    => 'clear_nginx_cache',
-		'title' => 'Purge NGINX Cache',
-		'href'  => admin_url( 'admin-post.php?action=clear_nginx_cache' ),
-		'meta'  => array( 'class' => 'clear-nginx-cache' ),
+		'id'    => 'nginx_cache_purge',
+		'title' => 'NGINX Cache: Purge',
+		'href'  => admin_url( 'admin-post.php?action=nginx_cache_purge' ),
+		'meta'  => array( 'class' => 'nginx-cache-purge' ),
+	    );
+	    $wp_admin_bar->add_node( $args );
+	}
+
+	public function add_cache_off_button( $wp_admin_bar ) {
+	    $args = array(
+		'id'    => 'nginx_cache_off',
+		'title' => 'NC: Off',
+		'href'  => admin_url( 'admin-post.php?action=nginx_cache_off' ),
+		'meta'  => array( 'class' => 'nginx-cache-off' ),
+	    );
+	    $wp_admin_bar->add_node( $args );
+	}
+
+	public function add_cache_on_button( $wp_admin_bar ) {
+	    $args = array(
+		'id'    => 'nginx_cache_on',
+		'title' => 'NC: On',
+		'href'  => admin_url( 'admin-post.php?action=nginx_cache_on' ),
+		'meta'  => array( 'class' => 'nginx-cache-on' ),
 	    );
 	    $wp_admin_bar->add_node( $args );
 	}
@@ -153,48 +178,161 @@ class Tnc_Wp_Toolbox_Run{
 	 *
 	 * @return	Success/Failure
 	 */
-	function clear_nginx_cache() {
+	function nginx_cache_purge() {
 	    // Get the cPanel username
 	    $cpanel_username = get_current_user();
 	    // Get the API token, exit if not present
 	    if( is_readable("/home/".$cpanel_username."/.tnc/cp-api-key") ) {
-		$api_token = file_get_contents("/home/".$cpanel_username."/.tnc/cp-api-key");
+			$api_token = file_get_contents("/home/".$cpanel_username."/.tnc/cp-api-key");
 	    } else {
-		set_transient( 'tnc_wp_toolbox_clear_cache_error', 'cPanel API Token could not be read - please set it in /home/USER/.tnc/cp-api-key');
-		wp_safe_redirect(admin_url());
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel API Token could not be read - please set it in /home/USER/.tnc/cp-api-key');
+			wp_safe_redirect(admin_url());
 		exit;
 	    }
 	    // Get the server hostname
 	    $server_hostname = gethostname();
 	    // Build the headers for the request
 	    $headers = array(
-		'Authorization' => 'cpanel '. $cpanel_username . ':' . $api_token,
+			'Authorization' => 'cpanel '. $cpanel_username . ':' . $api_token,
 	    );
 	    // Build the body for the request
 	    $body = array(
-		'parameter' => 'value',
+			'parameter' => 'value',
 	    );
 	    // Build the URL for the request
 	    $url = 'https://' . $server_hostname . ':2083/execute/NginxCaching/clear_cache';
 	    // Make the request
 	    $response = wp_remote_post( $url, array(
-		'headers' => $headers,
-		'body' => $body,
+			'headers' => $headers,
+			'body' => $body,
 	    ) );
+	    // Prepare for redirection
+	    $referer = wp_get_referer();
 	    // Report the outcome
 	    if ( is_wp_error( $response ) ) {
-		$error_message = $response->get_error_message();
-		set_transient( 'tnc_wp_toolbox_clear_cache_error', $error_message, 60 );
-		wp_redirect( admin_url() );
-		exit;
+			$error_message = $response->get_error_message();
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', $error_message, 60 );
+			wp_safe_redirect( $referer );
+			exit;
 	    } elseif ( wp_remote_retrieve_response_code( $response ) == 200 ) {
-		set_transient( 'tnc_wp_toolbox_clear_cache_success', 'NGINX User Cache has been successfully purged!', 60 );
-		wp_redirect( admin_url() );
-		exit;
+			set_transient( 'tnc_wp_toolbox_nginx_action_success', 'NGINX User Cache has been successfully purged!', 60 );
+			wp_safe_redirect( $referer );
+			exit;
 	    } else {
-		set_transient( 'tnc_wp_toolbox_clear_cache_error', 'We hit a snag while purging the NGINX User Cache. If this continues, please contact us.', 60 );
-		wp_redirect( admin_url() );
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'We hit a snag while purging the NGINX User Cache. If this continues, please contact us.', 60 );
+			wp_safe_redirect( $referer );
+			exit;
+	    }	
+	}
+
+
+	/**
+	 * Function to handle disabling the NGINX User Cache
+	 *
+	 * @access	public
+	 * @since	1.1.0
+	 *
+	 * @return	Success/Failure
+	 */
+	function nginx_cache_off() {
+	    // Get the cPanel username
+	    $cpanel_username = get_current_user();
+	    // Get the API token, exit if not present
+	    if( is_readable("/home/".$cpanel_username."/.tnc/cp-api-key") ) {
+			$api_token = file_get_contents("/home/".$cpanel_username."/.tnc/cp-api-key");
+	    } else {
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel API Token could not be read - please set it in /home/USER/.tnc/cp-api-key');
+			wp_safe_redirect(admin_url());
 		exit;
+	    }
+	    // Get the server hostname
+	    $server_hostname = gethostname();
+	    // Build the headers for the request
+	    $headers = array(
+			'Authorization' => 'cpanel '. $cpanel_username . ':' . $api_token,
+	    );
+	    // Build the body for the request
+	    $body = array(
+			'parameter' => 'value',
+	    );
+	    // Build the URL for the request
+	    $url = 'https://' . $server_hostname . ':2083/execute/NginxCaching/disable_cache';
+	    // Make the request
+	    $response = wp_remote_post( $url, array(
+			'headers' => $headers,
+			'body' => $body,
+	    ) );
+	    // Prepare for redirection
+	    $referer = wp_get_referer();
+	    // Report the outcome
+	    if ( is_wp_error( $response ) ) {
+			$error_message = $response->get_error_message();
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', $error_message, 60 );
+			wp_safe_redirect( $referer );
+			exit;
+	    } elseif ( wp_remote_retrieve_response_code( $response ) == 200 ) {
+			set_transient( 'tnc_wp_toolbox_nginx_action_success', 'NGINX User Cache has been disabled!', 60 );
+			wp_safe_redirect( $referer );
+			exit;
+	    } else {
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'We hit a snag while disabling the NGINX User Cache. If this continues, please contact us.', 60 );
+			wp_safe_redirect( $referer );
+			exit;
+	    }	
+	}
+
+	/**
+	 * Function to handle enabling the NGINX User Cache
+	 *
+	 * @access	public
+	 * @since	1.1.0
+	 *
+	 * @return	Success/Failure
+	 */
+	function nginx_cache_on() {
+	    // Get the cPanel username
+	    $cpanel_username = get_current_user();
+	    // Get the API token, exit if not present
+	    if( is_readable("/home/".$cpanel_username."/.tnc/cp-api-key") ) {
+			$api_token = file_get_contents("/home/".$cpanel_username."/.tnc/cp-api-key");
+	    } else {
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel API Token could not be read - please set it in /home/USER/.tnc/cp-api-key');
+			wp_safe_redirect(admin_url());
+		exit;
+	    }
+	    // Get the server hostname
+	    $server_hostname = gethostname();
+	    // Build the headers for the request
+	    $headers = array(
+			'Authorization' => 'cpanel '. $cpanel_username . ':' . $api_token,
+	    );
+	    // Build the body for the request
+	    $body = array(
+			'parameter' => 'value',
+	    );
+	    // Build the URL for the request
+	    $url = 'https://' . $server_hostname . ':2083/execute/NginxCaching/enable_cache';
+	    // Make the request
+	    $response = wp_remote_post( $url, array(
+			'headers' => $headers,
+			'body' => $body,
+	    ) );
+	    // Prepare for redirection
+	    $referer = wp_get_referer();
+	    // Report the outcome
+	    if ( is_wp_error( $response ) ) {
+			$error_message = $response->get_error_message();
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', $error_message, 60 );
+			wp_safe_redirect( $referer );
+			exit;
+	    } elseif ( wp_remote_retrieve_response_code( $response ) == 200 ) {
+			set_transient( 'tnc_wp_toolbox_nginx_action_success', 'NGINX User Cache has been enabled!', 60 );
+			wp_safe_redirect( $referer );
+			exit;
+	    } else {
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'We hit a snag while enabling the NGINX User Cache. If this continues, please contact us.', 60 );
+			wp_safe_redirect( $referer );
+			exit;
 	    }	
 	}
 
