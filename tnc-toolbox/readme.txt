@@ -5,7 +5,7 @@ Donate link:
 Contributors: 
 Tags: 
 Requires at least: 
-Tested up to: 6.0
+Tested up to: 6.1.1
 Requires PHP: 
 Stable tag: 1.1.1
 License: GPLv2
