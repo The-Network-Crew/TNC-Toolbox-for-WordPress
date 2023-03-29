@@ -7,7 +7,7 @@ Tags:
 Requires at least: 
 Tested up to: 6.1.1
 Requires PHP: 
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,10 @@ Yes! You can disable or enable the cache from the top admin bar.
 4. Click on `Activate plugin`
 
 == Changelog ==
+
+= 1.1.2: March 29, 2023 =
+* GUI: Add config page in WP-Admin
+* API/User/Host: Change to fields
 
 = 1.1.1: January 20, 2023 =
 * Security; improve description
