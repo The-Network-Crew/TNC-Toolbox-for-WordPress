@@ -67,7 +67,7 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 		 * @return	void
 		 */
 		public function __clone() {
-			_doing_it_wrong( __FUNCTION__, __( 'You are not allowed to clone this class.', 'tnc-wp-toolbox' ), '1.0.0' );
+			_doing_it_wrong( __FUNCTION__, __( 'You are not allowed to clone this class.', 'tnc-toolbox' ), '1.0.0' );
 		}
 
 		/**
@@ -78,7 +78,7 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 		 * @return	void
 		 */
 		public function __wakeup() {
-			_doing_it_wrong( __FUNCTION__, __( 'You are not allowed to unserialize this class.', 'tnc-wp-toolbox' ), '1.0.0' );
+			_doing_it_wrong( __FUNCTION__, __( 'You are not allowed to unserialize this class.', 'tnc-toolbox' ), '1.0.0' );
 		}
 		
 		/**
@@ -145,7 +145,7 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 		 * @return  void
 		 */
 		public function load_textdomain() {
-			load_plugin_textdomain( 'tnc-wp-toolbox', FALSE, dirname( plugin_basename( TNCWPTBOX_PLUGIN_FILE ) ) . '/languages/' );
+			load_plugin_textdomain( 'tnc-toolbox', FALSE, dirname( plugin_basename( TNCWPTBOX_PLUGIN_FILE ) ) . '/languages/' );
 		}
 
 	}

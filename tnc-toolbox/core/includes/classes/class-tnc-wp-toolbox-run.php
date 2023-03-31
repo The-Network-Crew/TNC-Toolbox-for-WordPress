@@ -125,7 +125,7 @@ class Tnc_Wp_Toolbox_Run{
 	*/
 	public function add_plugin_action_link( $links ) {
 
-		$links['our_shop'] = sprintf( '<a href="%s" title="my.LEOPARD" style="font-weight:700;">%s</a>', 'https://my.leopard.host', __( 'my.LEOPARD', 'tnc-wp-toolbox' ) );
+		$links['our_shop'] = sprintf( '<a href="%s" title="my.LEOPARD" style="font-weight:700;">%s</a>', 'https://my.leopard.host', __( 'my.LEOPARD', 'tnc-toolbox' ) );
 
 		return $links;
 	}
@@ -179,18 +179,30 @@ class Tnc_Wp_Toolbox_Run{
 	 * @return	Success/Failure
 	 */
 	function nginx_cache_purge() {
-	    // Get the cPanel username
-	    $cpanel_username = get_current_user();
-	    // Get the API token, exit if not present
-	    if( is_readable("/home/".$cpanel_username."/.tnc/cp-api-key") ) {
-			$api_token = file_get_contents("/home/".$cpanel_username."/.tnc/cp-api-key");
+	    // Get the cPanel Username, exit if not present
+	    if( is_readable( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username' ) ) {
+			$cpanel_username = file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username' );
 	    } else {
-			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel API Token could not be read - please set it in /home/USER/.tnc/cp-api-key');
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel Username could not be read - please configure it in Settings');
 			wp_safe_redirect(admin_url());
 		exit;
 	    }
-	    // Get the server hostname
-	    $server_hostname = gethostname();
+	    // Get the API Token, exit if not present
+	    if( is_readable( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key' ) ) {
+			$api_token = file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key' );
+	    } else {
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel API Token could not be read - please configure it in Settings');
+			wp_safe_redirect(admin_url());
+		exit;
+	    }
+	    // Get the hostname, exit is not present
+	    if( is_readable( TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname' ) ) {
+			$server_hostname = file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname' );
+	    } else {
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'Server Hostname could not be read - please configure it in Settings');
+			wp_safe_redirect(admin_url());
+		exit;
+	    }
 	    // Build the headers for the request
 	    $headers = array(
 			'Authorization' => 'cpanel '. $cpanel_username . ':' . $api_token,
@@ -235,18 +247,30 @@ class Tnc_Wp_Toolbox_Run{
 	 * @return	Success/Failure
 	 */
 	function nginx_cache_off() {
-	    // Get the cPanel username
-	    $cpanel_username = get_current_user();
-	    // Get the API token, exit if not present
-	    if( is_readable("/home/".$cpanel_username."/.tnc/cp-api-key") ) {
-			$api_token = file_get_contents("/home/".$cpanel_username."/.tnc/cp-api-key");
+	    // Get the cPanel Username, exit if not present
+	    if( is_readable( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username' ) ) {
+			$cpanel_username = file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username' );
 	    } else {
-			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel API Token could not be read - please set it in /home/USER/.tnc/cp-api-key');
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel Username could not be read - please configure it in Settings');
 			wp_safe_redirect(admin_url());
 		exit;
 	    }
-	    // Get the server hostname
-	    $server_hostname = gethostname();
+	    // Get the API Token, exit if not present
+	    if( is_readable( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key' ) ) {
+			$api_token = file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key' );
+	    } else {
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel API Token could not be read - please configure it in Settings');
+			wp_safe_redirect(admin_url());
+		exit;
+	    }
+	    // Get the hostname, exit is not present
+	    if( is_readable( TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname' ) ) {
+			$server_hostname = file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname' );
+	    } else {
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'Server Hostname could not be read - please configure it in Settings');
+			wp_safe_redirect(admin_url());
+		exit;
+	    }
 	    // Build the headers for the request
 	    $headers = array(
 			'Authorization' => 'cpanel '. $cpanel_username . ':' . $api_token,
@@ -290,18 +314,30 @@ class Tnc_Wp_Toolbox_Run{
 	 * @return	Success/Failure
 	 */
 	function nginx_cache_on() {
-	    // Get the cPanel username
-	    $cpanel_username = get_current_user();
-	    // Get the API token, exit if not present
-	    if( is_readable("/home/".$cpanel_username."/.tnc/cp-api-key") ) {
-			$api_token = file_get_contents("/home/".$cpanel_username."/.tnc/cp-api-key");
+	    // Get the cPanel Username, exit if not present
+	    if( is_readable( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username' ) ) {
+			$cpanel_username = file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username' );
 	    } else {
-			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel API Token could not be read - please set it in /home/USER/.tnc/cp-api-key');
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel Username could not be read - please configure it in Settings');
 			wp_safe_redirect(admin_url());
 		exit;
 	    }
-	    // Get the server hostname
-	    $server_hostname = gethostname();
+	    // Get the API Token, exit if not present
+	    if( is_readable( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key' ) ) {
+			$api_token = file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key' );
+	    } else {
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'cPanel API Token could not be read - please configure it in Settings');
+			wp_safe_redirect(admin_url());
+		exit;
+	    }
+	    // Get the hostname, exit is not present
+	    if( is_readable( TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname' ) ) {
+			$server_hostname = file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname' );
+	    } else {
+			set_transient( 'tnc_wp_toolbox_nginx_action_error', 'Server Hostname could not be read - please configure it in Settings');
+			wp_safe_redirect(admin_url());
+		exit;
+	    }
 	    // Build the headers for the request
 	    $headers = array(
 			'Authorization' => 'cpanel '. $cpanel_username . ':' . $api_token,
@@ -335,5 +371,4 @@ class Tnc_Wp_Toolbox_Run{
 			exit;
 	    }	
 	}
-
 }
