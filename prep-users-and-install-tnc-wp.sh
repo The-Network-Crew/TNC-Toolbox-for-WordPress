@@ -24,5 +24,9 @@ do
   uapi --output=jsonpretty --user=${user} Tokens create_full_access name='TNC-WP-TOOLBOX' | jq -r '.result.data.token' > /home/${user}/.tnc/cp-api-key
   chown ${user}:${user} -R /home/${user}/.tnc/
   chmod 0600 /home/${user}/.tnc/cp-api-key
-  su - ${user} -c "cd public_html && wp plugin install https://insert.your.domain.here/plugin-only-zip-file.zip --activate"
+  su - ${user} -c "cd public_html && wp plugin install tnc-toolbox --activate"
 done
+
+# Musings pre-dev: /var/cpanel/users/$user should be referenced for homedir path, removing fixed /home/
+# Same goes for API Key generation & cPanel Username. Then reference nix for hostname check into file.
+# This needs to be completed post-activation so the files are present. Add chmod 600 as bypass plugin.
