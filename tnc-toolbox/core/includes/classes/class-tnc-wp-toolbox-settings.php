@@ -92,21 +92,21 @@ class Tnc_Wp_Toolbox_Settings{
     	$hostname = sanitize_text_field( $_POST['tnc_toolbox_server_hostname'] );
 
     		// Save the API key to file
-    	$api_key_file = TNCWPTBOX_PLUGIN_DIR . 'assets/cpanel-api-key';
+    	$api_key_file = TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key';
     	if ( file_put_contents( $api_key_file, $api_key ) === false ) {
     		wp_die( 'Unable to save API key to file.' );
     	}
     	chmod( $api_key_file, 0600 );
 
     		// Save the username to file
-    	$username_file = TNCWPTBOX_PLUGIN_DIR . 'assets/cpanel-username';
+    	$username_file = TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username';
     	if ( file_put_contents( $username_file, $username ) === false ) {
     		wp_die( 'Unable to save username to file.' );
     	}
     	chmod( $username_file, 0600 );
 
     		// Save the hostname to file
-    	$hostname_file = TNCWPTBOX_PLUGIN_DIR . 'assets/server-hostname';
+    	$hostname_file = TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname';
     	if ( file_put_contents( $hostname_file, $hostname ) === false ) {
     		wp_die( 'Unable to save hostname to file.' );
     	}
@@ -133,15 +133,15 @@ class Tnc_Wp_Toolbox_Settings{
     			<table class="form-table">
     				<tr>
     					<th scope="row"><label for="tnc_toolbox_api_key">cPanel API Key</label><br><small>Key only, not the name. <a href="https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/" target="_blank">Docs</a>.</small></th>
-    					<td><input type="text" id="tnc_toolbox_api_key" name="tnc_toolbox_api_key" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'assets/cpanel-api-key' ) ); ?>" /></td>
+    					<td><input type="text" id="tnc_toolbox_api_key" name="tnc_toolbox_api_key" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key' ) ); ?>" /></td>
     				</tr>
     				<tr>
     					<th scope="row"><label for="tnc_toolbox_username">cPanel Username</label><br><small>Plain-text user, as used to log-in.</small></th>
-    					<td><input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'assets/cpanel-username' ) ); ?>" /></td>
+    					<td><input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username' ) ); ?>" /></td>
     				</tr>
     				<tr>
     					<th scope="row"><label for="tnc_toolbox_server_hostname">Server Hostname</label><br><small>FQDN of Server, no HTTPS etc.</small></th>
-    					<td><input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'assets/server-hostname' ) ); ?>" /></td>
+    					<td><input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname' ) ); ?>" /></td>
     				</tr>
     			</table>
     			<?php submit_button( 'Save Settings' ); ?>
