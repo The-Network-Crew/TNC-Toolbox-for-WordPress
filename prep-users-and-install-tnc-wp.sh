@@ -35,6 +35,7 @@ do
     echo "UNINSTALL: tnc-toolbox present in ${user}"
     su - ${user} -c "cd public_html && wp plugin deactivate tnc-toolbox"
     su - ${user} -c "cd public_html && wp plugin delete tnc-toolbox"
+    uapi --output=jsonpretty --user=${user} Tokens revoke name='TNC-TOOLBOX'
   fi
 
   # Install the plugin
