@@ -49,10 +49,10 @@ do
   # Save the server hostname
   hostname -f > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname
 
-  # Internet-protect the config
-  chmod 0600 ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/*
-
   # fixperms the account (ownership)
   fixperms -a ${user}
+
+  # Internet-protect the config
+  chmod 0600 ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/*
 
 done
