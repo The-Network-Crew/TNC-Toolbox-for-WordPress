@@ -15,18 +15,26 @@ Adds functionality to WP that ties into your NGINX-powered Hosting on cPanel.
 
 == Description ==
 
-This plugin provides functionality that enhances your WordPress experience when using NGINX-on-cPanel.
+This plugin enhances your WordPress experience with NGINX-on-cPanel (ea-nginx). 
+
+Built for our Managed Server clients, we've open-sourced it so others can enjoy it too!
+
+We plan to add further features as clients & the community request it. Check the FAQ.
 
 
 == Frequently Asked Questions ==
 
-= Does the plugin allow me to purge the NGINX User Cache for an account? =
+= Does the plugin allow me to purge the NGINX User Cache? =
 
 Yes, it does! This can be done easily via the button in the admin top bar.
 
-= Does the plugin allow me to disable or enable NGINX User Caching? =
+= Does it allow me to disable or enable NGINX User Caching? =
 
 Yes! You can disable or enable the cache from the top admin bar.
+
+= Can I request functionality to be added into the module? =
+
+Yes! Simply raise an Issue/PR on the [GitHub repository](https://github.com/LEOPARD-host/TNC-Toolbox-for-WordPress/issues).
 
 
 == Installation ==
@@ -47,10 +55,12 @@ Yes! You can disable or enable the cache from the top admin bar.
 * API/User/Host: Change to fields
 
 = 1.1.1: January 20, 2023 =
-* Security; improve description
+* Security: Improve escaping, etc
+* Description: Re-word for WP.org
 
 = 1.1.0: January 19, 2023 =
-* NGINX Cache disable/enable
+* NGINX Cache: Disable/Enable added
 
 = 1.0.0: January 12, 2023 =
-* Birthday of TNC Toolbox
+* It's a module: Birth of TNC Toolbox
+* NGINX Cache: Purge the Cache in WP
