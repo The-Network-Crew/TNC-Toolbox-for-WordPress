@@ -42,7 +42,9 @@ do
     hostname -f > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname
     fixperms -a ${user}
     chmod 0600 ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/*
-    grep -v ^$ ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/*
+    echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-username) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-username
+    echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-api-key) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-api-key
+    echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname
   fi
   
 done
