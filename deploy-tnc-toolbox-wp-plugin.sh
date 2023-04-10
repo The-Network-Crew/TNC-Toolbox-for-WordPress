@@ -55,5 +55,8 @@ do
 
   # Internet-protect the config
   chmod 0600 ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/*
+  
+  # Remove blank lines
+  grep -v ^$ ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/*
 
 done
