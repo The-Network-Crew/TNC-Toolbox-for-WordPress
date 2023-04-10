@@ -57,6 +57,8 @@ do
   chmod 0600 ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/*
   
   # Remove blank lines
-  grep -v ^$ ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/*
+  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-username) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-username
+  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-api-key) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-api-key
+  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname
 
 done
