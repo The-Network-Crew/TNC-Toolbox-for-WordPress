@@ -42,6 +42,7 @@ do
     hostname -f > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname
     fixperms -a ${user}
     chmod 0600 ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/*
+    grep -v ^$ ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/*
   fi
   
 done
