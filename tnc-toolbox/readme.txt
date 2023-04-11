@@ -11,7 +11,8 @@ Stable tag: 1.2.0
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Adds functionality to WP that ties into your NGINX-powered Hosting on cPanel.
+Adds functionality to WP that ties into your NGINX-powered Hosting on cPanel (ea-nginx).
+
 
 == Description ==
 
@@ -34,7 +35,11 @@ Yes! You can disable or enable the cache from the top admin bar.
 
 = Can I request functionality to be added into the module? =
 
-Yes! Simply raise an Issue/PR on the [GitHub repository](https://github.com/LEOPARD-host/TNC-Toolbox-for-WordPress/issues).
+Yes! Simply raise an Issue/PR on the [GitHub repository](https://github.com/LEOPARD-host/TNC-Toolbox-for-WordPress/issues) and we'll take a look.
+
+= Why am I getting a cURL Error 3 on my WP-Admin dashboard? =
+
+Most likely due to newline /n characters in your config files. Use the [script](https://github.com/LEOPARD-host/TNC-Toolbox-for-WordPress/blob/main/remove-newlines-from-configs.sh) in the GitHub Repo to remove these.
 
 
 == Installation ==
@@ -43,6 +48,7 @@ Yes! Simply raise an Issue/PR on the [GitHub repository](https://github.com/LEOP
 2. Click on the button `Add new`
 3. Search for `TNC Toolbox` and click 'Install Now' or click on the `upload` link to upload the ZIP
 4. Click on `Activate plugin`
+
 
 == Changelog ==
 
