@@ -34,6 +34,6 @@ Note: EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implemen
 
 Please raise an Issue on the GitHub Repository! Include all info, screenshots, etc, to help our crew.
 
-https://github.com/LEOPARD-host/WordPress-Toolbox-by-TNC/issues
+https://github.com/LEOPARD-host/TNC-Toolbox-for-WordPress/issues
 
 **The Network Crew Pty Ltd (TNC)**
