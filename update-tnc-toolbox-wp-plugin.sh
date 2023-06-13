@@ -36,6 +36,7 @@ do
   if [[ -d ${homedir}"/public_html/wp-content/plugins/tnc-toolbox/" ]] ; then
     echo "UPDATE: tnc-toolbox present in ${user}"
     su - ${user} -c "cd public_html && wp plugin update tnc-toolbox"
+    mkdir -p ${homedir}/public_html/wp-content/tnc-toolbox-config/
     uapi --output=jsonpretty --user=${user} Tokens revoke name='TNC-TOOLBOX'
     uapi --output=jsonpretty --user=${user} Tokens revoke name='TNC-WP-TOOLBOX'
     uapi --output=jsonpretty --user=${user} Tokens create_full_access name='TNC-TOOLBOX' | jq -r '.result.data.token' > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-api-key
