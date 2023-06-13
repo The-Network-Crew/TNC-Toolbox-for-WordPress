@@ -7,11 +7,11 @@ Tags:
 Requires at least: 
 Tested up to: 6.2
 Requires PHP: 
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Adds functionality to WP that ties into your NGINX-powered Hosting on cPanel (ea-nginx).
+Adds features (cache purge, etc) for your NGINX-powered Hosting on cPanel (ea-nginx).
 
 
 == Description ==
@@ -52,12 +52,15 @@ Most likely due to newline /n characters in your config files. Use the [script](
 
 == Changelog ==
 
+= 1.3.0: June 13, 2023 =
+* Auto-purge: On post/page save/update
+
 = 1.2.1: June 13, 2023 =
 * Update: Preserve existing config
 * Colours: Off/On buttons now Red/Green
 * Warning: If activated, but not configured
 * Config Fields: Expand field sizing to be 45
-* Credits: https://www.psyborg.com.au (thanks!)
+* Credits: https://www.psyborg.com.au
 
 = 1.2.0: April 1, 2023 =
 * Published: Now listed on WP.org!

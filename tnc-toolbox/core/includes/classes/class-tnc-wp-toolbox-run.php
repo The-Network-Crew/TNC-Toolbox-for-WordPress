@@ -80,6 +80,8 @@ class Tnc_Wp_Toolbox_Run{
 		add_action( 'admin_post_nginx_cache_on', array( $this, 'nginx_cache_on' ) );
 		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_nginx_action_error_notice') );
 		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_nginx_action_success_notice') );
+		add_action( 'save_post', array( $this, 'purge_cache_on_update' ), 10, 3 );
+		add_action( 'post_updated', array( $this, 'purge_cache_on_update' ), 10, 3 );
 	
 	}
 
@@ -125,10 +127,12 @@ class Tnc_Wp_Toolbox_Run{
 	* @return	array	An array of plugin action links.
 	*/
 	public function add_plugin_action_link( $links ) {
+	    $settings_link = '<a href="' . admin_url( 'options-general.php?page=tnc_toolbox' ) . '">' . __( 'Settings', 'tnc-toolbox' ) . '</a>';
+	    $links['our_shop'] = sprintf( '<a href="%s" title="my.LEOPARD" style="font-weight:700;">%s</a>', 'https://my.leopard.host', __( 'my.LEOPARD', 'tnc-toolbox' ) );
 
-		$links['our_shop'] = sprintf( '<a href="%s" title="my.LEOPARD" style="font-weight:700;">%s</a>', 'https://my.leopard.host', __( 'my.LEOPARD', 'tnc-toolbox' ) );
+	    array_unshift( $links, $settings_link );
 
-		return $links;
+	    return $links;
 	}
 
 	/**
@@ -256,6 +260,25 @@ class Tnc_Wp_Toolbox_Run{
 	    }	
 	}
 
+	/**
+	 * Function to automatically purge the cache when a post or page is updated
+	 *
+	 * @access public
+	 * @since  1.3.0
+	 * 
+	 * @param  int      $post_id   The ID of the post being updated
+	 * @param  WP_Post  $post      The post object being updated
+	 * @param  bool     $update    Whether this is an update to an existing post
+	 *
+	 * @return void
+	 */
+	public function purge_cache_on_update( $post_id, $post, $update ){
+	    // Check if the post is published or updated
+	    if ( 'publish' === $post->post_status || $update ) {
+	        // Purge the cache
+	        $this->nginx_cache_purge();
+	    }
+	}
 
 	/**
 	 * Function to handle disabling the NGINX User Cache
