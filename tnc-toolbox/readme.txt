@@ -7,7 +7,7 @@ Tags:
 Requires at least: 
 Tested up to: 6.2
 Requires PHP: 
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,9 @@ Most likely due to newline /n characters in your config files. Use the [script](
 
 
 == Changelog ==
+
+= 1.3.2: June 13, 2023 =
+* Config Folder: Create before save
 
 = 1.3.1: June 13, 2023 =
 * Config Files: Relocate (to preserve)

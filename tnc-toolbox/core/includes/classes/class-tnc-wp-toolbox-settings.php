@@ -142,6 +142,12 @@ class Tnc_Wp_Toolbox_Settings{
      * @since  1.1.2
      */
     private function save_settings() {
+
+        // Check if the config directory exists, create it if it doesn't
+        if ( ! is_dir( TNCWPTBOX_CONFIG_DIR ) ) {
+            wp_mkdir_p( TNCWPTBOX_CONFIG_DIR );
+        }
+
         // Sanitize the API key, username, and hostname
     	$api_key = sanitize_text_field( $_POST['tnc_toolbox_api_key'] );
     	$username = sanitize_text_field( $_POST['tnc_toolbox_username'] );
