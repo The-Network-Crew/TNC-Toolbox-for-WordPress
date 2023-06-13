@@ -71,6 +71,7 @@ class Tnc_Wp_Toolbox_Run{
 	private function add_hooks(){
 	
 		add_action( 'plugin_action_links_' . TNCWPTBOX_PLUGIN_BASE, array( $this, 'add_plugin_action_link' ), 20 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_custom_css' ) );
 		add_action( 'admin_bar_menu', array( $this, 'add_cache_purge_button' ), 100 );
 		add_action( 'admin_post_nginx_cache_purge', array( $this, 'nginx_cache_purge' ) );
 		add_action( 'admin_bar_menu', array( $this, 'add_cache_off_button' ), 100 );
@@ -131,6 +132,24 @@ class Tnc_Wp_Toolbox_Run{
 	}
 
 	/**
+	 * Enqueue the custom CSS for plugin buttons
+	 *
+	 * @access  public
+	 * @since   1.2.1
+	 *
+	 * @return  void
+	 */
+	public function enqueue_custom_css() {
+	    wp_register_style( 'tnc_custom_css', false );
+	    wp_enqueue_style( 'tnc_custom_css' );
+	    $custom_css = "
+	        .nginx-cache-btn.nginx-cache-off a { background-color: #d63638 !important; }
+	        .nginx-cache-btn.nginx-cache-on a { background-color: green !important; }
+	    ";
+	    wp_add_inline_style( 'tnc_custom_css', $custom_css );
+	}
+
+	/**
 	 * Add the menu items to the WordPress topbar
 	 *
 	 * @access	public
@@ -152,20 +171,20 @@ class Tnc_Wp_Toolbox_Run{
 
 	public function add_cache_off_button( $wp_admin_bar ) {
 	    $args = array(
-		'id'    => 'nginx_cache_off',
-		'title' => 'NC: Off',
-		'href'  => admin_url( 'admin-post.php?action=nginx_cache_off' ),
-		'meta'  => array( 'class' => 'nginx-cache-off' ),
+	        'id'    => 'nginx_cache_off',
+	        'title' => 'NC: Off',
+	        'href'  => admin_url( 'admin-post.php?action=nginx_cache_off' ),
+	        'meta'  => array( 'class' => 'nginx-cache-btn nginx-cache-off' ),
 	    );
 	    $wp_admin_bar->add_node( $args );
 	}
 
 	public function add_cache_on_button( $wp_admin_bar ) {
 	    $args = array(
-		'id'    => 'nginx_cache_on',
-		'title' => 'NC: On',
-		'href'  => admin_url( 'admin-post.php?action=nginx_cache_on' ),
-		'meta'  => array( 'class' => 'nginx-cache-on' ),
+	        'id'    => 'nginx_cache_on',
+	        'title' => 'NC: On',
+	        'href'  => admin_url( 'admin-post.php?action=nginx_cache_on' ),
+	        'meta'  => array( 'class' => 'nginx-cache-btn nginx-cache-on' ),
 	    );
 	    $wp_admin_bar->add_node( $args );
 	}

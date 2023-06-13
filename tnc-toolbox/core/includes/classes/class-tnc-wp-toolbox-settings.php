@@ -31,10 +31,16 @@ class Tnc_Wp_Toolbox_Settings{
      * @since 1.0.0
      */
     function __construct(){
+        $this->plugin_name = TNCWPTBOX_NAME;
 
-    	$this->plugin_name = TNCWPTBOX_NAME;
+        // Schedule a daily event to update the empty configs transient if not already scheduled.
+        if (!wp_next_scheduled('tnc_update_empty_configs_transient')) {
+            wp_schedule_event(time(), 'daily', 'tnc_update_empty_configs_transient');
+        }
+        add_action('tnc_update_empty_configs_transient', array($this, 'update_empty_configs_transient'));
 
-    	add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
+        add_action('all_admin_notices', array($this, 'tnc_wp_toolbox_empty_configs_notice'));
+        add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
     }
 
     /**
@@ -62,6 +68,57 @@ class Tnc_Wp_Toolbox_Settings{
     		'tnc_toolbox',
     		array( $this, 'handle_settings_page' )
     	);
+    }
+
+    /**
+     * Checks if any of the config files are empty
+     *
+     * @access private
+     * @since  1.2.1
+     * @return bool True if any config files are empty, False otherwise.
+     */
+    private function config_files_empty() {
+        $api_key = file_get_contents(TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key');
+        $username = file_get_contents(TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username');
+        $hostname = file_get_contents(TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname');
+
+        if (empty($api_key) || empty($username) || empty($hostname)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Display a warning message for empty configuration files.
+     *
+     * @access public
+     * @since  1.2.1
+     */
+    public function tnc_wp_toolbox_empty_configs_notice() {
+        if (get_transient('tnc_wp_toolbox_empty_configs_warning')) {
+            ?>
+            <div class="notice notice-warning is-dismissible">
+                <p><?php _e('Warning: TNC WP Toolbox plugin has been installed and activated but it is missing configuration data.', 'tnc-wp-toolbox'); ?></p>
+                <p><?php _e('Please go to the <a href="options-general.php?page=tnc_toolbox">TNC WP Toolbox settings page</a> and enter the required configuration in order for the plugin to work properly.', 'tnc-wp-toolbox'); ?></p>
+            </div>
+            <?php
+            delete_transient('tnc_wp_toolbox_empty_configs_warning');
+        }
+    }
+
+    /**
+     * Update the empty configs transient based on the current state of the config files
+     *
+     * @access public
+     * @since  1.2.1
+     */
+    public function update_empty_configs_transient() {
+        if ($this->config_files_empty()) {
+            set_transient('tnc_wp_toolbox_empty_configs_warning', true, 0);
+        } else {
+            delete_transient('tnc_wp_toolbox_empty_configs_warning');
+        }
     }
 
     /**
@@ -132,16 +189,16 @@ class Tnc_Wp_Toolbox_Settings{
     			<?php wp_nonce_field( 'tnc_toolbox_settings', 'tnc_toolbox_settings_nonce' ); ?>
     			<table class="form-table">
     				<tr>
-    					<th scope="row"><label for="tnc_toolbox_api_key">cPanel API Key</label><br><small>Key only, not the name. <a href="https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/" target="_blank">Docs</a>.</small></th>
-    					<td><input type="text" id="tnc_toolbox_api_key" name="tnc_toolbox_api_key" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key' ) ); ?>" /></td>
+    					<th scope="row"><label for="tnc_toolbox_api_key">cPanel API Token</label><br><small>Key only, not the name. <a href="https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/" target="_blank">Docs</a>.</small></th>
+    					<td><input type="text" id="tnc_toolbox_api_key" name="tnc_toolbox_api_key"  size="45" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key' ) ); ?>" /></td>
     				</tr>
     				<tr>
     					<th scope="row"><label for="tnc_toolbox_username">cPanel Username</label><br><small>Plain-text user, as used to log-in.</small></th>
-    					<td><input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username' ) ); ?>" /></td>
+    					<td><input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username"  size="45" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username' ) ); ?>" /></td>
     				</tr>
     				<tr>
     					<th scope="row"><label for="tnc_toolbox_server_hostname">Server Hostname</label><br><small>FQDN of Server, no HTTPS etc.</small></th>
-    					<td><input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname' ) ); ?>" /></td>
+    					<td><input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname"  size="45" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname' ) ); ?>" /></td>
     				</tr>
     			</table>
     			<?php submit_button( 'Save Settings' ); ?>

@@ -7,7 +7,7 @@ Tags:
 Requires at least: 
 Tested up to: 6.2
 Requires PHP: 
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,22 +35,29 @@ Yes! You can disable or enable the cache from the top admin bar.
 
 = Can I request functionality to be added into the module? =
 
-Yes! Simply raise an Issue/PR on the [GitHub repository](https://github.com/LEOPARD-host/TNC-Toolbox-for-WordPress/issues) and we'll take a look.
+Yes! Simply raise an Issue/PR on the [GitHub repository](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/issues) and we'll take a look.
 
 = Why am I getting a cURL Error 3 on my WP-Admin dashboard? =
 
-Most likely due to newline /n characters in your config files. Use the [script](https://github.com/LEOPARD-host/TNC-Toolbox-for-WordPress/blob/main/remove-newlines-from-configs.sh) in the GitHub Repo to remove these.
+Most likely due to newline /n characters in your config files. Use the [script](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/blob/main/remove-newlines-from-configs.sh) in the GitHub Repo to remove these.
 
 
 == Installation ==
 
 1. Go to `Plugins` in the Admin menu
-2. Click on the button `Add new`
-3. Search for `TNC Toolbox` and click 'Install Now' or click on the `upload` link to upload the ZIP
+2. Click on the button `Add New`
+3. Search for `TNC Toolbox` and click 'Install Now'
 4. Click on `Activate plugin`
 
 
 == Changelog ==
+
+= 1.2.1: June 13, 2023 =
+* Update: Preserve existing config
+* Colours: Off/On buttons now Red/Green
+* Warning: If activated, but not configured
+* Config Fields: Expand field sizing to be 45
+* Credits: https://www.psyborg.com.au (thanks!)
 
 = 1.2.0: April 1, 2023 =
 * Published: Now listed on WP.org!
