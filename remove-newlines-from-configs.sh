@@ -20,9 +20,9 @@ do
   fi
   
   # Remove blank lines
-  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-username) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-username
-  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-api-key) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-api-key
-  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname
+  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-username) > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-username
+  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-api-key) > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-api-key
+  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/tnc-toolbox-config/server-hostname) > ${homedir}/public_html/wp-content/tnc-toolbox-config/server-hostname
 
   # Confirm completed for user
   echo "REMOVED BLANK LINES: From ${user}"

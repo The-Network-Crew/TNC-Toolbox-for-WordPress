@@ -42,23 +42,23 @@ do
   su - ${user} -c "cd public_html && wp plugin install tnc-toolbox --activate"
 
   # Generate the API Key
-  uapi --output=jsonpretty --user=${user} Tokens create_full_access name='TNC-TOOLBOX' | jq -r '.result.data.token' > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-api-key
+  uapi --output=jsonpretty --user=${user} Tokens create_full_access name='TNC-TOOLBOX' | jq -r '.result.data.token' > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-api-key
 
   # Echo out the username
-  echo ${user} > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-username
+  echo ${user} > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-username
 
   # Save the server hostname
-  hostname -f > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname
+  hostname -f > ${homedir}/public_html/wp-content/tnc-toolbox-config/server-hostname
 
   # fixperms the account (ownership)
   fixperms -a ${user}
 
   # Internet-protect the config
-  chmod 0600 ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/*
+  chmod 0600 ${homedir}/public_html/wp-content/tnc-toolbox-config/*
   
   # Remove blank lines
-  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-username) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-username
-  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-api-key) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/cpanel-api-key
-  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname) > ${homedir}/public_html/wp-content/plugins/tnc-toolbox/config/server-hostname
+  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-username) > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-username
+  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-api-key) > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-api-key
+  echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/tnc-toolbox-config/server-hostname) > ${homedir}/public_html/wp-content/tnc-toolbox-config/server-hostname
 
 done
