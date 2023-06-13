@@ -54,6 +54,7 @@ Most likely due to newline /n characters in your config files. Use the [script](
 
 = 1.3.0: June 13, 2023 =
 * Auto-purge: On post/page save/update
+* Settings link: Add to Installed Plugins
 
 = 1.2.1: June 13, 2023 =
 * Update: Preserve existing config
