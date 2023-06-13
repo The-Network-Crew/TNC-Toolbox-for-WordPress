@@ -16,11 +16,18 @@ Adds features (cache purge, etc) for your NGINX-powered Hosting on cPanel (ea-ng
 
 == Description ==
 
-This plugin enhances your WordPress experience with NGINX-on-cPanel (ea-nginx). 
+This plugin enhances your WordPress experience with NGINX-on-cPanel (ea-nginx). Built for our Managed Server clients, we've open-sourced it so others can enjoy it too!
 
-Built for our Managed Server clients, we've open-sourced it so others can enjoy it too!
+With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the plugin aims to help with Website Management, Performance and Security. 
 
-We plan to add further features as clients & the community request it. Check the FAQ.
+We plan to add further features as clients & the community request it.
+
+**At the moment, TNC Toolbox:**
+
+- allows you to enable, disable and purge the NGINX User Cache
+- auto-purges the NGINX User Cache on post/page publish/update
+- alerts you if the plugin is activated but has not yet been configured
+- retains its configuration (API Token etc) when the plugin is updated
 
 
 == Frequently Asked Questions ==
@@ -44,10 +51,11 @@ Most likely due to newline /n characters in your config files. Use the [script](
 
 == Installation ==
 
-1. Go to `Plugins` in the Admin menu
+1. Go to `Plugins` in WP-Admin
 2. Click on the button `Add New`
-3. Search for `TNC Toolbox` and click 'Install Now'
-4. Click on `Activate plugin`
+3. Search for `TNC Toolbox` then click `Install Now`
+4. Click on `Activate plugin` then `Settings`
+5. Enter your API Token, User & Hostname
 
 
 == Changelog ==
