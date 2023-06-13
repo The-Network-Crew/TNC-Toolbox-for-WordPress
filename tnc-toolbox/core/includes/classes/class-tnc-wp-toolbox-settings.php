@@ -38,7 +38,6 @@ class Tnc_Wp_Toolbox_Settings{
             wp_schedule_event(time(), 'daily', 'tnc_update_empty_configs_transient');
         }
         add_action('tnc_update_empty_configs_transient', array($this, 'update_empty_configs_transient'));
-
         add_action('all_admin_notices', array($this, 'tnc_wp_toolbox_empty_configs_notice'));
         add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
     }
