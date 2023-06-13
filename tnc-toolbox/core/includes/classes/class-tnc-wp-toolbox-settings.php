@@ -99,8 +99,8 @@ class Tnc_Wp_Toolbox_Settings{
         if (get_transient('tnc_wp_toolbox_empty_configs_warning')) {
             ?>
             <div class="notice notice-warning is-dismissible">
-                <p><?php _e('Warning: TNC WP Toolbox plugin has been installed and activated but it is missing configuration data.', 'tnc-wp-toolbox'); ?></p>
-                <p><?php _e('Please go to the <a href="options-general.php?page=tnc_toolbox">TNC WP Toolbox settings page</a> and enter the required configuration in order for the plugin to work properly.', 'tnc-wp-toolbox'); ?></p>
+                <p><?php _e('Warning: TNC Toolbox has been installed and activated but it is missing configuration!', 'tnc-wp-toolbox'); ?></p>
+                <p><?php _e('Please go to the <a href="options-general.php?page=tnc_toolbox">TNC Toolbox settings</a> and enter the required config in order for the plugin to work properly. Thank you.', 'tnc-wp-toolbox'); ?></p>
             </div>
             <?php
             delete_transient('tnc_wp_toolbox_empty_configs_warning');
