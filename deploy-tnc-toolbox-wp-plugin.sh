@@ -55,6 +55,7 @@ do
 
   # Internet-protect the config
   chmod 0600 ${homedir}/public_html/wp-content/tnc-toolbox-config/*
+  chown ${user}:${user} -R ${homedir}/public_html/wp-content/tnc-toolbox-config/
   
   # Remove blank lines
   echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-username) > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-username
