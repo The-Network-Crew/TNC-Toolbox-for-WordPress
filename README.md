@@ -30,6 +30,12 @@ Note: EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implemen
 - Prepare your server: ensure shell/CageFS/wp/fixperms/jq are installed and properly functional.
 - As root, execute the script and it should take care of the deployment process for your WP users.
 
+### Updating to v1.3.1 or greater (from previous vers)
+
+Note: This will change the config file location, and you will need to re-enter accordingly.
+
+/wp-content/plugins/tnc-toolbox/config/* becomes /wp-content/tnc-toolbox-config/*
+
 ### Feature Requests, Improvements, Bug Reports, etc:
 
 Please raise an Issue on the GitHub Repository! Include all info, screenshots, etc, to help our crew.
