@@ -5,13 +5,13 @@
  * @package       TNCWPTBOX
  * @author        The Network Crew Pty Ltd
  * @license       gplv2
- * @version       1.3.0
+ * @version       1.3.1
  *
  * @wordpress-plugin
  * Plugin Name:   TNC Toolbox
  * Plugin URI:    https://leopard.host
  * Description:   Adds functionality to WP that ties into your NGINX-powered Hosting on cPanel.
- * Version:       1.3.0
+ * Version:       1.3.1
  * Author:        The Network Crew Pty Ltd
  * Author URI:    https://thenetworkcrew.com.au
  * Domain Path:   /languages
@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 define( 'TNCWPTBOX_NAME',			'TNC Toolbox' );
 
 // Plugin version
-define( 'TNCWPTBOX_VERSION',		'1.3.0' );
+define( 'TNCWPTBOX_VERSION',		'1.3.1' );
 
 // Plugin Root File
 define( 'TNCWPTBOX_PLUGIN_FILE',	__FILE__ );
@@ -59,6 +59,9 @@ define( 'TNCWPTBOX_PLUGIN_DIR',	plugin_dir_path( TNCWPTBOX_PLUGIN_FILE ) );
 
 // Plugin Folder URL
 define( 'TNCWPTBOX_PLUGIN_URL',	plugin_dir_url( TNCWPTBOX_PLUGIN_FILE ) );
+
+// Plugin Config Folder
+define( 'TNCWPTBOX_CONFIG_DIR', WP_CONTENT_DIR . '/tnc-toolbox-config/' );
 
 /**
  * Load the main class for the core functionality

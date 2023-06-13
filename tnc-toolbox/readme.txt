@@ -7,7 +7,7 @@ Tags:
 Requires at least: 
 Tested up to: 6.2
 Requires PHP: 
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,12 +52,14 @@ Most likely due to newline /n characters in your config files. Use the [script](
 
 == Changelog ==
 
+= 1.3.1: June 13, 2023 =
+* Config Files: Relocate (to preserve)
+
 = 1.3.0: June 13, 2023 =
 * Auto-purge: On post/page save/update
 * Settings link: Add to Installed Plugins
 
 = 1.2.1: June 13, 2023 =
-* Update: Preserve existing config
 * Colours: Off/On buttons now Red/Green
 * Warning: If activated, but not configured
 * Config Fields: Expand field sizing to be 45

@@ -78,9 +78,9 @@ class Tnc_Wp_Toolbox_Settings{
      * @return bool True if any config files are empty, False otherwise.
      */
     private function config_files_empty() {
-        $api_key = file_get_contents(TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key');
-        $username = file_get_contents(TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username');
-        $hostname = file_get_contents(TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname');
+        $api_key = file_get_contents(TNCWPTBOX_CONFIG_DIR . 'cpanel-api-key');
+        $username = file_get_contents(TNCWPTBOX_CONFIG_DIR . 'cpanel-username');
+        $hostname = file_get_contents(TNCWPTBOX_CONFIG_DIR . 'server-hostname');
 
         if (empty($api_key) || empty($username) || empty($hostname)) {
             return true;
@@ -99,7 +99,7 @@ class Tnc_Wp_Toolbox_Settings{
         if (get_transient('tnc_wp_toolbox_empty_configs_warning')) {
             ?>
             <div class="notice notice-warning is-dismissible">
-                <p><?php _e('Warning: TNC Toolbox has been installed and activated but it is missing configuration!', 'tnc-wp-toolbox'); ?></p>
+                <p><?php _e('<b>Warning:</b> TNC Toolbox has been installed and activated but it is missing configuration!', 'tnc-wp-toolbox'); ?></p>
                 <p><?php _e('Please go to the <a href="options-general.php?page=tnc_toolbox">TNC Toolbox settings</a> and enter the required config in order for the plugin to work properly. Thank you.', 'tnc-wp-toolbox'); ?></p>
             </div>
             <?php
@@ -149,21 +149,21 @@ class Tnc_Wp_Toolbox_Settings{
     	$hostname = sanitize_text_field( $_POST['tnc_toolbox_server_hostname'] );
 
     		// Save the API key to file
-    	$api_key_file = TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key';
+    	$api_key_file = TNCWPTBOX_CONFIG_DIR . 'cpanel-api-key';
     	if ( file_put_contents( $api_key_file, $api_key ) === false ) {
     		wp_die( 'Unable to save API key to file.' );
     	}
     	chmod( $api_key_file, 0600 );
 
     		// Save the username to file
-    	$username_file = TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username';
+    	$username_file = TNCWPTBOX_CONFIG_DIR . 'cpanel-username';
     	if ( file_put_contents( $username_file, $username ) === false ) {
     		wp_die( 'Unable to save username to file.' );
     	}
     	chmod( $username_file, 0600 );
 
     		// Save the hostname to file
-    	$hostname_file = TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname';
+    	$hostname_file = TNCWPTBOX_CONFIG_DIR . 'server-hostname';
     	if ( file_put_contents( $hostname_file, $hostname ) === false ) {
     		wp_die( 'Unable to save hostname to file.' );
     	}
@@ -190,15 +190,15 @@ class Tnc_Wp_Toolbox_Settings{
     			<table class="form-table">
     				<tr>
     					<th scope="row"><label for="tnc_toolbox_api_key">cPanel API Token</label><br><small>Key only, not the name. <a href="https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/" target="_blank">Docs</a>.</small></th>
-    					<td><input type="text" id="tnc_toolbox_api_key" name="tnc_toolbox_api_key"  size="45" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-api-key' ) ); ?>" /></td>
+    					<td><input type="text" id="tnc_toolbox_api_key" name="tnc_toolbox_api_key"  size="45" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_CONFIG_DIR . 'cpanel-api-key' ) ); ?>" /></td>
     				</tr>
     				<tr>
     					<th scope="row"><label for="tnc_toolbox_username">cPanel Username</label><br><small>Plain-text user, as used to log-in.</small></th>
-    					<td><input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username"  size="45" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/cpanel-username' ) ); ?>" /></td>
+    					<td><input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username"  size="45" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_CONFIG_DIR . 'cpanel-username' ) ); ?>" /></td>
     				</tr>
     				<tr>
     					<th scope="row"><label for="tnc_toolbox_server_hostname">Server Hostname</label><br><small>FQDN of Server, no HTTPS etc.</small></th>
-    					<td><input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname"  size="45" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_PLUGIN_DIR . 'config/server-hostname' ) ); ?>" /></td>
+    					<td><input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname"  size="45" value="<?php echo esc_attr( file_get_contents( TNCWPTBOX_CONFIG_DIR . 'server-hostname' ) ); ?>" /></td>
     				</tr>
     			</table>
     			<?php submit_button( 'Save Settings' ); ?>
