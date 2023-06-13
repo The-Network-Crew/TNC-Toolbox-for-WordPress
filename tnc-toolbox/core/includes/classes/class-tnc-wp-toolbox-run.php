@@ -149,6 +149,7 @@ class Tnc_Wp_Toolbox_Run{
 	    $custom_css = "
 	        .nginx-cache-btn.nginx-cache-off a { background-color: #d63638 !important; }
 	        .nginx-cache-btn.nginx-cache-on a { background-color: green !important; }
+	        .nginx-cache-btn.nginx-cache-purge a { background-color: #FFBF00 !important; }
 	    ";
 	    wp_add_inline_style( 'tnc_custom_css', $custom_css );
 	}
@@ -163,15 +164,6 @@ class Tnc_Wp_Toolbox_Run{
 	 *
 	 * @return	void
 	 */
-	public function add_cache_purge_button( $wp_admin_bar ) {
-	    $args = array(
-		'id'    => 'nginx_cache_purge',
-		'title' => 'NGINX Cache: Purge',
-		'href'  => admin_url( 'admin-post.php?action=nginx_cache_purge' ),
-		'meta'  => array( 'class' => 'nginx-cache-purge' ),
-	    );
-	    $wp_admin_bar->add_node( $args );
-	}
 
 	public function add_cache_off_button( $wp_admin_bar ) {
 	    $args = array(
@@ -179,6 +171,16 @@ class Tnc_Wp_Toolbox_Run{
 	        'title' => 'NC: Off',
 	        'href'  => admin_url( 'admin-post.php?action=nginx_cache_off' ),
 	        'meta'  => array( 'class' => 'nginx-cache-btn nginx-cache-off' ),
+	    );
+	    $wp_admin_bar->add_node( $args );
+	}
+
+	public function add_cache_purge_button( $wp_admin_bar ) {
+	    $args = array(
+			'id'    => 'nginx_cache_purge',
+			'title' => 'NC: Purge',
+			'href'  => admin_url( 'admin-post.php?action=nginx_cache_purge' ),
+			'meta'  => array( 'class' => 'nginx-cache-btn nginx-cache-purge' ),
 	    );
 	    $wp_admin_bar->add_node( $args );
 	}

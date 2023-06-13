@@ -5,7 +5,7 @@
  * @package       TNCWPTBOX
  * @author        The Network Crew Pty Ltd
  * @license       gplv2
- * @version       1.3.2
+ * @version       1.3.3
  *
  * @wordpress-plugin
  * Plugin Name:   TNC Toolbox
@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 define( 'TNCWPTBOX_NAME',			'TNC Toolbox' );
 
 // Plugin version
-define( 'TNCWPTBOX_VERSION',		'1.3.2' );
+define( 'TNCWPTBOX_VERSION',		'1.3.3' );
 
 // Plugin Root File
 define( 'TNCWPTBOX_PLUGIN_FILE',	__FILE__ );
