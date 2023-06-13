@@ -53,21 +53,21 @@ Most likely due to newline /n characters in your config files. Use the [script](
 == Changelog ==
 
 = 1.3.3: June 13, 2023 =
-* Top bar links: Traffic lights
+* Top bar links: Traffic lights 
 
 = 1.3.2: June 13, 2023 =
-* Config Folder: Create before save
+* Config Folder: Create before save (#8)
 
 = 1.3.1: June 13, 2023 =
-* Config Files: Relocate (to preserve)
+* Config Files: Relocate (to preserve) (#8)
 
 = 1.3.0: June 13, 2023 =
-* Auto-purge: On post/page save/update
-* Settings link: Add to Installed Plugins
+* Auto-purge: On post/page save/update (#3)
+* Settings link: Add to Installed Plugins (#9)
 
 = 1.2.1: June 13, 2023 =
-* Colours: Off/On buttons now Red/Green
-* Warning: If activated, but not configured
+* Colours: Off/On buttons now Red/Green (#9)
+* Warning: If activated, but not configured (#9)
 * Config Fields: Expand field sizing to be 45
 * Credits: https://www.psyborg.com.au
 
