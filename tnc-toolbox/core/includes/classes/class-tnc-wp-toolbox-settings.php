@@ -188,7 +188,7 @@ class Tnc_Wp_Toolbox_Settings{
     public function render_settings_page() {
     	?>
     	<div class="wrap">
-    		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+    		<h1><?php echo esc_html( get_admin_page_title() ) . " (WP) v" . TNCWPTBOX_VERSION; ?></h1>
             <h4>To communicate with the cPanel API (UAPI), we need your API Token, Username & Server Hostname.</h4>
     		<form method="post">
     			<input type="hidden" name="action" value="tnc_toolbox_settings" />
