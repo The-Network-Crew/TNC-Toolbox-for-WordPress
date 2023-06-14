@@ -7,7 +7,7 @@ Tags:
 Requires at least: 
 Tested up to: 6.2
 Requires PHP: 
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,7 +60,10 @@ Most likely due to newline /n characters in your config files. Use the [script](
 
 == Changelog ==
 
-= 1.3.3: June 13, 2023 =
+= 1.3.4: June 14, 2023 =
+* Auto-purge: Fix GUI save issue
+
+= 1.3.3: June 14, 2023 =
 * Top bar links: Move into sub-menu
 
 = 1.3.2: June 13, 2023 =

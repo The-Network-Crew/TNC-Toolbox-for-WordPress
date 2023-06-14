@@ -189,6 +189,7 @@ class Tnc_Wp_Toolbox_Settings{
     	?>
     	<div class="wrap">
     		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+            <h4>To communicate with the cPanel API (UAPI), we need your API Token, Username & Server Hostname.</h4>
     		<form method="post">
     			<input type="hidden" name="action" value="tnc_toolbox_settings" />
     			<?php wp_nonce_field( 'tnc_toolbox_settings', 'tnc_toolbox_settings_nonce' ); ?>

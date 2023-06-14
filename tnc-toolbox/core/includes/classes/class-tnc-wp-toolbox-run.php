@@ -81,9 +81,8 @@ class Tnc_Wp_Toolbox_Run{
 		add_action( 'admin_post_nginx_cache_on', array( $this, 'nginx_cache_on' ) );
 		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_nginx_action_error_notice') );
 		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_nginx_action_success_notice') );
-		add_action( 'save_post', array( $this, 'purge_cache_on_update' ), 10, 3 );
-		add_action( 'post_updated', array( $this, 'purge_cache_on_update' ), 10, 3 );
-	
+		add_action( 'tnc_scheduled_cache_purge', array( $this, 'nginx_cache_purge' ) );
+		add_action( 'post_updated', array( $this, 'purge_cache_on_update' ), 10, 3 );	
 	}
 
 	/**
@@ -148,9 +147,9 @@ class Tnc_Wp_Toolbox_Run{
 	    wp_register_style( 'tnc_custom_css', false );
 	    wp_enqueue_style( 'tnc_custom_css' );
 	    $custom_css = "
-	        /* .nginx-cache-btn.nginx-cache-off a { background-color: #d63638 !important; }
+	        .nginx-cache-btn.nginx-cache-off a { background-color: #d63638 !important; }
 	        .nginx-cache-btn.nginx-cache-purge a { background-color: #ff9500 !important; }
-	        .nginx-cache-btn.nginx-cache-on a { background-color: green !important; } */
+	        .nginx-cache-btn.nginx-cache-on a { background-color: green !important; }
 	    ";
 	    wp_add_inline_style( 'tnc_custom_css', $custom_css );
 	}
@@ -288,11 +287,11 @@ class Tnc_Wp_Toolbox_Run{
 	 *
 	 * @return void
 	 */
-	public function purge_cache_on_update( $post_id, $post, $update ){
+	public function purge_cache_on_update( $post_id, $post_after, $post_before ) {
 	    // Check if the post is published or updated
-	    if ( 'publish' === $post->post_status || $update ) {
-	        // Purge the cache
-	        $this->nginx_cache_purge();
+	    if ( 'publish' === $post_after->post_status || ( $post_before->post_status === 'publish' && $post_after->post_status !== 'trash' ) ) {
+	        // Schedule the cache purge to run after the current request
+	        wp_schedule_single_event( time(), 'tnc_scheduled_cache_purge' );
 	    }
 	}
 
