@@ -41,6 +41,9 @@ do
   # Install the plugin
   su - ${user} -c "cd public_html && wp plugin install tnc-toolbox --activate"
 
+  # Create the config dir
+  mkdir -p ${homedir}/public_html/wp-content/tnc-toolbox-config/
+
   # Generate the API Key
   uapi --output=jsonpretty --user=${user} Tokens create_full_access name='TNC-TOOLBOX' | jq -r '.result.data.token' > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-api-key
 
