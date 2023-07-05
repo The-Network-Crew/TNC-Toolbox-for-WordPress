@@ -2,7 +2,7 @@
 
 https://wordpress.org/plugins/tnc-toolbox
 
-### What the WordPress Plugin does:
+## ❓ WHAT THE TNC TOOLBOX DOES ❓
 
 - Allows you to purge the EA-NGINX User Cache from within WordPress
 - Allows you to disable or enable the NGINX User Cache from inside WP
@@ -10,14 +10,14 @@ https://wordpress.org/plugins/tnc-toolbox
 
 Will expand to include other features as requested by community & clients.
 
-### System Requirements for the Plugin:
+## 🖥️ PLUGIN SYSTEM REQUIREMENTS 🖥️
 
 - cPanel API Key, cPanel Username & Server Hostname needed in Settings
 - Hosting Environment must be cPanel+WHM, running NGINX + Apache stack!
 
 Note: EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implementations.
 
-### Installing the Plugin (within WordPress CMS):
+## ⚙️ INSTALLING THE TNC TOOLBOX ⚙️
 
 1. Head to WP-Admin > Plugins, search for "TNC Toolbox"
 2. Click "Install" for the resulting plugin (this one)
@@ -25,18 +25,18 @@ Note: EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implemen
 4. Done! Head to Settings > TNC Toolbox for config
 5. Configure your API Key, Username & Hostname
 
-### Using the script to deploy the plugin server-wide:
+## 🛠️ DEPLOYING IT SERVER-WIDE 🛠️
 
 - Prepare your server: ensure shell/CageFS/wp/fixperms/jq are installed and properly functional.
 - As root, execute the script and it should take care of the deployment process for your WP users.
 
-### Updating to v1.3.1 or greater (from previous vers)
+## 🆕 UPGRADING TO V1.3.1 > 🆕
 
 Note: This will change the config file location, and you will need to re-enter accordingly.
 
 /wp-content/plugins/tnc-toolbox/config/* becomes /wp-content/tnc-toolbox-config/*
 
-### Feature Requests, Improvements, Bug Reports, etc:
+## ✨ CONTRIBUTING ✨
 
 Please raise an Issue on the GitHub Repository! Include all info, screenshots, etc, to help our crew.
 
