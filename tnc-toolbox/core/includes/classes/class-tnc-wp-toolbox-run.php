@@ -73,16 +73,20 @@ class Tnc_Wp_Toolbox_Run{
 		add_action( 'plugin_action_links_' . TNCWPTBOX_PLUGIN_BASE, array( $this, 'add_plugin_action_link' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_custom_css' ) );
 		add_action( 'admin_bar_menu', array( $this, 'add_parent_menu_entry' ), 99 );
-		add_action( 'admin_bar_menu', array( $this, 'add_cache_off_button' ), 100 );
-		add_action( 'admin_post_nginx_cache_off', array( $this, 'nginx_cache_off' ) );
 		add_action( 'admin_bar_menu', array( $this, 'add_cache_purge_button' ), 100 );
 		add_action( 'admin_post_nginx_cache_purge', array( $this, 'nginx_cache_purge' ) );
-		add_action( 'admin_bar_menu', array( $this, 'add_cache_on_button' ), 100 );
-		add_action( 'admin_post_nginx_cache_on', array( $this, 'nginx_cache_on' ) );
 		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_nginx_action_error_notice') );
 		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_nginx_action_success_notice') );
 		add_action( 'tnc_scheduled_cache_purge', array( $this, 'nginx_cache_purge' ) );
 		add_action( 'post_updated', array( $this, 'purge_cache_on_update' ), 10, 3 );	
+
+		// We bring in pluggable.php, so should be okay to use current_user_can()
+		if ( current_user_can('update_core') ) {
+			add_action( 'admin_bar_menu', array( $this, 'add_cache_off_button' ), 100 );
+			add_action( 'admin_post_nginx_cache_off', array( $this, 'nginx_cache_off' ) );
+    		add_action( 'admin_bar_menu', array( $this, 'add_cache_on_button' ), 100 );
+			add_action( 'admin_post_nginx_cache_on', array( $this, 'nginx_cache_on' ) );
+		}
 	}
 
 	/**
@@ -114,7 +118,6 @@ class Tnc_Wp_Toolbox_Run{
 		delete_transient( 'tnc_wp_toolbox_nginx_action_success' );
 	    }
 	}
-
 	
 	/**
 	* Adds action links to the plugin list table

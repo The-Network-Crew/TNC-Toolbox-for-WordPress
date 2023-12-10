@@ -5,9 +5,9 @@ Donate link:
 Contributors: 
 Tags: 
 Requires at least: 
-Tested up to: 6.2
+Tested up to: 6.4
 Requires PHP: 
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,8 +26,9 @@ We plan to add further features as clients & the community request it.
 
 - allows you to enable, disable and purge the NGINX User Cache
 - auto-purges the NGINX User Cache on post/page publish/update
-- alerts you if the plugin is activated but has not yet been configured
+- alerts you if the plugin is activated but has not been configured
 - retains its configuration (API Token etc) when the plugin is updated
+- only allows Administrators to enable/disable caching; edit config
 
 
 == Frequently Asked Questions ==
@@ -40,13 +41,19 @@ Yes, it does! This can be done easily via the button in the admin top bar.
 
 Yes! You can disable or enable the cache from the top admin bar.
 
+This is only visible if you are logged in as an Administrator.
+
 = Can I request functionality to be added into the module? =
 
 Yes! Simply raise an Issue/PR on the [GitHub repository](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/issues) and we'll take a look.
 
 = Why am I getting a cURL Error 3 on my WP-Admin dashboard? =
 
-Most likely due to newline /n characters in your config files. Use the [script](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/blob/main/remove-newlines-from-configs.sh) in the GitHub Repo to remove these.
+Most likely due to newline /n characters in your config files. Use the [script](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/blob/main/script-remove-conf-newlines.sh) in the GitHub Repo to remove these.
+
+= Is there a way for us to deploy the plugin server-wide? =
+
+Yes! If you check the GitHub repository, you can use the bash scripts there (make sure you satisfy their pre-requisites) to deploy/update the plugin server-wide.
 
 
 == Installation ==
@@ -59,6 +66,11 @@ Most likely due to newline /n characters in your config files. Use the [script](
 
 
 == Changelog ==
+
+= 1.3.5: December 10, 2023 =
+* Config: No warning if empty (#13)
+* ACL: On/Off/Config = Admins only (#14)
+* pluggable.php: Import for WP API use (#15)
 
 = 1.3.4: June 14, 2023 =
 * Auto-purge: Fix GUI save issue
