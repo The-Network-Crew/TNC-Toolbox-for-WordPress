@@ -3,7 +3,9 @@
 **WP.org:** https://wordpress.org/plugins/tnc-toolbox
 
 - Allows you to purge the EA-NGINX User Cache from within WordPress
+- Automatically purges the cache when a post or page is updated in WP
 - Allows you to disable or enable the NGINX User Cache from inside WP
+- Only presents the options to enable/disable/configure for WP Admins
 - For any action, redirects you back to the page you requested it from
 
 Will expand to include other features as requested by community & clients!
@@ -14,6 +16,8 @@ Will expand to include other features as requested by community & clients!
 - Hosting Environment must be cPanel+WHM, running NGINX + Apache stack!
 
 > Note: EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implementations.
+> 
+> CloudLinux Apache2NGINX (A2N) depends on ea-NGINX so shouldn't cause issues with TNC Toolbox.
 
 ## ⚙️ (INSTALL) How to Install the Plugin ⚙️
 
