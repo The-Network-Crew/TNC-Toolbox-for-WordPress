@@ -151,7 +151,6 @@ class Tnc_Wp_Toolbox_Run{
 	    wp_enqueue_style( 'tnc_custom_css' );
 	    $custom_css = "
 	        .nginx-cache-btn.nginx-cache-off a { background-color: #d63638 !important; }
-	        .nginx-cache-btn.nginx-cache-purge a { background-color: #ff9500 !important; }
 	        .nginx-cache-btn.nginx-cache-on a { background-color: green !important; }
 	    ";
 	    wp_add_inline_style( 'tnc_custom_css', $custom_css );
