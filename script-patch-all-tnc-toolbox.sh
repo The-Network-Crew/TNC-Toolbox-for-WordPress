@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Creates unrestricted cPanel API Tokens & updates the TNC Toolbox for WP.
-# The Network Crew Pty Ltd :: https://github.com/LEOPARD-host/TNC-WP-Toolbox/
+# Creates unrestricted cPanel API Tokens & updates the TNC Toolbox for WP
+# https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/
+# (C) The Network Crew Pty Ltd - GPLv3 license enclosed
 
 # NOTE: This script assumes a properly functional CageFS set-up on your server.
 # CageFS: If you do not have this set-up, change/comment "wp" & install separately.
