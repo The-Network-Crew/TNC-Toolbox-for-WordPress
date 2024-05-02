@@ -31,12 +31,6 @@ class Tnc_Wp_Toolbox_Settings{
         if (!wp_next_scheduled('tnc_update_empty_configs_transient')) {
             wp_schedule_event(time(), 'daily', 'tnc_update_empty_configs_transient');
         }
-        // Only show warning and register Options page if the user has sufficient privileges. (#14)
-        if ( current_user_can('update_core') ) {
-            add_action('tnc_update_empty_configs_transient', array($this, 'update_empty_configs_transient'));
-            add_action('all_admin_notices', array($this, 'tnc_wp_toolbox_empty_configs_notice'));
-            add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
-        }
     }
 
     /**
