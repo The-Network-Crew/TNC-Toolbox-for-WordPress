@@ -1,4 +1,4 @@
-=== TNC Toolbox: for Web Performance ===
+=== TNC Toolbox: Web Performance ===
 Author URI: https://tnc.works
 Plugin URI: https://merlot.digital
 Donate link: 
