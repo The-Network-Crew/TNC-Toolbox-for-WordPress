@@ -7,28 +7,22 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * Class Tnc_Wp_Toolbox_Settings
  *
  * This class contains all of the plugin settings.
- * Here you can configure the whole plugin data.
  *
  * @package    TNCWPTBOX
  * @subpackage Classes/Tnc_Wp_Toolbox_Settings
  * @author     The Network Crew Pty Ltd
- * @since      1.0.0
  */
 class Tnc_Wp_Toolbox_Settings{
 
     /**
      * The plugin name
-     *
      * @var    string
-     * @since  1.0.0
      */
     private $plugin_name;
 
     /**
      * Our Tnc_Wp_Toolbox_Settings constructor 
      * to run the plugin logic.
-     *
-     * @since 1.0.0
      */
     function __construct(){
         $this->plugin_name = TNCWPTBOX_NAME;
@@ -47,9 +41,6 @@ class Tnc_Wp_Toolbox_Settings{
 
     /**
      * Return the plugin name for use in GUI.
-     *
-     * @access public
-     * @since  1.0.0
      * @return string The plugin name
      */
     public function get_plugin_name(){
@@ -58,9 +49,6 @@ class Tnc_Wp_Toolbox_Settings{
 
     /**
      * Register the WP Admin settings menu entry.
-     *
-     * @access public
-     * @since  1.1.2
      */
     public function register_admin_menu() {
     	add_options_page(
@@ -74,9 +62,7 @@ class Tnc_Wp_Toolbox_Settings{
 
     /**
      * Checks if any of the config files are empty
-     *
      * @access private
-     * @since  1.2.1
      * @return bool True if any config files are empty, False otherwise.
      */
     private function config_files_empty() {
@@ -94,9 +80,6 @@ class Tnc_Wp_Toolbox_Settings{
 
     /**
      * Display a warning message for empty configuration files.
-     *
-     * @access public
-     * @since  1.2.1
      */
     public function tnc_wp_toolbox_empty_configs_notice() {
         if (get_transient('tnc_wp_toolbox_empty_configs_warning')) {
@@ -112,9 +95,6 @@ class Tnc_Wp_Toolbox_Settings{
 
     /**
      * Update the empty configs transient based on the current state of the config files
-     *
-     * @access public
-     * @since  1.2.1
      */
     public function update_empty_configs_transient() {
         if ($this->config_files_empty()) {
@@ -126,9 +106,6 @@ class Tnc_Wp_Toolbox_Settings{
 
     /**
      * Route settings page-loads; save/render.
-     *
-     * @access public
-     * @since  1.1.2
      */
     public function handle_settings_page() {
         // Check if the form was submitted and the nonce is valid
@@ -141,9 +118,6 @@ class Tnc_Wp_Toolbox_Settings{
 
     /**
      * Save updated settings to disk
-     *
-     * @access public
-     * @since  1.1.2
      */
     private function save_settings() {
 
@@ -157,28 +131,28 @@ class Tnc_Wp_Toolbox_Settings{
     	$username = sanitize_text_field( $_POST['tnc_toolbox_username'] );
     	$hostname = sanitize_text_field( $_POST['tnc_toolbox_server_hostname'] );
 
-    		// Save the API key to file
+        // Save the API key to file
     	$api_key_file = TNCWPTBOX_CONFIG_DIR . 'cpanel-api-key';
     	if ( file_put_contents( $api_key_file, $api_key ) === false ) {
     		wp_die( 'Unable to save API Key to file.' );
     	}
     	chmod( $api_key_file, 0600 );
 
-    		// Save the username to file
+        // Save the username to file
     	$username_file = TNCWPTBOX_CONFIG_DIR . 'cpanel-username';
     	if ( file_put_contents( $username_file, $username ) === false ) {
     		wp_die( 'Unable to save Username to file.' );
     	}
     	chmod( $username_file, 0600 );
 
-    		// Save the hostname to file
+        // Save the hostname to file
     	$hostname_file = TNCWPTBOX_CONFIG_DIR . 'server-hostname';
     	if ( file_put_contents( $hostname_file, $hostname ) === false ) {
     		wp_die( 'Unable to save Hostname to file.' );
     	}
     	chmod( $hostname_file, 0600 );
 
-    		// Redirect to the settings page
+        // Redirect to the settings page
     	$this->render_settings_page();
     	exit;
     }
