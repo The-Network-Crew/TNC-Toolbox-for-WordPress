@@ -1,4 +1,4 @@
-=== TNC Toolbox ===
+=== TNC Toolbox: for Web Performance ===
 Author URI: https://tnc.works
 Plugin URI: https://merlot.digital
 Donate link: 
@@ -11,7 +11,8 @@ Stable tag: 1.3.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Adds functionality (cache purge, etc) to WP - designed for NGINX-powered Servers on cPanel+WHM.
+Adds functionality (cache purge, etc) to WP - designed for NGINX-powered Servers on cPanel+WHM. Made to help you fly online - by Merlot Digital.
+
 
 == Description ==
 
@@ -21,8 +22,6 @@ Built for our Managed Server clients, we've open-sourced it so others can enjoy 
 
 With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the plugin aims to help with Website Management, Performance and Security. 
 
-We plan to add further features as clients & the community request it. Let us know on GitHub!
-
 **At the moment, TNC Toolbox:**
 
 - allows you to enable, disable and purge the NGINX User Cache
@@ -31,16 +30,20 @@ We plan to add further features as clients & the community request it. Let us kn
 - retains its configuration (API Token etc) when the plugin is updated
 - only allows Administrators to enable/disable caching; edit config
 
+We plan to add further features as clients & the community request it. 
+
+**Let us know your thoughts on GitHub!**
+
 
 == Frequently Asked Questions ==
 
 = Does the plugin allow me to purge the NGINX User Cache? =
 
-Yes, it does! This can be done easily via the button in the admin top bar.
+Yes, it does! All users can do this easily via the button in the admin top bar.
 
 = Does it allow me to disable or enable NGINX User Caching? =
 
-Yes! You can disable or enable the cache from the top admin bar.
+Yes! Admins can disable or enable the cache from the top admin bar.
 
 This is only visible if you are logged in as an Administrator.
 
@@ -55,6 +58,8 @@ Most likely due to newline /n characters in your config files. Use the [script](
 = Is there a way for us to deploy the plugin server-wide? =
 
 Yes! If you check the GitHub repository, you can use the bash scripts there (make sure you satisfy their pre-requisites) to deploy/update the plugin server-wide.
+
+Please note there are pre-requisites to running the scripts, so understand & prepare before usage as always.
 
 
 == Installation ==
