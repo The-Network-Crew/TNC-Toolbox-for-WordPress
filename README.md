@@ -1,4 +1,4 @@
-# 🐆 TNC Toolbox for WP (inc. NGINX Cache actions)
+# TNC Toolbox for WP (inc. NGINX Cache actions)
 
 **WP.org:** https://wordpress.org/plugins/tnc-toolbox
 
@@ -10,7 +10,7 @@
 
 **Will expand to include other features as requested by community & clients!**
 
-## 🖥️ (PLUGIN) System Requirements 🖥️
+## 🖥️ (PLUGIN) System Requirements
 
 - cPanel API Key, cPanel Username & Server Hostname needed in Settings
 - Hosting Environment must be cPanel+WHM, running NGINX + Apache stack!
@@ -19,7 +19,7 @@
 > 
 > CloudLinux Apache2NGINX (A2N) depends on ea-NGINX so shouldn't cause issues with TNC Toolbox.
 
-## ⚙️ (INSTALL) How to Install the Plugin ⚙️
+## ⚙️ (INSTALL) How to Install the Plugin
 
 1. Head to WP-Admin > Plugins, search for "TNC Toolbox"
 2. Click "Install" for the resulting plugin (this one)
@@ -27,7 +27,7 @@
 4. Done! Head to Settings > TNC Toolbox for config
 5. Configure your API Key, Username & Hostname
 
-## 🛠️ (DEPLOY) Loading it onto all WP sites 🛠️
+## 🛠️ (DEPLOY) Loading it onto all WP sites
 
 - **Prepare your server: ensure shell/CageFS/wp/fixperms/jq are installed and properly functional.**
 - As root, execute the script and it should take care of the deployment process for your WP users.
@@ -38,13 +38,13 @@
 2. `script-patch-all-tnc-toolbox.sh` :: Update all copies found with latest version
 3. `script-remove-conf-newlines.sh` :: Fix up config files to ensure no blank post-PHP
 
-## 🆘 (HELP) Getting help with the Plugin 🆘
+## 🆘 (HELP) Getting help with the Plugin
 
 Please raise an [Issue](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/issues) on the GitHub Repository! 
 
 Include all info, screenshots, etc, to help our crew.
 
-## ✨ (FOSS) Contributing to the Plugin ✨
+## ✨ (FOSS) Contributing to the Plugin
 
 Please feel free to contribute by submitting a PR with your proposed changes!
 
