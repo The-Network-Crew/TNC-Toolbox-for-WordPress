@@ -70,6 +70,7 @@ Yes! If you check the GitHub repository, you can use the bash scripts there (mak
 = 1.3.6: May 2, 2024 =
 * Pluggable: Remove dependency (#17) support multi-site
 * Re-factor: Merge API calls into single function
+* GPLv3: Consistent, no longer partial v2 & v3
 
 = 1.3.5: December 10, 2023 =
 * Config: No warning if empty (#13)
