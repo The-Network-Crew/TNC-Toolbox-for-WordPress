@@ -61,14 +61,15 @@ class Tnc_Wp_Toolbox_Run{
 		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_nginx_action_success_notice') );
 		add_action( 'tnc_scheduled_cache_purge', array( $this, 'nginx_cache_purge' ) );
 		add_action( 'post_updated', array( $this, 'purge_cache_on_update' ), 10, 3 );	
-
-		// We bring in pluggable.php, so should be okay to use current_user_can()
-		if ( current_user_can('update_core') ) {
-			add_action( 'admin_bar_menu', array( $this, 'add_cache_off_button' ), 100 );
-			add_action( 'admin_post_nginx_cache_off', array( $this, 'nginx_cache_off' ) );
-    			add_action( 'admin_bar_menu', array( $this, 'add_cache_on_button' ), 100 );
-			add_action( 'admin_post_nginx_cache_on', array( $this, 'nginx_cache_on' ) );
-		}
+	}
+	
+	public function add_capability_dependent_hooks() {
+	    if (current_user_can('update_core')) {
+		add_action('admin_bar_menu', array($this, 'add_cache_off_button'), 100);
+		add_action('admin_post_nginx_cache_off', array($this, 'nginx_cache_off'));
+		add_action('admin_bar_menu', array($this, 'add_cache_on_button'), 100);
+		add_action('admin_post_nginx_cache_on', array($this, 'nginx_cache_on'));
+	    }
 	}
 
 	/**
