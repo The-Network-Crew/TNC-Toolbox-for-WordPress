@@ -1,17 +1,14 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
-## [1.3.6] - TBC
-
-### 🚀 Feature
-- 
+## [1.3.6] - 2024-05-02
 
 ### 💅 Polish
 - Upgrade consistently to GPLv3 from a split mix of v2 and v3
+- Merge all cPanel API Calls into single function, pass action (#17)
 
 ### 🐛 Bug Fix
-- 
-
+- Multi-site should now function properly, due to #17 being fixed
 
 ## [1.3.5] - 2023-12-10
 
