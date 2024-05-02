@@ -5,13 +5,13 @@
  * @package       TNCWPTBOX
  * @author        The Network Crew Pty Ltd
  * @license       gplv3
- * @version       1.3.5
+ * @version       1.3.6
  *
  * @wordpress-plugin
  * Plugin Name:   TNC Toolbox
  * Plugin URI:    https://merlot.digital
- * Description:   Adds functionality to WP that ties into your NGINX-powered Hosting on cPanel.
- * Version:       1.3.5
+ * Description:   Adds functionality to WP - designed for NGINX-powered Servers on cPanel+WHM.
+ * Version:       1.3.6
  * Author:        The Network Crew Pty Ltd
  * Author URI:    https://tnc.works
  * Domain Path:   /languages
@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 define( 'TNCWPTBOX_NAME',			'TNC Toolbox' );
 
 // Plugin version
-define( 'TNCWPTBOX_VERSION',		'1.3.5' );
+define( 'TNCWPTBOX_VERSION',		'1.3.6' );
 
 // Plugin Root File
 define( 'TNCWPTBOX_PLUGIN_FILE',	__FILE__ );
@@ -63,9 +63,6 @@ define( 'TNCWPTBOX_PLUGIN_URL',	plugin_dir_url( TNCWPTBOX_PLUGIN_FILE ) );
 // Plugin Config Folder
 define( 'TNCWPTBOX_CONFIG_DIR', WP_CONTENT_DIR . '/tnc-toolbox-config/' );
 
-// Import pluggable.php so we can discern user access level, and more (#14)
-include(ABSPATH . WPINC . "/pluggable.php");
-
 // Load the main class for the core functionality
 require_once TNCWPTBOX_PLUGIN_DIR . 'core/class-tnc-wp-toolbox.php';
 
@@ -73,8 +70,6 @@ require_once TNCWPTBOX_PLUGIN_DIR . 'core/class-tnc-wp-toolbox.php';
  * The main function to load the only instance
  * of our master class.
  *
- * @author  The Network Crew Pty Ltd
- * @since   1.0.0
  * @return  object|Tnc_Wp_Toolbox
  */
 function TNCWPTBOX() {
