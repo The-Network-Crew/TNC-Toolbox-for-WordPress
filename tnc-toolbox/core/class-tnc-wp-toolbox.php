@@ -112,9 +112,7 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 				self::$instance->includes();
 				self::$instance->helpers		= new Tnc_Wp_Toolbox_Helpers();
 				self::$instance->settings		= new Tnc_Wp_Toolbox_Settings();
-
-				//Fire the plugin logic
-				new Tnc_Wp_Toolbox_Run();
+				self::$instance->run 			= new Tnc_Wp_Toolbox_Run(); // Store run instance
 
 				/**
 				 * Fire a custom action to allow dependencies
@@ -135,7 +133,8 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 		 */
 		private function base_hooks() {
 			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
-			add_action('plugins_loaded', array($this, 'add_capability_dependent_hooks'));
+			add_action('plugins_loaded', array(self::$instance->run, 'add_capability_dependent_hooks'));
+			add_action('plugins_loaded', array(self::$instance->settings, 'add_capability_dependent_settings'));
 		}
 
 		/**
