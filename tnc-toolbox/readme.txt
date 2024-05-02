@@ -11,16 +11,17 @@ Stable tag: 1.3.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Adds features (cache purge, etc) for your NGINX-powered Hosting on cPanel (ea-nginx).
-
+Adds functionality (cache purge, etc) to WP - designed for NGINX-powered Servers on cPanel+WHM.
 
 == Description ==
 
-This plugin enhances your WordPress experience with NGINX-on-cPanel (ea-nginx). Built for our Managed Server clients, we've open-sourced it so others can enjoy it too!
+This plugin enhances your WordPress experience with NGINX-on-cPanel (ea-nginx). 
+
+Built for our Managed Server clients, we've open-sourced it so others can enjoy it too!
 
 With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the plugin aims to help with Website Management, Performance and Security. 
 
-We plan to add further features as clients & the community request it.
+We plan to add further features as clients & the community request it. Let us know on GitHub!
 
 **At the moment, TNC Toolbox:**
 
