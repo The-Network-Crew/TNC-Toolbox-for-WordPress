@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [1.3.6] - TBC
+
+### 🚀 Feature
+- 
+
+### 💅 Polish
+- Upgrade consistently to GPLv3 from a split mix of v2 and v3
+
+### 🐛 Bug Fix
+- 
+
+
 ## [1.3.5] - 2023-12-10
 
 ### 🚀 Feature
