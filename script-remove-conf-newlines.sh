@@ -1,4 +1,7 @@
 #!/bin/bash
+# This script removes new lines from plugin config files, to avoid issues
+# https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/
+# (C) The Network Crew Pty Ltd - GPLv3 license enclosed
 
 # Require root to run
 if [ "$EUID" -ne 0 ]
