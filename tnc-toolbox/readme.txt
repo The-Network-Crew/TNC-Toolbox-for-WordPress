@@ -1,11 +1,11 @@
 === TNC Toolbox ===
-Author URI: https://thenetworkcrew.com.au
-Plugin URI: https://leopard.host
+Author URI: https://tnc.works
+Plugin URI: https://merlot.digital
 Donate link: 
 Contributors: 
 Tags: 
 Requires at least: 
-Tested up to: 6.4
+Tested up to: 6.5
 Requires PHP: 
 Stable tag: 1.3.5
 License: GPLv2
