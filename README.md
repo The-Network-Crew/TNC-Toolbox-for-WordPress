@@ -8,7 +8,7 @@
 - Only presents the options to enable/disable/configure for WP Admins
 - For any action, redirects you back to the page you requested it from
 
-Will expand to include other features as requested by community & clients!
+**Will expand to include other features as requested by community & clients!**
 
 ## 🖥️ (PLUGIN) System Requirements 🖥️
 
@@ -29,14 +29,8 @@ Will expand to include other features as requested by community & clients!
 
 ## 🛠️ (DEPLOY) Loading it onto all WP sites 🛠️
 
-- Prepare your server: ensure shell/CageFS/wp/fixperms/jq are installed and properly functional.
+- **Prepare your server: ensure shell/CageFS/wp/fixperms/jq are installed and properly functional.**
 - As root, execute the script and it should take care of the deployment process for your WP users.
-
-## 🆕 (OLD) Updating to v1.3.1 onwards > 🆕
-
-Note: This will change the config file location, and you will need to re-enter accordingly.
-
-/wp-content/plugins/tnc-toolbox/config/* becomes /wp-content/tnc-toolbox-config/*
 
 ## 🆘 (HELP) Getting help with the Plugin 🆘
 
