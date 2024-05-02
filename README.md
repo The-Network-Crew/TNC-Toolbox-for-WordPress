@@ -32,6 +32,12 @@
 - **Prepare your server: ensure shell/CageFS/wp/fixperms/jq are installed and properly functional.**
 - As root, execute the script and it should take care of the deployment process for your WP users.
 
+**Scripts supplied:**
+
+1. `script-deploy-tnc-toolbox.sh` :: Deploy to all WP sites found across a server
+2. `script-patch-all-tnc-toolbox.sh` :: Update all copies found with latest version
+3. `script-remove-conf-newlines.sh` :: Fix up config files to ensure no blank post-PHP
+
 ## 🆘 (HELP) Getting help with the Plugin 🆘
 
 Please raise an [Issue](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/issues) on the GitHub Repository! 
