@@ -8,8 +8,8 @@ Requires at least:
 Tested up to: 6.5
 Requires PHP: 
 Stable tag: 1.3.5
-License: GPLv2
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+License: GPLv3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Adds features (cache purge, etc) for your NGINX-powered Hosting on cPanel (ea-nginx).
 
