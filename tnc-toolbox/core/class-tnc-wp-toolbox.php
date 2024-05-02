@@ -135,6 +135,7 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 		 */
 		private function base_hooks() {
 			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
+			add_action('plugins_loaded', array($this, 'add_capability_dependent_hooks'));
 		}
 
 		/**
