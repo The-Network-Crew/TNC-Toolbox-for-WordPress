@@ -7,7 +7,7 @@ Tags:
 Requires at least: 
 Tested up to: 6.5
 Requires PHP: 
-Stable tag: 1.3.5
+Stable tag: 1.3.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -66,6 +66,10 @@ Yes! If you check the GitHub repository, you can use the bash scripts there (mak
 
 
 == Changelog ==
+
+= 1.3.6: May 2, 2024 =
+* Pluggable: Remove dependency (#17) support multi-site
+* Re-factor: Merge API calls into single function
 
 = 1.3.5: December 10, 2023 =
 * Config: No warning if empty (#13)
