@@ -5,10 +5,11 @@ All notable changes to TNC Toolbox for WordPress will be documented in this file
 
 ### 💅 Polish
 - Upgrade consistently to GPLv3 from a split mix of v2 and v3
-- Merge all cPanel API Calls into single function, pass action (#17)
+- Merge all cPanel API Calls into single function, pass action (#16)
 
 ### 🐛 Bug Fix
 - Multi-site should now function properly, due to #17 being fixed
+- pluggable.php no longer included, as it is supplied by WP (#17)
 
 ## [1.3.5] - 2023-12-10
 
