@@ -4,22 +4,22 @@
  *
  * @package       TNCWPTBOX
  * @author        The Network Crew Pty Ltd
- * @license       gplv2
+ * @license       gplv3
  * @version       1.3.5
  *
  * @wordpress-plugin
  * Plugin Name:   TNC Toolbox
- * Plugin URI:    https://leopard.host
+ * Plugin URI:    https://merlot.digital
  * Description:   Adds functionality to WP that ties into your NGINX-powered Hosting on cPanel.
  * Version:       1.3.5
  * Author:        The Network Crew Pty Ltd
- * Author URI:    https://thenetworkcrew.com.au
+ * Author URI:    https://tnc.works
  * Domain Path:   /languages
- * License:       GPLv2
- * License URI:   https://www.gnu.org/licenses/gpl-2.0.html
+ * License:       GPLv3
+ * License URI:   https://www.gnu.org/licenses/gpl-3.0.html
  *
  * You should have received a copy of the GNU General Public License
- * along with TNC Toolbox. If not, see <https://www.gnu.org/licenses/gpl-2.0.html/>.
+ * along with TNC Toolbox. If not, see <https://www.gnu.org/licenses/gpl-3.0.html/>.
  */
 
 // Exit if accessed directly.
