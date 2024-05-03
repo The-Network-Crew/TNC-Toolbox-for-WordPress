@@ -1,4 +1,4 @@
-# TNC Toolbox for WP (inc. NGINX Cache actions)
+# TNC Toolbox: Web Performance
 
 **WP.org:** https://wordpress.org/plugins/tnc-toolbox
 
