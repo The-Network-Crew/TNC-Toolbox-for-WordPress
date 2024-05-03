@@ -37,19 +37,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 class Tnc_Wp_Toolbox_Run{
 
-	/**
-	 * Our Tnc_Wp_Toolbox_Run constructor 
-	 * to run the plugin logic.
-	 */
+	// Our Tnc_Wp_Toolbox_Run constructor to run the plugin logic.
 	function __construct(){
 		$this->add_hooks();
 	}
 
-	/**
-	 * ######################
-	 * #### WORDPRESS HOOKS
-	 * ######################
-	 */
+	/////////////////////
+	// WORDPRESS HOOKS //
+	/////////////////////
 	
 	private function add_hooks(){
 		add_action( 'plugin_action_links_' . TNCWPTBOX_PLUGIN_BASE, array( $this, 'add_plugin_action_link' ), 20 );
@@ -57,12 +52,13 @@ class Tnc_Wp_Toolbox_Run{
 		add_action( 'admin_bar_menu', array( $this, 'add_parent_menu_entry' ), 99 );
 		add_action( 'admin_bar_menu', array( $this, 'add_cache_purge_button' ), 100 );
 		add_action( 'admin_post_nginx_cache_purge', array( $this, 'nginx_cache_purge' ) );
-		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_nginx_action_error_notice') );
-		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_nginx_action_success_notice') );
+		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_cpanel_action_error_notice') );
+		add_action( 'admin_notices', array( $this, 'tnc_wp_toolbox_cpanel_action_success_notice') );
 		add_action( 'tnc_scheduled_cache_purge', array( $this, 'nginx_cache_purge' ) );
 		add_action( 'post_updated', array( $this, 'purge_cache_on_update' ), 10, 3 );	
 	}
-	
+
+	// These are run from the parent class to ensure pluggable.php is ready
 	public function add_capability_dependent_hooks() {
 	    if (current_user_can('update_core')) {
 		add_action('admin_bar_menu', array($this, 'add_cache_off_button'), 100);
@@ -72,37 +68,37 @@ class Tnc_Wp_Toolbox_Run{
 	    }
 	}
 
-	/**
-	 * ######################
-	 * #### WORDPRESS HOOK CALLBACKS
-	 * ######################
-	 */
+	//////////////////////////////
+	// WORDPRESS HOOK CALLBACKS //
+	//////////////////////////////
 
-	function tnc_wp_toolbox_nginx_action_error_notice() {
-	    if ( $error_message = get_transient( 'tnc_wp_toolbox_nginx_action_error' ) ) {
+	function tnc_wp_toolbox_cpanel_action_error_notice() {
+	    if ( $error_message = get_transient( 'tnc_wp_toolbox_cpanel_action_error' ) ) {
 		?>
 		<div class="notice notice-error">
 		    <p><?php echo esc_html( $error_message ); ?></p>
 		</div>
 		<?php
-		delete_transient( 'tnc_wp_toolbox_nginx_action_error' );
+		delete_transient( 'tnc_wp_toolbox_cpanel_action_error' );
 	    }
 	}
 
-	function tnc_wp_toolbox_nginx_action_success_notice() {
-	    if ( $success_message = get_transient( 'tnc_wp_toolbox_nginx_action_success' ) ) {
+	function tnc_wp_toolbox_cpanel_action_success_notice() {
+	    if ( $success_message = get_transient( 'tnc_wp_toolbox_cpanel_action_success' ) ) {
 		?>
 		<div class="notice notice-success">
 		    <p><?php echo esc_html( $success_message ); ?></p>
 		</div>
 		<?php
-		delete_transient( 'tnc_wp_toolbox_nginx_action_success' );
+		delete_transient( 'tnc_wp_toolbox_cpanel_action_success' );
 	    }
 	}
+
+	///////////////////////////////
+	// OTHER GENERAL PREP n WORK //
+	///////////////////////////////
 	
-	/**
-	* Adds action links to the plugin list table
-	*/
+	// On the Plugins page, add link out and to the plugin config.
 	public function add_plugin_action_link( $links ) {
 	    $settings_link = '<a href="' . admin_url( 'options-general.php?page=tnc_toolbox' ) . '">' . __( 'Settings', 'tnc-toolbox' ) . '</a>';
 	    $links['our_shop'] = sprintf( '<a href="%s" title="my.Merlot" style="font-weight:700;">%s</a>', 'https://my.merlot.digital', __( 'my.Merlot', 'tnc-toolbox' ) );
@@ -112,9 +108,7 @@ class Tnc_Wp_Toolbox_Run{
 	    return $links;
 	}
 
-	/**
-	 * Enqueue the custom CSS for plugin buttons in top bar
-	 */
+	// Add custom CSS and enqueue within WP Core, re: colours etc.
 	public function enqueue_custom_css() {
 	    wp_register_style( 'tnc_custom_css', false );
 	    wp_enqueue_style( 'tnc_custom_css' );
@@ -125,10 +119,7 @@ class Tnc_Wp_Toolbox_Run{
 	    wp_add_inline_style( 'tnc_custom_css', $custom_css );
 	}
 
-	/**
-	 * Add the menu items to the WordPress top Admin Menu Bar
-	 */
-
+	// WP-Admin: Add the top bar menu parent and entries
 	public function add_parent_menu_entry( $wp_admin_bar ) {
 		$args = array(
 			'id' => 'tnc_parent_menu_entry',
@@ -139,17 +130,7 @@ class Tnc_Wp_Toolbox_Run{
 		$wp_admin_bar->add_node( $args );
 	}
 
-	public function add_cache_off_button( $wp_admin_bar ) {
-	    $args = array(
-	        'id'    => 'nginx_cache_off',
-	        'parent' => 'tnc_parent_menu_entry',
-	        'title' => 'NGINX User Cache: Off',
-	        'href'  => admin_url( 'admin-post.php?action=nginx_cache_off' ),
-	        'meta'  => array( 'class' => 'nginx-cache-btn nginx-cache-off' ),
-	    );
-	    $wp_admin_bar->add_node( $args );
-	}
-
+	// WP-Admin: Add CACHE PURGE (menu item)
 	public function add_cache_purge_button( $wp_admin_bar ) {
 	    $args = array(
 		'id'    => 'nginx_cache_purge',
@@ -161,6 +142,19 @@ class Tnc_Wp_Toolbox_Run{
 	    $wp_admin_bar->add_node( $args );
 	}
 
+	// WP-Admin: Add CACHE OFF (menu item)
+	public function add_cache_off_button( $wp_admin_bar ) {
+	    $args = array(
+	        'id'    => 'nginx_cache_off',
+	        'parent' => 'tnc_parent_menu_entry',
+	        'title' => 'NGINX User Cache: Off',
+	        'href'  => admin_url( 'admin-post.php?action=nginx_cache_off' ),
+	        'meta'  => array( 'class' => 'nginx-cache-btn nginx-cache-off' ),
+	    );
+	    $wp_admin_bar->add_node( $args );
+	}
+
+	// WP-Admin: Add CACHE ON (menu item)
 	public function add_cache_on_button( $wp_admin_bar ) {
 	    $args = array(
 	        'id'    => 'nginx_cache_on',
@@ -172,54 +166,64 @@ class Tnc_Wp_Toolbox_Run{
 	    $wp_admin_bar->add_node( $args );
 	}
 
-	// cPanel API Calls - Originated via single function, with endpoint passed in, etc.
-
+	//////////////////////////////
+	// DO A DEFINED THING (API) //
+	// Called below > @endpoint //
+	//////////////////////////////
+	
 	private function cpanel_api_request($endpoint, $success_message, $error_message) {
+		// Read the config files (prepare)
 		$config_items = ['cpanel-username', 'cpanel-api-key', 'server-hostname'];
 		$config = [];
-		// Read the config files (prepare)
 		foreach ($config_items as $item) {
 			$file_path = TNCWPTBOX_CONFIG_DIR . $item;
 			if (is_readable($file_path)) {
 				$config[$item] = file_get_contents($file_path);
 			} else {
-				set_transient('tnc_wp_toolbox_nginx_action_error', "{$item} could not be read - please configure it in Settings", 60);
+				set_transient('tnc_wp_toolbox_cpanel_action_error', "The {$item} config seems to be empty - please configure it in Settings > TNC Toolbox. Cheers!", 60);
 				wp_safe_redirect(admin_url());
 				exit;
 			}
 		}
-		
+
+		// Build up the request structure
 		$headers = ['Authorization' => 'cpanel ' . $config['cpanel-username'] . ':' . $config['cpanel-api-key']];
 		$body = ['parameter' => 'value'];
 		$url = 'https://' . $config['server-hostname'] . ':2083/execute/' . $endpoint;
-		
+
+		// Do the thing, prepare to handle
 		$response = wp_remote_post($url, ['headers' => $headers, 'body' => $body]);
 		$referer = wp_get_referer();
-		
+
+		// Match up conditions/errors, relay
 		if (is_wp_error($response)) {
-			set_transient('tnc_wp_toolbox_nginx_action_error', $response->get_error_message(), 60);
+			set_transient('tnc_wp_toolbox_cpanel_action_error', $response->get_error_message(), 60);
 		} elseif (wp_remote_retrieve_response_code($response) == 200) {
-			set_transient('tnc_wp_toolbox_nginx_action_success', $success_message, 60);
+			set_transient('tnc_wp_toolbox_cpanel_action_success', $success_message, 60);
 		} else {
-			set_transient('tnc_wp_toolbox_nginx_action_error', $error_message, 60);
+			set_transient('tnc_wp_toolbox_cpanel_action_error', $error_message, 60);
 		}
-		
+
+		// Off you go then, thanks for coming
 		wp_safe_redirect($referer);
 		exit;
 	}
-	
-	// NGINX Cache: Functions to refer actions into main function (API)
+
+	////////////////////////////
+	// FUNCTIONS TO DO THINGS //
+	// Self-explanatory calls //
+	////////////////////////////
 	
 	function nginx_cache_purge() {
-		$this->cpanel_api_request('NginxCaching/clear_cache', 'NGINX User Cache has been successfully purged!', 'We hit a snag while purging the NGINX User Cache. If this continues, please contact us.');
+		$this->cpanel_api_request('NginxCaching/clear_cache', 'NGINX User Cache has been successfully purged!', 'TNC Toolbox hit a snag while purging the NGINX User Cache. If this continues, please contact us.');
 	}
 	
 	function nginx_cache_off() {
-		$this->cpanel_api_request('NginxCaching/disable_cache', 'NGINX User Cache has been disabled!', 'We hit a snag while disabling the NGINX User Cache. If this continues, please contact us.');
+		$this->cpanel_api_request('NginxCaching/disable_cache', 'NGINX User Cache has been disabled!', 'TNC Toolbox hit a snag while disabling the NGINX User Cache. If this continues, please contact us.');
 	}
 	
 	function nginx_cache_on() {
-		$this->cpanel_api_request('NginxCaching/enable_cache', 'NGINX User Cache has been enabled!', 'We hit a snag while enabling the NGINX User Cache. If this continues, please contact us.');
+		$this->cpanel_api_request('NginxCaching/enable_cache', 'NGINX User Cache has been enabled!', 'TNC Toolbox hit a snag while enabling the NGINX User Cache. If this continues, please contact us.');
 	}
 
 	/**
