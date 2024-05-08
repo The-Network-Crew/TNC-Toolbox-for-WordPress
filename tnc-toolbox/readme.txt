@@ -3,7 +3,7 @@ Author URI: https://tnc.works
 Plugin URI: https://merlot.digital
 Donate link: 
 Contributors: 
-Tags: 
+Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Requires at least: 
 Tested up to: 6.5
 Requires PHP: 
@@ -11,7 +11,7 @@ Stable tag: 1.3.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Adds functionality (cache purge, etc) to WP - designed for NGINX-powered Servers on cPanel+WHM. Made to help you fly online - by Merlot Digital.
+Adds functionality (cache purge, etc) to WP - designed for NGINX-powered Servers on cPanel+WHM. Made to help you fly online.
 
 
 == Description ==
