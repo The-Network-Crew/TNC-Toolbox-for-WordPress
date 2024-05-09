@@ -7,7 +7,7 @@ Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Requires at least: 
 Tested up to: 6.5
 Requires PHP: 
-Stable tag: 1.3.6
+Stable tag: 1.3.7
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -73,9 +73,13 @@ Please note there are pre-requisites to running the scripts, so understand & pre
 
 == Changelog ==
 
+= 1.3.7: May 9, 2024 =
+* Declare class firstly, resolve warnings (#18)
+* Slight improvements to GUI/Menu wording
+
 = 1.3.6: May 2, 2024 =
-* Pluggable: Remove dependency (#17) support multi-site
-* Re-factor: Merge API calls into single function
+* Pluggable: Remove dependency, ie. support multi-site (#17)
+* Re-factor: Merge API calls into single function (#16)
 * GPLv3: Consistent, no longer partial v2 & v3
 
 = 1.3.5: December 10, 2023 =
