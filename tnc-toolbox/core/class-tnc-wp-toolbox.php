@@ -111,7 +111,7 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 				 * Fire a custom action to allow dependencies
 				 * after the successful plugin setup
 				 */
-				do_action( 'TNCWPTBOX/plugin_loaded' );
+				do_action('TNCWPTBOX/plugin_loaded');
 			}
 
 			return self::$instance;
@@ -125,7 +125,7 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 		 * @return  void
 		 */
 		private function base_hooks() {
-			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
+			add_action('plugins_loaded', array(self::$instance, 'load_textdomain'));
 			add_action('plugins_loaded', array(self::$instance->run, 'add_capability_dependent_hooks'));
 			add_action('plugins_loaded', array(self::$instance->settings, 'add_capability_dependent_settings'));
 		}
@@ -138,7 +138,7 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 		 * @return  void
 		 */
 		public function load_textdomain() {
-			load_plugin_textdomain( 'tnc-toolbox', FALSE, dirname( plugin_basename( TNCWPTBOX_PLUGIN_FILE ) ) . '/languages/' );
+			load_plugin_textdomain('tnc-toolbox', FALSE, dirname(plugin_basename(TNCWPTBOX_PLUGIN_FILE)) . '/languages/' );
 		}
 
 	}
