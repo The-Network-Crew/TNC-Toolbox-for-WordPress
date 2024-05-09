@@ -100,7 +100,7 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 		 */
 		public static function instance() {
 			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof Tnc_Wp_Toolbox ) ) {
-				self::$instance					= new Tnc_Wp_Toolbox;
+				self::$instance				= new Tnc_Wp_Toolbox;
 				self::$instance->includes();
 				self::$instance->helpers		= new Tnc_Wp_Toolbox_Helpers();
 				self::$instance->settings		= new Tnc_Wp_Toolbox_Settings();
