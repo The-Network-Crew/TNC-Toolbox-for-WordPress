@@ -5,13 +5,13 @@
  * @package       TNCWPTBOX
  * @author        The Network Crew Pty Ltd (TNC)
  * @license       gplv3
- * @version       1.3.6
+ * @version       1.3.7
  *
  * @wordpress-plugin
  * Plugin Name:   TNC Toolbox: Web Performance
  * Plugin URI:    https://merlot.digital
  * Description:   Adds functionality to WP - designed for NGINX-powered Servers on cPanel+WHM. Made to help you fly online.
- * Version:       1.3.6
+ * Version:       1.3.7
  * Author:        The Network Crew Pty Ltd (TNC)
  * Author URI:    https://tnc.works
  * Domain Path:   /languages
@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 define( 'TNCWPTBOX_NAME',		'TNC Toolbox' );
 
 // Plugin version
-define( 'TNCWPTBOX_VERSION',		'1.3.6' );
+define( 'TNCWPTBOX_VERSION',		'1.3.7' );
 
 // Plugin Root File
 define( 'TNCWPTBOX_PLUGIN_FILE',	__FILE__ );
