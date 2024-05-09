@@ -33,9 +33,9 @@ With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the
 
 We plan to add further features as clients & the community request it. 
 
-_Please let us know your ideas on GitHub - we'd love to hear from you!_
+_Please let us know your ideas on [GitHub](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/) - we'd love to hear from you!_
 
-**FOSS by [The Network Crew Pty Ltd](https://tnc.works) for [Merlot Digital](https://merlot.digital) & the world.**
+**FOSS by [The Network Crew Pty Ltd](https://tnc.works) for [Merlot Digital](https://merlot.digital) and the world.**
 
 
 == Frequently Asked Questions ==
