@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [1.3.7] - 2024-05-09
+
+### 💅 Polish
+- Slight improvements to GUI/Menu wording
+
+### 🐛 Bug Fix
+- Declare class firstly, resolve warnings (#18)
+
 ## [1.3.6] - 2024-05-02
 
 ### 💅 Polish
