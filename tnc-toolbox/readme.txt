@@ -32,7 +32,7 @@ With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the
 
 We plan to add further features as clients & the community request it. 
 
-**Let us know your thoughts on GitHub!**
+**Let us know your thoughts on GitHub! We'd love to hear from you.**
 
 
 == Frequently Asked Questions ==
@@ -64,11 +64,23 @@ Please note there are pre-requisites to running the scripts, so understand & pre
 
 == Installation ==
 
+Pre-requisites:
+1. To use ea-NGINX features, your Hosting needs to be on cPanel
+2. Acquire a cPanel API Token (cPanel > Manage API Tokens)
+3. Configure the TNC Toolbox plugin inside WordPress
+
+How to install:
 1. Go to `Plugins` in WP-Admin
 2. Click on the button `Add New`
 3. Search for `TNC Toolbox` then click `Install Now`
 4. Click on `Activate plugin` then `Settings`
 5. Enter your API Token, User & Hostname
+6. Save the config & use WP as-normal!
+
+Caching ideals:
+- Don't forget, ea-NGINX (reverse proxy caching) is meant to be 2nd-level
+- ie. Make sure your WP site also has on-site caching, like WP Super Cache
+- You can go further with caching, and should: like browser-caching assets!
 
 
 == Changelog ==
