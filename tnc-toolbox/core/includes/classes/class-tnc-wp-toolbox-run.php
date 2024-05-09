@@ -36,7 +36,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @since		1.0.0
  */
 class Tnc_Wp_Toolbox_Run{
-
 	// Our Tnc_Wp_Toolbox_Run constructor to run the plugin logic.
 	function __construct(){
 		$this->add_hooks();
@@ -135,7 +134,7 @@ class Tnc_Wp_Toolbox_Run{
 	    $args = array(
 		'id'    => 'nginx_cache_purge',
 		'parent' => 'tnc_parent_menu_entry',
-		'title' => 'NGINX User Cache: Purge',
+		'title' => 'NGINX Cache: Purge!',
 		'href'  => admin_url( 'admin-post.php?action=nginx_cache_purge' ),
 		'meta'  => array( 'class' => 'nginx-cache-btn nginx-cache-purge' ),
 	    );
@@ -147,7 +146,7 @@ class Tnc_Wp_Toolbox_Run{
 	    $args = array(
 	        'id'    => 'nginx_cache_off',
 	        'parent' => 'tnc_parent_menu_entry',
-	        'title' => 'NGINX User Cache: Off',
+	        'title' => 'NGINX Cache: Off',
 	        'href'  => admin_url( 'admin-post.php?action=nginx_cache_off' ),
 	        'meta'  => array( 'class' => 'nginx-cache-btn nginx-cache-off' ),
 	    );
@@ -159,7 +158,7 @@ class Tnc_Wp_Toolbox_Run{
 	    $args = array(
 	        'id'    => 'nginx_cache_on',
 	        'parent' => 'tnc_parent_menu_entry',
-	        'title' => 'NGINX User Cache: On',
+	        'title' => 'NGINX Cache: On',
 	        'href'  => admin_url( 'admin-post.php?action=nginx_cache_on' ),
 	        'meta'  => array( 'class' => 'nginx-cache-btn nginx-cache-on' ),
 	    );
@@ -215,15 +214,15 @@ class Tnc_Wp_Toolbox_Run{
 	////////////////////////////
 	
 	function nginx_cache_purge() {
-		$this->cpanel_api_request('NginxCaching/clear_cache', 'NGINX User Cache has been successfully purged!', 'TNC Toolbox hit a snag while purging the NGINX User Cache. If this continues, please contact us.');
+		$this->cpanel_api_request('NginxCaching/clear_cache', 'NGINX Cache has been successfully purged!', 'TNC Toolbox hit a snag purging the NGINX Cache. If this continues, please contact your Hosting Support.');
 	}
 	
 	function nginx_cache_off() {
-		$this->cpanel_api_request('NginxCaching/disable_cache', 'NGINX User Cache has been disabled!', 'TNC Toolbox hit a snag while disabling the NGINX User Cache. If this continues, please contact us.');
+		$this->cpanel_api_request('NginxCaching/disable_cache', 'NGINX Cache has been disabled.', 'TNC Toolbox hit a snag disabling the NGINX Cache. If this continues, please contact your Hosting Support.');
 	}
 	
 	function nginx_cache_on() {
-		$this->cpanel_api_request('NginxCaching/enable_cache', 'NGINX User Cache has been enabled!', 'TNC Toolbox hit a snag while enabling the NGINX User Cache. If this continues, please contact us.');
+		$this->cpanel_api_request('NginxCaching/enable_cache', 'NGINX Cache has been enabled!', 'TNC Toolbox hit a snag enabling the NGINX Cache. If this continues, please contact your Hosting Support.');
 	}
 
 	/**
