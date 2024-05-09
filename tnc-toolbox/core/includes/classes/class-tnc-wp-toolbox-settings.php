@@ -38,7 +38,7 @@ class Tnc_Wp_Toolbox_Settings{
      * @return string The plugin name
      */
     public function get_plugin_name(){
-    	return apply_filters( 'TNCWPTBOX/settings/get_plugin_name', $this->plugin_name );
+    	return apply_filters('TNCWPTBOX/settings/get_plugin_name', $this->plugin_name);
     }
 
     // Function to register the restricted items, from above
@@ -46,7 +46,7 @@ class Tnc_Wp_Toolbox_Settings{
         if (current_user_can('update_core')) {
             add_action('tnc_update_empty_configs_transient', array($this, 'update_empty_configs_transient'));
             add_action('all_admin_notices', array($this, 'tnc_wp_toolbox_empty_configs_notice'));
-            add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
+            add_action('admin_menu', array($this, 'register_admin_menu'));
         }
     }
 
@@ -137,21 +137,21 @@ class Tnc_Wp_Toolbox_Settings{
         // Save the API key to file
     	$api_key_file = TNCWPTBOX_CONFIG_DIR . 'cpanel-api-key';
     	if ( file_put_contents( $api_key_file, $api_key ) === false ) {
-    		wp_die( 'Unable to save API Key to file.' );
+    		wp_die( 'TNC Toolbox: Unable to save API Key to file.' );
     	}
     	chmod( $api_key_file, 0600 );
 
         // Save the username to file
     	$username_file = TNCWPTBOX_CONFIG_DIR . 'cpanel-username';
     	if ( file_put_contents( $username_file, $username ) === false ) {
-    		wp_die( 'Unable to save Username to file.' );
+    		wp_die( 'TNC Toolbox: Unable to save Username to file.' );
     	}
     	chmod( $username_file, 0600 );
 
         // Save the hostname to file
     	$hostname_file = TNCWPTBOX_CONFIG_DIR . 'server-hostname';
     	if ( file_put_contents( $hostname_file, $hostname ) === false ) {
-    		wp_die( 'Unable to save Hostname to file.' );
+    		wp_die( 'TNC Toolbox: Unable to save Hostname to file.' );
     	}
     	chmod( $hostname_file, 0600 );
 
