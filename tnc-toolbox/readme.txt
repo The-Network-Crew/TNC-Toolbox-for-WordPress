@@ -16,7 +16,7 @@ Adds functionality (cache purge, etc) to WP - designed for NGINX-powered Servers
 
 == Description ==
 
-This plugin enhances your WordPress experience with NGINX-on-cPanel (ea-nginx). 
+TNC Toolbox aims to enhance your WordPress experience with NGINX-on-cPanel (ea-nginx). 
 
 Built for our Managed Server clients, we've open-sourced it so others can enjoy it too!
 
@@ -24,15 +24,18 @@ With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the
 
 **At the moment, TNC Toolbox:**
 
-- allows you to enable, disable and purge the NGINX User Cache
-- auto-purges the NGINX User Cache on post/page publish/update
-- alerts you if the plugin is activated but has not been configured
-- retains its configuration (API Token etc) when the plugin is updated
-- only allows Administrators to enable/disable caching; edit config
+- Allows you to enable, disable and purge the NGINX User Cache
+- Purges the NGINX Cache magically on post/page publish/update!
+- Lets you know if the plugin is activated but not yet configured
+- Only allows Administrators to enable/disable caching; edit config
+
+**Eager for even more capabilities?**
 
 We plan to add further features as clients & the community request it. 
 
-**Let us know your thoughts on GitHub! We'd love to hear from you.**
+_Please let us know your ideas on GitHub - we'd love to hear from you!_
+
+**FOSS by [The Network Crew Pty Ltd](https://tnc.works) for [Merlot Digital](https://merlot.digital) & the world.**
 
 
 == Frequently Asked Questions ==
@@ -64,12 +67,12 @@ Please note there are pre-requisites to running the scripts, so understand & pre
 
 == Installation ==
 
-Pre-requisites:
+**Pre-requisites:**
 1. To use ea-NGINX features, your Hosting needs to be on cPanel
 2. Acquire a cPanel API Token (cPanel > Manage API Tokens)
 3. Configure the TNC Toolbox plugin inside WordPress
 
-How to install:
+**How to install:**
 1. Go to `Plugins` in WP-Admin
 2. Click on the button `Add New`
 3. Search for `TNC Toolbox` then click `Install Now`
@@ -77,7 +80,7 @@ How to install:
 5. Enter your API Token, User & Hostname
 6. Save the config & use WP as-normal!
 
-Caching ideals:
+**Caching ideals:**
 - Don't forget, ea-NGINX (reverse proxy caching) is meant to be 2nd-level
 - ie. Make sure your WP site also has on-site caching, like WP Super Cache
 - You can go further with caching, and should: like browser-caching assets!
