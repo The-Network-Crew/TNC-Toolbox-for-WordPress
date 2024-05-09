@@ -40,22 +40,15 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 		private static $instance;
 
 		/**
-		 * TNCWPTBOX helpers object.
+		 * TNCWPTBOX object declarations.
 		 *
 		 * @access	public
 		 * @since	1.0.0
-		 * @var		object|Tnc_Wp_Toolbox_Helpers
+		 * @var		object|Tnc_Wp_Toolbox_*
 		 */
 		public $helpers;
-
-		/**
-		 * TNCWPTBOX settings object.
-		 *
-		 * @access	public
-		 * @since	1.0.0
-		 * @var		object|Tnc_Wp_Toolbox_Settings
-		 */
 		public $settings;
+		public $run;
 
 		/**
 		 * Throw error on object clone.
