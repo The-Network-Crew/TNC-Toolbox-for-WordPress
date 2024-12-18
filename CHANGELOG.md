@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [1.3.8] - 2024-12-18
+
+### 💅 Polish
+- Update compatibility with WP to support v6.7 (#20)
+- Slight improvements to GUI Notice wording (#21)
+
 ## [1.3.7] - 2024-05-09
 
 ### 💅 Polish
