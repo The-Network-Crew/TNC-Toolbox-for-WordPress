@@ -146,7 +146,7 @@ class Tnc_Wp_Toolbox_Run{
 	    $args = array(
 	        'id'    => 'nginx_cache_off',
 	        'parent' => 'tnc_parent_menu_entry',
-	        'title' => 'NGINX Cache: Off',
+	        'title' => 'NGINX Cache: OFF',
 	        'href'  => admin_url( 'admin-post.php?action=nginx_cache_off' ),
 	        'meta'  => array( 'class' => 'nginx-cache-btn nginx-cache-off' ),
 	    );
@@ -158,7 +158,7 @@ class Tnc_Wp_Toolbox_Run{
 	    $args = array(
 	        'id'    => 'nginx_cache_on',
 	        'parent' => 'tnc_parent_menu_entry',
-	        'title' => 'NGINX Cache: On',
+	        'title' => 'NGINX Cache: ON',
 	        'href'  => admin_url( 'admin-post.php?action=nginx_cache_on' ),
 	        'meta'  => array( 'class' => 'nginx-cache-btn nginx-cache-on' ),
 	    );
@@ -179,7 +179,7 @@ class Tnc_Wp_Toolbox_Run{
 			if (is_readable($file_path)) {
 				$config[$item] = file_get_contents($file_path);
 			} else {
-				set_transient('tnc_wp_toolbox_cpanel_action_error', "The {$item} config seems to be empty - please configure it in Settings > TNC Toolbox. Cheers!", 60);
+				set_transient('tnc_wp_toolbox_cpanel_action_error', "Problemo! {$item} config seems to be empty - please update it in Settings > TNC Toolbox. Cheers!", 60);
 				wp_safe_redirect(admin_url());
 				exit;
 			}
