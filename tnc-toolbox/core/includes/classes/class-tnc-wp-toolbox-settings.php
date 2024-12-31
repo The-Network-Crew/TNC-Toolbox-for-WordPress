@@ -184,7 +184,7 @@ class Tnc_Wp_Toolbox_Settings{
                         <td><input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username"  size="45" value="<?php echo esc_attr( $this->get_file_content( TNCWPTBOX_CONFIG_DIR . 'cpanel-username' ) ); ?>" /></td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="tnc_toolbox_server_hostname">Server Hostname</label><br><small>FQDN of Server, no HTTPS etc.</small></th>
+                        <th scope="row"><label for="tnc_toolbox_server_hostname">Server Hostname</label><br><small>FQDN of Server. No HTTPS etc.</small></th>
                         <td><input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname"  size="45" value="<?php echo esc_attr( $this->get_file_content( TNCWPTBOX_CONFIG_DIR . 'server-hostname' ) ); ?>" /></td>
                     </tr>
                 </table>
