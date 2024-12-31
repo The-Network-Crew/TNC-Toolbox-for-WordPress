@@ -198,7 +198,7 @@ class Tnc_Wp_Toolbox_Run{
 		// Match up conditions/errors, relay
 		if (wp_remote_retrieve_response_code($response) == 200) {
 			set_transient('tnc_wp_toolbox_cpanel_action_success', $success_message, 60);
-		} elseif (!empty($response_body)) {
+		} elseif (!empty($response_body) && strlen($response_body) < 1000) {
 			set_transient('tnc_wp_toolbox_cpanel_action_error', 'TNC Toolbox: ' . $endpoint . ' hit a snag. The error we received is: ' . $response_body, 60);
 		} else {
 			set_transient('tnc_wp_toolbox_cpanel_action_error', $error_message, 60);
