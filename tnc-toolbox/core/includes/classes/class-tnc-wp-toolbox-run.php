@@ -179,7 +179,7 @@ class Tnc_Wp_Toolbox_Run{
 			if (is_readable($file_path)) {
 				$config[$item] = file_get_contents($file_path);
 			} else {
-				set_transient('tnc_wp_toolbox_cpanel_action_error', "Problemo! {$item} config seems to be empty - please update it in Settings > TNC Toolbox. Cheers!", 60);
+				set_transient('tnc_wp_toolbox_cpanel_action_error', "TNC Toolbox: Problemo! {$item} config seems to be empty - please update it in Settings > TNC Toolbox. Cheers!", 60);
 				wp_safe_redirect(admin_url());
 				exit;
 			}
@@ -192,13 +192,14 @@ class Tnc_Wp_Toolbox_Run{
 
 		// Do the thing, prepare to handle
 		$response = wp_remote_post($url, ['headers' => $headers, 'body' => $body]);
+		$response_body = wp_remote_retrieve_body($response);
 		$referer = wp_get_referer();
-
+		
 		// Match up conditions/errors, relay
-		if (is_wp_error($response)) {
-			set_transient('tnc_wp_toolbox_cpanel_action_error', $response->get_error_message(), 60);
-		} elseif (wp_remote_retrieve_response_code($response) == 200) {
+		if (wp_remote_retrieve_response_code($response) == 200) {
 			set_transient('tnc_wp_toolbox_cpanel_action_success', $success_message, 60);
+		} elseif (!empty($response_body)) {
+			set_transient('tnc_wp_toolbox_cpanel_action_error', 'TNC Toolbox: ' . $endpoint . ' hit a snag. The error we received is: ' . $response_body, 60);
 		} else {
 			set_transient('tnc_wp_toolbox_cpanel_action_error', $error_message, 60);
 		}
@@ -214,15 +215,15 @@ class Tnc_Wp_Toolbox_Run{
 	////////////////////////////
 	
 	function nginx_cache_purge() {
-		$this->cpanel_api_request('NginxCaching/clear_cache', 'NGINX Cache has been successfully purged!', 'TNC Toolbox hit a snag purging the NGINX Cache. If this continues, please contact your Hosting Support.');
+		$this->cpanel_api_request('NginxCaching/clear_cache', 'TNC Toolbox: NGINX Cache has been Purged!', 'TNC Toolbox: NginxCaching/clear_cache hit an uncaught snag. If this continues, please contact your Hosting Support.');
 	}
 	
 	function nginx_cache_off() {
-		$this->cpanel_api_request('NginxCaching/disable_cache', 'NGINX Cache has been disabled.', 'TNC Toolbox hit a snag disabling the NGINX Cache. If this continues, please contact your Hosting Support.');
+		$this->cpanel_api_request('NginxCaching/disable_cache', 'TNC Toolbox: NGINX Cache has been Disabled.', 'TNC Toolbox: NginxCaching/disable_cache hit an uncaught snag. If this continues, please contact your Hosting Support.');
 	}
 	
 	function nginx_cache_on() {
-		$this->cpanel_api_request('NginxCaching/enable_cache', 'NGINX Cache has been enabled!', 'TNC Toolbox hit a snag enabling the NGINX Cache. If this continues, please contact your Hosting Support.');
+		$this->cpanel_api_request('NginxCaching/enable_cache', 'TNC Toolbox: NGINX Cache has been Enabled!', 'TNC Toolbox: NginxCaching/enable_cache hit an uncaught snag. If this continues, please contact your Hosting Support.');
 	}
 
 	/**
