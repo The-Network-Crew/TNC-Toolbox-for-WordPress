@@ -7,7 +7,7 @@ Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Requires at least: 
 Tested up to: 6.7
 Requires PHP: 
-Stable tag: 1.3.8
+Stable tag: 1.3.9
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -87,6 +87,10 @@ Please note there are pre-requisites to running the scripts, so understand & pre
 
 
 == Changelog ==
+
+= 1.3.9: Dec 31, 2024 =
+* Pass-through error from cP API back to WP GUI (#22)
+* Improve uncaught error wording, and clarify on user type
 
 = 1.3.8: Dec 18, 2024 =
 * Update compatibility to WP 6.7.x sub-major (#20)
