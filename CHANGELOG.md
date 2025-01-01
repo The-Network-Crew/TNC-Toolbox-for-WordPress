@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [1.3.9] - 2024-12-31
+
+### 💅 Polish
+- Pass-through error from cP API back to WP GUI (#22)
+- Improve uncaught error wording, and clarify on user type
+
 ## [1.3.8] - 2024-12-18
 
 ### 💅 Polish
