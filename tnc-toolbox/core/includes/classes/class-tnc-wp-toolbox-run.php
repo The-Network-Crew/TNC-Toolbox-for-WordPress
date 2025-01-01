@@ -197,10 +197,14 @@ class Tnc_Wp_Toolbox_Run{
 		
 		// Match up conditions/errors, relay
 		if (wp_remote_retrieve_response_code($response) == 200) {
+			// Success relayed via green transient message.
 			set_transient('tnc_wp_toolbox_cpanel_action_success', $success_message, 60);
-		} elseif (!empty($response_body) && strlen($response_body) < 1000) {
+		} elseif (!empty($response_body)) {
+			// Truncate relayed error to first 200 chars, then relay.
+			substr($response_body, 0, 200);
 			set_transient('tnc_wp_toolbox_cpanel_action_error', 'TNC Toolbox: ' . $endpoint . ' hit a snag. The error we received is: ' . $response_body, 60);
 		} else {
+			// Failure (generic) relayed if there is no error returned from API.
 			set_transient('tnc_wp_toolbox_cpanel_action_error', $error_message, 60);
 		}
 
