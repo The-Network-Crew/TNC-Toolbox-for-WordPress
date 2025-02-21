@@ -2,8 +2,9 @@
 
 **WP.org:** https://wordpress.org/plugins/tnc-toolbox
 
-- Allows you to purge the EA-NGINX User Cache from within WordPress
-- Automatically purges the cache when a post or page is updated in WP
+- Allows you to purge the EA-NGINX User Cache from within WP
+- Automatically purges the cache when a post or page is updated
+- Does the same when the WP Core has been successfully upgraded :)
 - Allows you to disable or enable the NGINX User Cache from inside WP
 - Only presents the options to enable/disable/configure for WP Admins
 - For any action, redirects you back to the page you requested it from

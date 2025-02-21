@@ -1,13 +1,11 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
-## [1.4.0] - TBC 2025-##-##
-
-### 🚀 Feature
-- ??? (more cP API integrations?)
+## [1.4.0] - 2025-02-21
 
 ### 💅 Polish
-- Set max length of newly-relayed error (re: #22)
+- Set max length of newly-relayed API error (re: #22)
+- Auto-purge when WP Core is successfully upgraded (#23)
 
 ## [1.3.9] - 2024-12-31
 

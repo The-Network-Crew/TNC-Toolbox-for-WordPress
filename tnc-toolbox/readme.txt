@@ -7,11 +7,11 @@ Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Requires at least: 
 Tested up to: 6.7
 Requires PHP: 
-Stable tag: 1.3.9
+Stable tag: 1.4.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Adds functionality (cache purge, etc) to WP - designed for NGINX-powered Servers on cPanel+WHM. Made to help you fly online.
+Adds functionality (cache purge, etc) to WP - designed for NGINX-powered Servers on cPanel+WHM. Made to help you fly online!
 
 
 == Description ==
@@ -26,6 +26,7 @@ With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the
 
 - Allows you to enable, disable and purge the NGINX User Cache
 - Purges the NGINX Cache magically on post/page publish/update!
+- Also purges the Cache when the WP Core is successfully updated
 - Lets you know if the plugin is activated but not yet configured
 - Only allows Administrators to enable/disable caching; edit config
 
@@ -87,6 +88,10 @@ Please note there are pre-requisites to running the scripts, so understand & pre
 
 
 == Changelog ==
+
+= 1.4.0: Feb 21, 2025 =
+* Truncate max-length of relayed API error to GUI (#22)
+* Auto-purge when WP Core is successfully upgraded (#23)
 
 = 1.3.9: Dec 31, 2024 =
 * Pass-through error from cP API back to WP GUI (#22)
