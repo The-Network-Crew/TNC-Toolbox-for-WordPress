@@ -18,7 +18,7 @@ Made to help you fly online! Adds functionality (cache purge, etc) to WP - desig
 
 TNC Toolbox aims to enhance your WordPress experience with NGINX-on-cPanel (ea-nginx). 
 
-Built for our Managed Server clients, we've open-sourced it so others can enjoy it too!
+**Built for our Managed Server clients, we've open-sourced it so others can enjoy it too!**
 
 With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the plugin aims to help with Website Management, Performance and Security. 
 
@@ -36,7 +36,7 @@ We plan to add further features as clients & the community request it.
 
 _Please let us know your ideas on [GitHub](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/) - we'd love to hear from you!_
 
-**FOSS by [The Network Crew Pty Ltd](https://tnc.works) (TNC) for [Merlot Digital](https://merlot.digital) & the world.** ❤️
+> **FOSS by [The Network Crew Pty Ltd](https://tnc.works) (TNC) for [Merlot Digital](https://merlot.digital) & the world.** ❤️
 
 == Screenshots ==
 

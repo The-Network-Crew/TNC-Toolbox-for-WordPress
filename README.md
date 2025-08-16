@@ -9,7 +9,7 @@
 - Only presents the options to enable/disable/configure for WP Admins
 - For any action, redirects you back to the page you requested it from
 
-**Will expand to include other features as requested by community & clients!**
+> **Will expand to include other features as requested by community & clients!**
 
 ## 🖥️ (PLUGIN) System Requirements
 
