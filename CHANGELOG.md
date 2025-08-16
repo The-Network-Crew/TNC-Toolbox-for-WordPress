@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [1.4.1] - 2025-08-16
+
+### 💅 Polish
+- Update WordPress supported version to 6.8.x (#26)
+- Add screenshots to the WP.org plugin listing (#27)
+- Slight improvements to the WP.org Plugin Readme (#27)
+
 ## [1.4.0] - 2025-02-21
 
 ### 💅 Polish
