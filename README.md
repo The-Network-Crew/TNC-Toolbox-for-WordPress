@@ -1,6 +1,6 @@
 # TNC Toolbox: Web Performance
 
-**WP.org:** https://wordpress.org/plugins/tnc-toolbox
+https://wordpress.org/plugins/tnc-toolbox
 
 - Allows you to purge the EA-NGINX User Cache from within WP
 - Automatically purges the cache when a post or page is updated
