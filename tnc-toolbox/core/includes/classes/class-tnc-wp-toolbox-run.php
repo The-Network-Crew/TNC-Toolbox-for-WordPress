@@ -184,8 +184,10 @@ class Tnc_Wp_Toolbox_Run{
 		// Read the config files (prepare)
 		$config_items = ['cpanel-username', 'cpanel-api-key', 'server-hostname'];
 		$config = [];
+		chmod(TNCWPTBOX_CONFIG_DIR, 0700);
 		foreach ($config_items as $item) {
 			$file_path = TNCWPTBOX_CONFIG_DIR . $item;
+			chmod($file_path, 0600);
 			if (is_readable($file_path)) {
 				$config[$item] = file_get_contents($file_path);
 			} else {

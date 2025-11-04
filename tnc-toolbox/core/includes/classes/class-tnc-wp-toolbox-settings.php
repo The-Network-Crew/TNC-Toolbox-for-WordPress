@@ -128,7 +128,6 @@ class Tnc_Wp_Toolbox_Settings{
         if ( ! is_dir( TNCWPTBOX_CONFIG_DIR ) ) {
             wp_mkdir_p( TNCWPTBOX_CONFIG_DIR );
         }
-        chmod(TNCWPTBOX_CONFIG_DIR, 0700);
 
         // Sanitize the API key, username, and hostname
     	$api_key = sanitize_text_field( $_POST['tnc_toolbox_api_key'] );
@@ -140,23 +139,21 @@ class Tnc_Wp_Toolbox_Settings{
     	if ( file_put_contents( $api_key_file, $api_key ) === false ) {
     		wp_die( 'TNC Toolbox: Unable to save API Key to file.' );
     	}
-    	chmod( $api_key_file, 0600 );
 
         // Save the username to file
     	$username_file = TNCWPTBOX_CONFIG_DIR . 'cpanel-username';
     	if ( file_put_contents( $username_file, $username ) === false ) {
     		wp_die( 'TNC Toolbox: Unable to save Username to file.' );
     	}
-    	chmod( $username_file, 0600 );
 
         // Save the hostname to file
     	$hostname_file = TNCWPTBOX_CONFIG_DIR . 'server-hostname';
     	if ( file_put_contents( $hostname_file, $hostname ) === false ) {
     		wp_die( 'TNC Toolbox: Unable to save Hostname to file.' );
     	}
-    	chmod( $hostname_file, 0600 );
 
         // Redirect to the settings page
+        $this->config_inode_checks();
     	$this->render_settings_page();
     	exit;
     }
@@ -217,8 +214,8 @@ class Tnc_Wp_Toolbox_Settings{
      */
     private function config_inode_checks() {
         chmod(TNCWPTBOX_CONFIG_DIR, 0700);
-        chmod($api_key_file, 0600);
-        chmod($username_file, 0600);
-        chmod($hostname_file, 0600);
+        chmod(TNCWPTBOX_CONFIG_DIR . 'cpanel-api-key', 0600);
+        chmod(TNCWPTBOX_CONFIG_DIR . 'cpanel-username', 0600);
+        chmod(TNCWPTBOX_CONFIG_DIR . 'server-hostname', 0600);
     }
 }

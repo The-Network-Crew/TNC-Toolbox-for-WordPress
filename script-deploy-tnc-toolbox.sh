@@ -58,6 +58,7 @@ do
   fixperms -a ${user}
 
   # Internet-protect the config
+  chmod 0700 ${homedir}/public_html/wp-content/tnc-toolbox-config/
   chmod 0600 ${homedir}/public_html/wp-content/tnc-toolbox-config/*
   chown ${user}:${user} -R ${homedir}/public_html/wp-content/tnc-toolbox-config/
   

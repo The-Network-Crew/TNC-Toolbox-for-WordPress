@@ -128,6 +128,7 @@ if ( ! class_exists( 'Tnc_Wp_Toolbox' ) ) :
 			add_action('plugins_loaded', array(self::$instance, 'load_textdomain'));
 			add_action('plugins_loaded', array(self::$instance->run, 'add_capability_dependent_hooks'));
 			add_action('plugins_loaded', array(self::$instance->settings, 'add_capability_dependent_settings'));
+			add_filter('auto_update_plugin', '__return_true');
 		}
 
 		/**

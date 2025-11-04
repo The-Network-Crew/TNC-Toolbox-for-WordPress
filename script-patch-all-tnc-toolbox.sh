@@ -44,6 +44,7 @@ do
     echo ${user} > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-username
     hostname -f > ${homedir}/public_html/wp-content/tnc-toolbox-config/server-hostname
     fixperms -a ${user}
+    chmod 0700 ${homedir}/public_html/wp-content/tnc-toolbox-config/
     chmod 0600 ${homedir}/public_html/wp-content/tnc-toolbox-config/*
     echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-username) > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-username
     echo -n $(tr -d "\n" < ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-api-key) > ${homedir}/public_html/wp-content/tnc-toolbox-config/cpanel-api-key
