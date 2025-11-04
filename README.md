@@ -35,9 +35,10 @@ https://wordpress.org/plugins/tnc-toolbox
 
 **Scripts supplied:**
 
-1. `script-deploy-tnc-toolbox.sh` :: Deploy to all WP sites found across a server
-2. `script-patch-all-tnc-toolbox.sh` :: Update all copies found with latest version
-3. `script-remove-conf-newlines.sh` :: Fix up config files to ensure no blank post-PHP
+1. `_scripts\deploy-tnc-toolbox.sh` :: Deploy to all WP sites found across a server
+2. `_scripts\fix-configs-tnc-toolbox.sh` :: Fix up config files to ensure no blank pages
+3. `_scripts\re-install-all-tnc-toolbox.sh` :: Update all copies found with latest version
+4. `_scripts\update-all-tnc-toolbox.sh` :: Only update every found installation of TNC Toolbox
 
 ## 🆘 (HELP) Getting help with the Plugin
 
