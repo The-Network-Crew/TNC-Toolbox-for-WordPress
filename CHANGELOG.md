@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [2.0.0] - 2025-11-05
+
+### 🔒 Security
+- Move configuration storage from files to WordPress database
+- Secure deletion of old config files after migration
+
+### ⚡️ Performance
+- Add direct quota info display in settings
+- Improve API response handling and error messages
+
+### 🏗 Architecture
+- Complete codebase reorganisation for better maintainability
+- Move cPanel API functionality to dedicated vendor module
+- Flatten directory structure
+- Simplify class hierarchy
+- Automatic config migration from old versions
+
 ## [1.4.2] - 2025-11-04
 
 ### 🐛 Bug Fix

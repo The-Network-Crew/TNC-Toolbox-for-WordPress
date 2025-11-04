@@ -30,15 +30,7 @@ https://wordpress.org/plugins/tnc-toolbox
 
 ## 🛠️ (DEPLOY) Loading it onto all WP sites
 
-- **Prepare your server: ensure shell/CageFS/wp/fixperms/jq are installed and properly functional.**
-- As root, execute the script and it should take care of the deployment process for your WP users.
-
-**Scripts supplied:**
-
-1. `_scripts\deploy-tnc-toolbox.sh` :: Deploy to all WP sites found across a server
-2. `_scripts\fix-configs-tnc-toolbox.sh` :: Fix up config files to ensure no blank pages
-3. `_scripts\re-install-all-tnc-toolbox.sh` :: Update all copies found with latest version
-4. `_scripts\update-all-tnc-toolbox.sh` :: Only update every found installation of TNC Toolbox
+Use WP-CLI to install **tnc-toolbox** for all relevant accounts.
 
 ## 🆘 (HELP) Getting help with the Plugin
 

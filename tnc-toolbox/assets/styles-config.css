@@ -1,0 +1,52 @@
+/* TNC Toolbox Admin Styles */
+.tnc-toolbox-header {
+    margin-bottom: 2em;
+}
+
+.tnc-toolbox-header h1 {
+    margin-bottom: 0.5em;
+}
+
+.tnc-toolbox-form {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 4px;
+}
+
+.tnc-toolbox-form .form-table th {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.tnc-toolbox-form .description {
+    margin-top: 4px;
+    color: #666;
+}
+
+.tnc-toolbox-status {
+    margin-top: 2em;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-left: 4px solid #46b450;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+}
+
+.tnc-toolbox-status h3 {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    color: #1d2327;
+}
+
+.tnc-toolbox-status p {
+    margin: 0;
+    color: #3c434a;
+}
+
+/* Input styling */
+.tnc-toolbox-form input[type="text"] {
+    width: 100%;
+    max-width: 25em;
+}

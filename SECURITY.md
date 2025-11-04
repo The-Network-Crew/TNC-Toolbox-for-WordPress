@@ -6,12 +6,12 @@ The single latest available release is the only release supported by this Securi
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.x.x latest  | :white_check_mark: |
+| 2.x.x latest  | :white_check_mark: |
 | 1.2.x   | :x:                |
 | 1.1.x   | :x:                |
 | 1.0.x   | :x:                |
 
-> \* Note: Latest version - if it is v1.2.3 then that is supported, if latest is v1.4.1 then that is supported, etc. 
+> \* Note: Latest version - if it is v2.2.3 then that is supported, if latest is v2.4.1 then that is supported, etc. 
 
 ## 🔒 Secure Code Contributions
 

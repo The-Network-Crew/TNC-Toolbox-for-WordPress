@@ -1,0 +1,261 @@
+<?php
+
+// Exit if accessed directly.
+if (!defined('ABSPATH')) exit;
+
+/**
+ * Plugin Settings Handler
+ *
+ * Manages plugin settings, database storage, and settings UI.
+ *
+ * @package    TNCWPTBOX
+ * @author     The Network Crew Pty Ltd
+ * @since      2.0.0
+ */
+class TNC_Settings {
+    /**
+     * The plugin name
+     * @var string
+     */
+    private $plugin_name;
+
+    /**
+     * Constructor.
+     * 
+     * @since 2.0.0
+     */
+    public function __construct() {
+        $this->plugin_name = TNCWPTBOX_NAME;
+        add_action('init', array($this, 'init_settings'));
+        add_action('admin_menu', array($this, 'register_admin_menu'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
+    }
+
+    public function enqueue_admin_styles($hook) {
+        if ($hook !== 'settings_page_tnc-toolbox') {
+            return;
+        }
+
+        wp_enqueue_style(
+            'tnc-toolbox-admin',
+            plugins_url('/assets/styles-config.css', dirname(__FILE__)),
+            array(),
+            TNCWPTBOX_VERSION
+        );
+    }
+
+    /**
+     * Initialize settings after WordPress is loaded
+     */
+    public function init_settings() {
+        if (current_user_can('update_core')) {
+            add_action('admin_menu', array($this, 'register_admin_menu'));
+        }
+    }
+
+    /**
+     * Return the plugin name
+     * @return string Plugin name
+     */
+    public function get_plugin_name() {
+        return apply_filters('TNCWPTBOX/settings/get_plugin_name', $this->plugin_name);
+    }
+
+    /**
+     * Register the WP Admin settings menu entry
+     */
+    public function register_admin_menu() {
+        add_options_page(
+            'TNC Toolbox',
+            'TNC Toolbox',
+            'manage_options',
+            'tnc_toolbox',
+            array($this, 'handle_settings_page')
+        );
+    }
+
+    /**
+     * Route settings page-loads; save/render
+     */
+    public function handle_settings_page() {
+        if (isset($_POST['submit_tnc_toolbox_settings']) && 
+            wp_verify_nonce($_POST['tnc_toolbox_settings_nonce'], 'tnc_toolbox_settings')) {
+            $this->save_settings();
+        } else {
+            $this->render_settings_page();
+        }
+    }
+
+    /**
+     * Save updated settings to database and test the connection
+     */
+    private function save_settings() {
+        // Sanitize inputs
+        $api_key = sanitize_text_field($_POST['tnc_toolbox_api_key']);
+        $username = sanitize_text_field($_POST['tnc_toolbox_username']);
+        $hostname = sanitize_text_field($_POST['tnc_toolbox_server_hostname']);
+
+        // Store in WordPress options
+        $saved = TNC_cPanel_UAPI::store_config($username, $api_key, $hostname);
+        if (!$saved) {
+            wp_die('TNC Toolbox: Unable to save settings to database.');
+        }
+
+        // Test the connection
+        $test_result = TNC_cPanel_UAPI::test_connection();
+        TNC_cPanel_UAPI::set_notice(
+            $test_result['message'],
+            $test_result['success'] ? 'success' : 'error'
+        );
+
+        // Check for old config directory and migrate if needed
+        $this->maybe_migrate_file_config();
+
+        // Show the settings page with any notices
+        $this->render_settings_page();
+        exit;
+    }
+
+    /**
+     * Migrate any existing file-based config to database
+     */
+    private function maybe_migrate_file_config() {
+        if (!defined('TNCWPTBOX_CONFIG_DIR') || !is_dir(TNCWPTBOX_CONFIG_DIR)) {
+            return;
+        }
+
+        // Only try to migrate if we don't already have DB settings
+        if (TNC_cPanel_UAPI::get_config() !== false) {
+            $this->cleanup_file_config();
+            return;
+        }
+
+        $config = array();
+        $config_items = array(
+            'cpanel-username' => 'username',
+            'cpanel-api-key' => 'api_key',
+            'server-hostname' => 'hostname'
+        );
+
+        foreach ($config_items as $file => $key) {
+            $file_path = TNCWPTBOX_CONFIG_DIR . $file;
+            if (is_readable($file_path)) {
+                $config[$key] = trim(file_get_contents($file_path));
+            }
+        }
+
+        // If we found all config items, store them
+        if (count($config) === count($config_items)) {
+            TNC_cPanel_UAPI::store_config(
+                $config['username'],
+                $config['api_key'],
+                $config['hostname']
+            );
+            $this->cleanup_file_config();
+        }
+    }
+
+    /**
+     * Securely remove old config files and directory
+     */
+    private function cleanup_file_config() {
+        if (!defined('TNCWPTBOX_CONFIG_DIR') || !is_dir(TNCWPTBOX_CONFIG_DIR)) {
+            return;
+        }
+
+        $files = array(
+            'cpanel-api-key',
+            'cpanel-username',
+            'server-hostname'
+        );
+
+        foreach ($files as $file) {
+            $file_path = TNCWPTBOX_CONFIG_DIR . $file;
+            if (file_exists($file_path)) {
+                // Overwrite with random data before deleting
+                file_put_contents($file_path, random_bytes(256));
+                unlink($file_path);
+            }
+        }
+
+        rmdir(TNCWPTBOX_CONFIG_DIR);
+    }
+
+    /**
+     * Render the plugin's settings page
+     */
+    public function render_settings_page() {
+        $config = TNC_cPanel_UAPI::get_config();
+        ?>
+        <div class="wrap">
+            <div class="tnc-toolbox-header">
+                <h1><?php echo esc_html(get_admin_page_title()) . " v" . TNCWPTBOX_VERSION; ?></h1>
+                <p>Configure your cPanel UAPI connection settings to enable NGINX cache management functionality.</p>
+            </div>
+
+            <div class="tnc-toolbox-form">
+                <form method="post">
+                    <input type="hidden" name="action" value="tnc_toolbox_settings" />
+                    <?php wp_nonce_field('tnc_toolbox_settings', 'tnc_toolbox_settings_nonce'); ?>
+                    
+                    <table class="form-table" role="presentation">
+                        <tr>
+                            <th scope="row">
+                                <label for="tnc_toolbox_api_key">cPanel API Token</label>
+                                <p class="description">
+                                    Key only, not the name. <a href="https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/" target="_blank">View documentation</a>.
+                                </p>
+                            </th>
+                            <td>
+                                <input type="text" id="tnc_toolbox_api_key" name="tnc_toolbox_api_key"
+                                    value="<?php echo esc_attr($config ? $config['api_key'] : ''); ?>" 
+                                    placeholder="Enter your cPanel API token"
+                                    class="regular-text" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <label for="tnc_toolbox_username">cPanel Username</label>
+                                <p class="description">Plain-text username. Not the API user.</p>
+                            </th>
+                            <td>
+                                <input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username"
+                                    value="<?php echo esc_attr($config ? $config['username'] : ''); ?>"
+                                    placeholder="Enter your cPanel username"
+                                    class="regular-text" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                <label for="tnc_toolbox_server_hostname">Server Hostname</label>
+                                <p class="description">FQDN of server (e.g., server.example.com). No HTTPS etc.</p>
+                            </th>
+                            <td>
+                                <input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname"
+                                    value="<?php echo esc_attr($config ? $config['hostname'] : ''); ?>"
+                                    placeholder="Enter your server hostname"
+                                    class="regular-text" />
+                            </td>
+                        </tr>
+                    </table>
+
+                    <?php submit_button('Save Settings & Test Connection'); ?>
+                    <input type="hidden" name="submit_tnc_toolbox_settings" value="1">
+                </form>
+
+                <?php if ($config): ?>
+                    <?php
+                    $quota = TNC_cPanel_UAPI::make_api_request('Quota/get_quota_info');
+                    if ($quota['success'] && isset($quota['data']['megabytes_used'])):
+                    ?>
+                        <div class="tnc-toolbox-status success">
+                            <h3>Server Status</h3>
+                            <p>Connection active. Current disk usage: <?php echo number_format($quota['data']['megabytes_used']); ?> MB</p>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php
+    }
+}
