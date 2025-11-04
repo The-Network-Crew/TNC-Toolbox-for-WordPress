@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [1.4.2] - 2025-11-04
+
+### 🐛 Bug Fix
+- Config Checker: Add function to iterate over
+- On-update Check: When core updates, also check
+
 ## [1.4.1] - 2025-08-16
 
 ### 💅 Polish

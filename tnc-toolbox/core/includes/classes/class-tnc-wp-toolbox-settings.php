@@ -128,6 +128,7 @@ class Tnc_Wp_Toolbox_Settings{
         if ( ! is_dir( TNCWPTBOX_CONFIG_DIR ) ) {
             wp_mkdir_p( TNCWPTBOX_CONFIG_DIR );
         }
+        chmod(TNCWPTBOX_CONFIG_DIR, 0700);
 
         // Sanitize the API key, username, and hostname
     	$api_key = sanitize_text_field( $_POST['tnc_toolbox_api_key'] );
@@ -206,5 +207,18 @@ class Tnc_Wp_Toolbox_Settings{
             return file_get_contents($file_path);
         }
         return '';
+    }
+
+    /**
+     * Iterates over config files & directory (maintenance task)
+     *
+     * @access public
+     * @since  1.4.2
+     */
+    private function config_inode_checks() {
+        chmod(TNCWPTBOX_CONFIG_DIR, 0700);
+        chmod($api_key_file, 0600);
+        chmod($username_file, 0600);
+        chmod($hostname_file, 0600);
     }
 }

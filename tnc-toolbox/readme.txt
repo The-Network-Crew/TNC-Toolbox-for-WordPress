@@ -7,7 +7,7 @@ Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Requires at least: 
 Tested up to: 6.8
 Requires PHP: 
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -101,6 +101,10 @@ This way, you can ensure maximum efficiency!
 The key is to purge when stale, so properly configuring your WP Plugin Cache is critical to ensuring that you don't end up with cache misses due to stale data that could've/should've been purged by garbage collection, preloading, etc, rule-sets.
 
 == Changelog ==
+
+= 1.4.2: Nov 4, 2025 =
+* Config Checker: Add function to iterate over
+* On-update Check: When core updates, also check
 
 = 1.4.1: Aug 16, 2025 =
 * Update WordPress supported version to 6.8.x (#26)

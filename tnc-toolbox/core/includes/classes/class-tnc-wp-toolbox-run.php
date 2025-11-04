@@ -63,7 +63,8 @@ class Tnc_Wp_Toolbox_Run{
 		add_action( 'tnc_scheduled_cache_purge', array( $this, 'nginx_cache_purge' ) );
 		add_action( 'post_updated', array( $this, 'purge_cache_on_update' ), 10, 3 );
 		// Purge the NGINX User Cache when WP Core is updated
-		add_action( '_core_updated_successfully', array( $this, 'nginx_cache_purge' ) );	
+		add_action( '_core_updated_successfully', array( $this, 'nginx_cache_purge' ) );
+		add_action( '_core_updated_successfully', array( $this, 'config_inode_checks' ) );
 	}
 
 	// These are run from the parent class to ensure pluggable.php is ready
