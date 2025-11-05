@@ -46,7 +46,7 @@ define('TNCTOOLBOX_PLUGIN_URL', plugin_dir_url(TNCTOOLBOX_PLUGIN_FILE));
 // Load required files
 require_once TNCTOOLBOX_PLUGIN_DIR . 'core/core.php';
 require_once TNCTOOLBOX_PLUGIN_DIR . 'core/settings.php';
-require_once TNCTOOLBOX_PLUGIN_DIR . 'vendors/cpanel_uapi.php';
+require_once TNCTOOLBOX_PLUGIN_DIR . 'vendors/cpanel-uapi.php';
 
 /**
  * Main plugin class for initialisation and hooks
@@ -130,7 +130,7 @@ class TNC_Toolbox {
                 );
             }
         }
-        
+
         // Check DB for config options, else create empty options
         $existing_config = TNC_cPanel_UAPI::get_config();
         if ($existing_config === false) {
