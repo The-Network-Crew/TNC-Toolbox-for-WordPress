@@ -130,6 +130,12 @@ class TNC_Toolbox {
                 );
             }
         }
+        
+        // Check DB for config options, else create empty options
+        $existing_config = TNC_cPanel_UAPI::get_config();
+        if ($existing_config === false) {
+            TNC_cPanel_UAPI::store_config('', '', '');
+        }
     }
 
     /**

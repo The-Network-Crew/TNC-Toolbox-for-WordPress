@@ -26,11 +26,15 @@ class TNC_cPanel_UAPI {
      * @return array|false API config, or false if not set
      */
     public static function get_config() {
-        $config = get_option(self::OPTIONS_KEY);
-        if (empty($config) || !is_array($config)) {
+        if ( !current_user_can( 'edit_posts' ) ) {
             return false;
+        } else {
+            $config = get_option(self::OPTIONS_KEY);
+            if (empty($config) || !is_array($config)) {
+                return false;
+            }
+            return $config;
         }
-        return $config;
     }
 
     /**
@@ -42,13 +46,17 @@ class TNC_cPanel_UAPI {
      * @return bool True on success, false on failure
      */
     public static function store_config($username, $api_key, $hostname) {
-        $config = [
-            'username' => sanitize_text_field($username),
-            'api_key' => sanitize_text_field($api_key),
-            'hostname' => sanitize_text_field($hostname)
-        ];
+        if ( !current_user_can( 'manage_options' ) ) {
+            return false;
+        } else
+            $config = [
+                'username' => sanitize_text_field($username),
+                'api_key' => sanitize_text_field($api_key),
+                'hostname' => sanitize_text_field($hostname)
+            ];
 
-        return update_option(self::OPTIONS_KEY, $config, false);
+            return update_option(self::OPTIONS_KEY, $config, false);
+        }
     }
 
     /**
