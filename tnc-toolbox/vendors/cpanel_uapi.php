@@ -7,12 +7,8 @@ if (!defined('ABSPATH')) exit;
  * cPanel API Request Handler
  *
  * Handles all communication with cPanel's UAPI endpoints.
- * Features:
- * - Secure storage of credentials in WP options
- * - Automatic quota info retrieval for settings verification
- * - Better error handling and user feedback
  * 
- * @package TNCWPTBOX
+ * @package TNCTOOLBOX
  * @subpackage Vendors
  * @author The Network Crew Pty Ltd
  * @since 2.0.0
@@ -27,7 +23,7 @@ class TNC_cPanel_UAPI {
     /**
      * Get stored API configuration
      *
-     * @return array|false API config or false if not set
+     * @return array|false API config, or false if not set
      */
     public static function get_config() {
         $config = get_option(self::OPTIONS_KEY);
@@ -41,7 +37,7 @@ class TNC_cPanel_UAPI {
      * Store API configuration in WordPress options
      *
      * @param string $username cPanel username
-     * @param string $api_key cPanel API key
+     * @param string $api_key  cPanel UAPI key
      * @param string $hostname Server hostname
      * @return bool True on success, false on failure
      */
@@ -71,10 +67,12 @@ class TNC_cPanel_UAPI {
             ];
         }
 
+        // Prepare request
         $headers = [
-            'Authorization' => 'cpanel ' . $config['username'] . ':' . $config['api_key'] // Using American spelling as per HTTP spec
+            'Authorization' => 'cpanel ' . $config['username'] . ':' . $config['api_key']
         ];
 
+        // Make the request
         $url = 'https://' . $config['hostname'] . ':2083/execute/' . $endpoint;
         $response = wp_remote_post($url, [
             'headers' => $headers,
@@ -87,14 +85,16 @@ class TNC_cPanel_UAPI {
         if (is_wp_error($response)) {
             return [
                 'success' => false,
-                'message' => 'Connection error: ' . $response->get_error_message()
+                'message' => 'Connection Error: ' . $response->get_error_message()
             ];
         }
 
+        // Parse response
         $response_code = wp_remote_retrieve_response_code($response);
         $response_body = wp_remote_retrieve_body($response);
         $response_data = json_decode($response_body, true);
 
+        // Handle API error responses
         if ($response_code !== 200) {
             $error_msg = !empty($response_data['errors']) ? implode(', ', $response_data['errors']) : 'Unknown error occurred';
             return [
@@ -127,7 +127,7 @@ class TNC_cPanel_UAPI {
             return [
                 'success' => true,
                 'message' => sprintf(
-                    'API Connection successful. Current disk usage: %s MB',
+                    'API Connected. Disk Usage: %s MB',
                     number_format($response['data']['megabytes_used'])
                 ),
                 'data' => $response['data']
@@ -136,23 +136,23 @@ class TNC_cPanel_UAPI {
 
         return [
             'success' => false,
-            'message' => 'API connected but quota information was not available.'
+            'message' => 'API appears to have connected, but no data retrieved?'
         ];
     }
 
     /**
-     * Helper function to set admin notice transient
+     * Helper to set admin notice transient
      */
     public static function set_notice($message, $type = 'error') {
         $transient_key = $type === 'error' ? 
-            'tnc_wp_toolbox_cpanel_action_error' : 
-            'tnc_wp_toolbox_cpanel_action_success';
+            'tnctoolbox_uapi_action_error' : 
+            'tnctoolbox_uapi_action_success';
         
         set_transient($transient_key, $message, 60);
     }
 
     /**
-     * Purge NGINX cache
+     * (REQUEST WRAPPER) Purge NGINX cache
      */
     public static function purge_cache() {
         $response = self::make_api_request('NginxCaching/clear_cache');
@@ -166,7 +166,7 @@ class TNC_cPanel_UAPI {
     }
 
     /**
-     * Disable NGINX cache
+     * (REQUEST WRAPPER) Disable NGINX cache
      */
     public static function disable_cache() {
         $response = self::make_api_request('NginxCaching/disable_cache');
@@ -180,13 +180,13 @@ class TNC_cPanel_UAPI {
     }
 
     /**
-     * Enable NGINX cache
+     * (REQUEST WRAPPER) Enable NGINX cache
      */
     public static function enable_cache() {
         $response = self::make_api_request('NginxCaching/enable_cache');
         self::set_notice(
             $response['success'] ? 
-            'TNC Toolbox: NGINX Cache has been Enabled!' : 
+            'TNC Toolbox: NGINX Cache has been Enabled.' : 
             'TNC Toolbox: ' . $response['message'],
             $response['success'] ? 'success' : 'error'
         );

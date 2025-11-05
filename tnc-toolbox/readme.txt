@@ -98,13 +98,14 @@ The key is to purge when stale, so properly configuring your WP Plugin Cache is 
 
 == Changelog ==
 
-= 2.0.0: Nov 5, 2025 =
+= 2.0.0: Nov 6, 2025 =
+* NOTE: MAJOR REBUILD, PLEASE TEST BEFORE DEPLOYING
+* Feature: Add direct quota info display in settings
 * Security: Move config storage from files to WordPress database
 * Security: Secure deletion of old config files after migration
-* Feature: Add direct quota info display in settings
 * Improvement: Better API response handling and error messages
 * Architecture: Complete codebase reorganisation for maintainability
-* Architecture: Move cPanel API functionality to dedicated vendor module
+* Architecture: Move cPanel API functionality to vendor module
 * Architecture: Flatten directory structure for simplicity
 * Architecture: Automatic config migration from old versions
 

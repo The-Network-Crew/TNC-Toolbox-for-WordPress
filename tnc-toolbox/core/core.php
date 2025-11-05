@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) exit;
  * 
  * Handles core plugin features like cache management and toolbar integration.
  *
- * @package    TNCWPTBOX
+ * @package    TNCTOOLBOX
  * @author     The Network Crew Pty Ltd
  * @since      2.0.0
  */
@@ -29,7 +29,7 @@ class TNC_Core {
      */
     public function add_hooks() {
         // Plugin row links
-        add_filter('plugin_action_links_' . TNCWPTBOX_PLUGIN_BASE, array($this, 'add_plugin_action_link'), 20);
+        add_filter('plugin_action_links_' . TNCTOOLBOX_PLUGIN_BASE, array($this, 'add_plugin_action_link'), 20);
 
         // Admin bar customization
         add_action('admin_enqueue_scripts', array($this, 'enqueue_custom_css'));
@@ -63,7 +63,7 @@ class TNC_Core {
     public function add_plugin_action_link($links) {
         $settings_link = sprintf(
             '<a href="%s">%s</a>',
-            admin_url('options-general.php?page=tnc_toolbox'),
+            admin_url('options-general.php?page=tnc-toolbox'),
             __('Settings', 'tnc-toolbox')
         );
 
@@ -99,9 +99,9 @@ class TNC_Core {
             'id' => 'tnc_parent_menu_entry',
             'title' => sprintf(
                 '<img src="%s" style="height: 20px; padding-top: 6px;">',
-                plugins_url('assets/tnc-icon-light.png', TNCWPTBOX_PLUGIN_FILE)
+                plugins_url('assets/tnc-icon-light.png', TNCTOOLBOX_PLUGIN_FILE)
             ),
-            'href' => admin_url('options-general.php?page=tnc_toolbox'),
+            'href' => admin_url('options-general.php?page=tnc-toolbox'),
             'meta' => array('class' => 'tnc-parent-menu-entry')
         );
         $wp_admin_bar->add_node($args);
@@ -176,7 +176,7 @@ class TNC_Core {
      */
     public function display_admin_notices() {
         foreach (['error', 'success'] as $type) {
-            $transient_key = "tnc_wp_toolbox_cpanel_action_{$type}";
+            $transient_key = "tnctoolbox_uapi_action_{$type}";
             if ($message = get_transient($transient_key)) {
                 printf(
                     '<div class="notice notice-%s is-dismissible"><p>%s</p></div>',

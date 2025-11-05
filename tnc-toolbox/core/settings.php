@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) exit;
  *
  * Manages plugin settings, database storage, and settings UI.
  *
- * @package    TNCWPTBOX
+ * @package    TNCTOOLBOX
  * @author     The Network Crew Pty Ltd
  * @since      2.0.0
  */
@@ -25,7 +25,7 @@ class TNC_Settings {
      * @since 2.0.0
      */
     public function __construct() {
-        $this->plugin_name = TNCWPTBOX_NAME;
+        $this->plugin_name = TNCTOOLBOX_NAME;
         add_action('init', array($this, 'init_settings'));
         add_action('admin_menu', array($this, 'register_admin_menu'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
@@ -40,7 +40,7 @@ class TNC_Settings {
             'tnc-toolbox-admin',
             plugins_url('/assets/styles-config.css', dirname(__FILE__)),
             array(),
-            TNCWPTBOX_VERSION
+            TNCTOOLBOX_VERSION
         );
     }
 
@@ -58,7 +58,7 @@ class TNC_Settings {
      * @return string Plugin name
      */
     public function get_plugin_name() {
-        return apply_filters('TNCWPTBOX/settings/get_plugin_name', $this->plugin_name);
+        return apply_filters('TNCTOOLBOX/settings/get_plugin_name', $this->plugin_name);
     }
 
     /**
@@ -69,7 +69,7 @@ class TNC_Settings {
             'TNC Toolbox',
             'TNC Toolbox',
             'manage_options',
-            'tnc_toolbox',
+            'tnc-toolbox',
             array($this, 'handle_settings_page')
         );
     }
@@ -90,7 +90,7 @@ class TNC_Settings {
      * Save updated settings to database and test the connection
      */
     private function save_settings() {
-        // Sanitize inputs
+        // Sanitise inputs
         $api_key = sanitize_text_field($_POST['tnc_toolbox_api_key']);
         $username = sanitize_text_field($_POST['tnc_toolbox_username']);
         $hostname = sanitize_text_field($_POST['tnc_toolbox_server_hostname']);
@@ -120,7 +120,7 @@ class TNC_Settings {
      * Migrate any existing file-based config to database
      */
     private function maybe_migrate_file_config() {
-        if (!defined('TNCWPTBOX_CONFIG_DIR') || !is_dir(TNCWPTBOX_CONFIG_DIR)) {
+        if (!is_dir( WP_CONTENT_DIR . '/tnc-toolbox-config/' )) {
             return;
         }
 
@@ -130,6 +130,7 @@ class TNC_Settings {
             return;
         }
 
+        // Map old file-names to new database config entry keys
         $config = array();
         $config_items = array(
             'cpanel-username' => 'username',
@@ -137,14 +138,15 @@ class TNC_Settings {
             'server-hostname' => 'hostname'
         );
 
+        // Get each config file's contents for DB ingestion
         foreach ($config_items as $file => $key) {
-            $file_path = TNCWPTBOX_CONFIG_DIR . $file;
+            $file_path = TNCTOOLBOX_CONFIG_DIR . $file;
             if (is_readable($file_path)) {
                 $config[$key] = trim(file_get_contents($file_path));
             }
         }
 
-        // If we found all config items, store them
+        // If we found all files, store to DB & delete
         if (count($config) === count($config_items)) {
             TNC_cPanel_UAPI::store_config(
                 $config['username'],
@@ -159,26 +161,28 @@ class TNC_Settings {
      * Securely remove old config files and directory
      */
     private function cleanup_file_config() {
-        if (!defined('TNCWPTBOX_CONFIG_DIR') || !is_dir(TNCWPTBOX_CONFIG_DIR)) {
+        if (!is_dir(WP_CONTENT_DIR . '/tnc-toolbox-config/')) {
             return;
         }
 
+        // List of config files to delete
         $files = array(
             'cpanel-api-key',
             'cpanel-username',
             'server-hostname'
         );
 
+        // Garble and then delete every config file
         foreach ($files as $file) {
-            $file_path = TNCWPTBOX_CONFIG_DIR . $file;
+            $file_path = WP_CONTENT_DIR . '/tnc-toolbox-config/' . $file;
             if (file_exists($file_path)) {
-                // Overwrite with random data before deleting
                 file_put_contents($file_path, random_bytes(256));
                 unlink($file_path);
             }
         }
 
-        rmdir(TNCWPTBOX_CONFIG_DIR);
+        // Delete the config directory
+        rmdir(WP_CONTENT_DIR . '/tnc-toolbox-config/');
     }
 
     /**
@@ -189,8 +193,8 @@ class TNC_Settings {
         ?>
         <div class="wrap">
             <div class="tnc-toolbox-header">
-                <h1><?php echo esc_html(get_admin_page_title()) . " v" . TNCWPTBOX_VERSION; ?></h1>
-                <p>Configure your cPanel UAPI connection settings to enable NGINX cache management functionality.</p>
+                <h1><?php echo esc_html(get_admin_page_title()) . " v" . TNCTOOLBOX_VERSION; ?></h1>
+                <p><strong>Configure your cPanel UAPI settings to enable NGINX Cache management.</strong></p>
             </div>
 
             <div class="tnc-toolbox-form">
@@ -203,7 +207,7 @@ class TNC_Settings {
                             <th scope="row">
                                 <label for="tnc_toolbox_api_key">cPanel API Token</label>
                                 <p class="description">
-                                    Key only, not the name. <a href="https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/" target="_blank">View documentation</a>.
+                                    Key only, not the name. <br><a href="https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/" target="_blank">View documentation</a>.
                                 </p>
                             </th>
                             <td>
@@ -216,7 +220,7 @@ class TNC_Settings {
                         <tr>
                             <th scope="row">
                                 <label for="tnc_toolbox_username">cPanel Username</label>
-                                <p class="description">Plain-text username. Not the API user.</p>
+                                <p class="description">Plain-text username. <br>Not the API user.</p>
                             </th>
                             <td>
                                 <input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username"
@@ -228,7 +232,7 @@ class TNC_Settings {
                         <tr>
                             <th scope="row">
                                 <label for="tnc_toolbox_server_hostname">Server Hostname</label>
-                                <p class="description">FQDN of server (e.g., server.example.com). No HTTPS etc.</p>
+                                <p class="description">FQDN of Server, like:<br><code>server.example.com</code></p>
                             </th>
                             <td>
                                 <input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname"
@@ -239,7 +243,7 @@ class TNC_Settings {
                         </tr>
                     </table>
 
-                    <?php submit_button('Save Settings & Test Connection'); ?>
+                    <?php submit_button('Save Settings & Test!'); ?>
                     <input type="hidden" name="submit_tnc_toolbox_settings" value="1">
                 </form>
 
@@ -249,8 +253,8 @@ class TNC_Settings {
                     if ($quota['success'] && isset($quota['data']['megabytes_used'])):
                     ?>
                         <div class="tnc-toolbox-status success">
-                            <h3>Server Status</h3>
-                            <p>Connection active. Current disk usage: <?php echo number_format($quota['data']['megabytes_used']); ?> MB</p>
+                            <h3>UAPI Status</h3>
+                            <p>Connected OK. Disk Usage: <?php echo number_format($quota['data']['megabytes_used']); ?> MB</p>
                         </div>
                     <?php endif; ?>
                 <?php endif; ?>

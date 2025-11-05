@@ -2,8 +2,8 @@
 /**
  * TNC Toolbox: Web Performance
  *
- * @package       TNCWPTBOX
- * @author        The Network Crew Pty Ltd (TNC)
+ * @package       TNCTOOLBOX
+ * @author        The Network Crew Pty Ltd (TNC & Co.)
  * @license       gplv3
  * @version       2.0.0
  *
@@ -12,7 +12,7 @@
  * Plugin URI:    https://merlot.digital
  * Description:   Adds functionality to WP - designed for NGINX-powered Servers on cPanel+WHM. Made to help you fly online!
  * Version:       2.0.0
- * Author:        The Network Crew Pty Ltd (TNC)
+ * Author:        The Network Crew Pty Ltd (TNC & Co.)
  * Author URI:    https://tnc.works
  * Domain Path:   /languages
  * License:       GPLv3
@@ -26,30 +26,30 @@
 if (!defined('ABSPATH')) exit;
 
 // Plugin name
-define('TNCWPTBOX_NAME', 'TNC Toolbox');
+define('TNCTOOLBOX_NAME', 'TNC Toolbox');
 
 // Plugin version
-define('TNCWPTBOX_VERSION', '2.0.0');
+define('TNCTOOLBOX_VERSION', '2.0.0');
 
 // Plugin Root File
-define('TNCWPTBOX_PLUGIN_FILE', __FILE__);
+define('TNCTOOLBOX_PLUGIN_FILE', __FILE__);
 
 // Plugin base
-define('TNCWPTBOX_PLUGIN_BASE', plugin_basename(TNCWPTBOX_PLUGIN_FILE));
+define('TNCTOOLBOX_PLUGIN_BASE', plugin_basename(TNCTOOLBOX_PLUGIN_FILE));
 
 // Plugin Folder Path
-define('TNCWPTBOX_PLUGIN_DIR', plugin_dir_path(TNCWPTBOX_PLUGIN_FILE));
+define('TNCTOOLBOX_PLUGIN_DIR', plugin_dir_path(TNCTOOLBOX_PLUGIN_FILE));
 
 // Plugin Folder URL
-define('TNCWPTBOX_PLUGIN_URL', plugin_dir_url(TNCWPTBOX_PLUGIN_FILE));
+define('TNCTOOLBOX_PLUGIN_URL', plugin_dir_url(TNCTOOLBOX_PLUGIN_FILE));
 
 // Load required files
-require_once TNCWPTBOX_PLUGIN_DIR . 'vendors/cpanel_uapi.php';
-require_once TNCWPTBOX_PLUGIN_DIR . 'core/core.php';
-require_once TNCWPTBOX_PLUGIN_DIR . 'core/settings.php';
+require_once TNCTOOLBOX_PLUGIN_DIR . 'core/core.php';
+require_once TNCTOOLBOX_PLUGIN_DIR . 'core/settings.php';
+require_once TNCTOOLBOX_PLUGIN_DIR . 'vendors/cpanel_uapi.php';
 
 /**
- * Main plugin class for initialization and hooks
+ * Main plugin class for initialisation and hooks
  */
 class TNC_Toolbox {
     /**
@@ -86,14 +86,14 @@ class TNC_Toolbox {
      */
     private function __construct() {
         // Register activation and upgrade hooks
-        register_activation_hook(TNCWPTBOX_PLUGIN_FILE, array($this, 'handle_activation'));
+        register_activation_hook(TNCTOOLBOX_PLUGIN_FILE, array($this, 'handle_activation'));
 
-        // Initialize core components after plugins are loaded
+        // Initialise core components after plugins are loaded
         add_action('plugins_loaded', array($this, 'init_components'));
     }
 
     /**
-     * Initialize plugin components
+     * Initialise plugin components
      */
     public function init_components() {
         $this->core = new TNC_Core();
@@ -105,21 +105,23 @@ class TNC_Toolbox {
      */
     public function handle_activation() {
         // Ensure settings are migrated if they exist
-        if (defined('TNCWPTBOX_CONFIG_DIR') && is_dir(TNCWPTBOX_CONFIG_DIR)) {
+        if (is_dir(WP_CONTENT_DIR . '/tnc-toolbox-config/')) {
             $config_files = array(
                 'cpanel-username' => 'username',
                 'cpanel-api-key' => 'api_key',
                 'server-hostname' => 'hostname'
             );
             
+            // Load each config file's contents
             $config = array();
             foreach ($config_files as $file => $key) {
-                $file_path = TNCWPTBOX_CONFIG_DIR . $file;
+                $file_path = WP_CONTENT_DIR . '/tnc-toolbox-config/' . $file;
                 if (is_readable($file_path)) {
                     $config[$key] = trim(file_get_contents($file_path));
                 }
             }
 
+            // If we found all files, store to DB
             if (count($config) === count($config_files)) {
                 TNC_cPanel_UAPI::store_config(
                     $config['username'],
@@ -138,12 +140,12 @@ class TNC_Toolbox {
         
         // If this is a pre-2.0.0 version and we have config files, migrate them
         if (version_compare($stored_version, '2.0.0', '<')) {
-            $this->handle_activation(); // Will handle the migration if needed
+            $this->handle_activation();
         }
 
         // Update stored version if different
-        if ($stored_version !== TNCWPTBOX_VERSION) {
-            update_option('tnc_toolbox_version', TNCWPTBOX_VERSION);
+        if ($stored_version !== TNCTOOLBOX_VERSION) {
+            update_option('tnc_toolbox_version', TNCTOOLBOX_VERSION);
         }
     }
 }
@@ -152,8 +154,8 @@ class TNC_Toolbox {
  * Main function to load plugin instance
  * @return TNC_Toolbox
  */
-function TNCWPTBOX() {
+function TNCTOOLBOX() {
     return TNC_Toolbox::instance();
 }
 
-TNCWPTBOX();
+TNCTOOLBOX();
