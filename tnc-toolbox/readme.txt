@@ -4,10 +4,10 @@ Plugin URI: https://merlot.digital
 Donate link: 
 Contributors: 
 Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
-Requires at least: 
+Requires at least: 6.0
 Tested up to: 6.8
-Requires PHP: 
-Stable tag: 1.4.2
+Requires PHP: 8.0
+Stable tag: 2.0.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -59,17 +59,9 @@ This is only visible if you are logged in as a WP Administrator.
 
 **Yes!** Simply raise an Issue/PR on the [GitHub repository](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/issues) and we'll take a look.
 
-= Why am I getting a cURL Error 3 on my WP-Admin dashboard? =
-
-It's most likely due to newline /n characters in your config files. 
-
-Use the [script](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/blob/main/script-remove-conf-newlines.sh) in the GitHub Repo to remove these.
-
 = Is there a way for us to deploy the plugin server-wide? =
 
-**Yes!** If you check the [GitHub repository](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/), you can use the bash scripts there (make sure you satisfy their pre-requisites) to deploy/update the plugin server-wide.
-
-Please note there are pre-requisites to running the scripts, so understand & prepare before usage as always!
+**Yes!** You can use `WP-CLI` to install **tnc-toolbox** for all users!
 
 == Installation ==
 
@@ -101,6 +93,19 @@ This way, you can ensure maximum efficiency!
 The key is to purge when stale, so properly configuring your WP Plugin Cache is critical to ensuring that you don't end up with cache misses due to stale data that could've/should've been purged by garbage collection, preloading, etc, rule-sets.
 
 == Changelog ==
+
+= 2.0.0: Nov 6, 2025 =
+* NOTE: MAJOR REBUILD, PLEASE TEST BEFORE DEPLOYING
+* Feature: Add direct quota info re: API connected OK (#5)
+* Security: Move config from files to WordPress database (#6)
+* Security: Secure deletion of old config after migration
+* License: Properly apply GPLv3 to all code in the repo
+* Improvement: Better API response handling and errors (#28)
+* Architecture: Complete codebase re-build for maintainability
+* Architecture: Move cPanel API functionality to vendor module
+* Architecture: Automatic config migration from old versions
+* Legacy: Requires WP 6.0 & PHP 8.0 to set easy baselines
+* Auto-update: Revert flag from v1.4.2 - was global (#29)
 
 = 1.4.2: Nov 4, 2025 =
 * Config Checker: Add function to iterate over
