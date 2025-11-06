@@ -7,7 +7,7 @@ Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -93,6 +93,9 @@ This way, you can ensure maximum efficiency!
 The key is to purge when stale, so properly configuring your WP Plugin Cache is critical to ensuring that you don't end up with cache misses due to stale data that could've/should've been purged by garbage collection, preloading, etc, rule-sets.
 
 == Changelog ==
+
+= 2.0.3: Nov 6, 2025 =
+* Auto-purge (ACF): When you save ACF config, purge! (#24)
 
 = 2.0.2: Nov 6, 2025 =
 * Fix: Settings save no longer errors (relocated func.) (#32)

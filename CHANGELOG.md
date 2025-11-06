@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [2.0.3] - 2025-11-06
+
+### 🚀 Feature
+- Auto-purge (ACF): When you save ACF config, purge! (#24)
+
 ## [2.0.2] - 2025-11-06
 
 ### 🐛 Bug Fix

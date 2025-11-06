@@ -2,6 +2,9 @@
 
 https://wordpress.org/plugins/tnc-toolbox
 
+> [!TIP]
+> **Will expand to include other features as requested by community & clients!**
+
 - Allows you to purge the EA-NGINX User Cache from within WP
 - Automatically purges the cache when a post or page is updated
 - Does the same when the WP Core has been successfully upgraded :)
@@ -10,16 +13,15 @@ https://wordpress.org/plugins/tnc-toolbox
 - For any action, redirects you back to the page you requested it from
 - Shows you whether or not the API is working via diagnostic quota info
 
-> **Will expand to include other features as requested by community & clients!**
-
 ## 🖥️ (PLUGIN) System Requirements
+
+> [!IMPORTANT]  
+> EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implementations.
+> 
+> CloudLinux Apache2NGINX (A2N) depends on ea-NGINX so _shouldn't_ cause issues with TNC Toolbox.
 
 - cPanel API Key, cPanel Username & Server Hostname needed in Settings
 - Hosting Environment must be cPanel+WHM, running NGINX + Apache stack!
-
-> Note: EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implementations.
-> 
-> CloudLinux Apache2NGINX (A2N) depends on ea-NGINX so shouldn't cause issues with TNC Toolbox.
 
 ## ⚙️ (INSTALL) How to Install the Plugin
 
@@ -35,9 +37,10 @@ Use `WP-CLI` to install **tnc-toolbox** for all relevant accounts.
 
 ## 🆘 (HELP) Getting help with the Plugin
 
-Please raise an [Issue](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/issues) on the GitHub Repository! 
-
 Include all info, screenshots, etc, to help our crew.
+
+> [!NOTE]  
+> Please raise an [Issue](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/issues) on the GitHub Repository! 
 
 ## ✨ (FOSS) Contributing to the Plugin
 
