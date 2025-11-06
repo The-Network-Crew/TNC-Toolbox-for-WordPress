@@ -23,6 +23,18 @@ https://wordpress.org/plugins/tnc-toolbox
 - cPanel API Key, cPanel Username & Server Hostname needed in Settings
 - Hosting Environment must be cPanel+WHM, running NGINX + Apache stack!
 
+## ♻️ (UPDATE) v1 to v2.x.x Overhaul
+
+**On every website running the plugin, check that:**
+
+1. Website is reporting v2.x.x plugin version.
+2. Plugin has been activated post-update. *
+3. Config exists in the plugin settings.
+4. API status checker reports OK.
+5. /wp-content/tnc-toolbox-config/ folder is gone.
+
+_(* Change to main plugin file name results in deactivation)_
+
 ## ⚙️ (INSTALL) How to Install the Plugin
 
 1. Head to WP-Admin > Plugins, search for "TNC Toolbox"

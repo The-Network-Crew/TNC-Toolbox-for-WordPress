@@ -22,6 +22,10 @@ TNC Toolbox aims to enhance your WordPress experience with NGINX-on-cPanel (ea-n
 
 With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the plugin aims to help with Website Management, Performance and Security. 
 
+> **FOSS by [The Network Crew Pty Ltd](https://tnc.works) (TNC) for [Merlot Digital](https://merlot.digital) & the world.** ❤️
+
+== Functionality ==
+
 **At the moment, TNC Toolbox:**
 
 - Allows you to enable, disable and purge the NGINX User Cache
@@ -29,6 +33,8 @@ With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the
 - Also purges the Cache when the WP Core is successfully updated
 - Lets you know if the plugin is activated but not yet configured
 - Only allows Admins to enable/disable caching & edit configs
+- Shows you the status of cP UAPI via disk usage info
+- Purge when any ACF config options are saved
 
 **Eager for even more capabilities?**
 
@@ -36,7 +42,17 @@ We plan to add further features as clients & the community request it.
 
 _Please let us know your ideas on [GitHub](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/) - we'd love to hear from you!_
 
-> **FOSS by [The Network Crew Pty Ltd](https://tnc.works) (TNC) for [Merlot Digital](https://merlot.digital) & the world.** ❤️
+== Updating from v1 to v2.x.x ==
+
+**On every website running the plugin, check that:**
+
+1. Website is reporting v2.x.x plugin version.
+2. Plugin has been activated post-update. *
+3. Config exists in the plugin settings.
+4. API status checker reports OK.
+5. /wp-content/tnc-toolbox-config/ folder is gone.
+
+_(* Change to main plugin file name results in deactivation)_
 
 == Screenshots ==
 
@@ -63,6 +79,22 @@ This is only visible if you are logged in as a WP Administrator.
 
 **Yes!** You can use `WP-CLI` to install **tnc-toolbox** for all users!
 
+== Caching Deployments ==
+
+**Caching ideals:**
+- Don't forget, ea-NGINX (reverse proxy caching) is meant to be 2nd-level
+- ie. Make sure your WP site also has on-site caching, like WP Super Cache
+- You can go further with caching, and should: like browser-caching assets!
+
+**3-layer Cache:**
+1. NGINX Caching Proxy (ahead of Apache)
+2. WP Super Cache, WP Rocket, etc on-site
+3. htaccess/etc rules for Browser Caching
+
+**This way, you can ensure maximum efficiency!**
+
+The key is to purge when stale, so properly configuring your WP Plugin Cache is critical to ensuring that you don't end up with cache misses due to stale data that could've/should've been purged by garbage collection, preloading, etc, rule-sets.
+
 == Installation ==
 
 **Pre-requisites:**
@@ -77,20 +109,6 @@ This is only visible if you are logged in as a WP Administrator.
 4. Click on `Activate plugin` then `Settings`
 5. Enter your API Token, User & Hostname
 6. Save the config & use WP as-normal!
-
-**Caching ideals:**
-- Don't forget, ea-NGINX (reverse proxy caching) is meant to be 2nd-level
-- ie. Make sure your WP site also has on-site caching, like WP Super Cache
-- You can go further with caching, and should: like browser-caching assets!
-
-**3-layer Cache:**
-1. NGINX Caching Proxy (ahead of Apache)
-2. WP Super Cache, WP Rocket, etc on-site
-3. htaccess/etc rules for Browser Caching
-
-This way, you can ensure maximum efficiency!
-
-The key is to purge when stale, so properly configuring your WP Plugin Cache is critical to ensuring that you don't end up with cache misses due to stale data that could've/should've been purged by garbage collection, preloading, etc, rule-sets.
 
 == Changelog ==
 
