@@ -2,21 +2,23 @@
 /**
  * TNC Toolbox: Web Performance
  *
- * @package       TNCTOOLBOX
- * @author        The Network Crew Pty Ltd (TNC & Co.)
- * @license       gplv3
- * @version       2.0.0
+ * @package           TNCTOOLBOX
+ * @author            The Network Crew Pty Ltd (TNC & Co.)
+ * @license           gplv3
+ * @version           2.0.0
  *
  * @wordpress-plugin
- * Plugin Name:   TNC Toolbox: Web Performance
- * Plugin URI:    https://merlot.digital
- * Description:   Adds functionality to WP - designed for NGINX-powered Servers on cPanel+WHM. Made to help you fly online!
- * Version:       2.0.0
- * Author:        The Network Crew Pty Ltd (TNC & Co.)
- * Author URI:    https://tnc.works
- * Domain Path:   /languages
- * License:       GPLv3
- * License URI:   https://www.gnu.org/licenses/gpl-3.0.html
+ * Plugin Name:       TNC Toolbox: Web Performance
+ * Plugin URI:        https://merlot.digital
+ * Description:       Adds functionality to WP - designed for NGINX-powered Servers on cPanel+WHM. Made to help you fly online!
+ * Version:           2.0.0
+ * Requires at least: 6.0
+ * Requires PHP:      8.0
+ * Author:            The Network Crew Pty Ltd (TNC & Co.)
+ * Author URI:        https://tnc.works
+ * Domain Path:       /languages
+ * License:           GPLv3
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  *
  * You should have received a copy of the GNU General Public License
  * along with TNC Toolbox. If not, see <https://www.gnu.org/licenses/gpl-3.0.html/>.
@@ -129,12 +131,6 @@ class TNC_Toolbox {
                     $config['hostname']
                 );
             }
-        }
-
-        // Check DB for config options, else create empty options
-        $existing_config = TNC_cPanel_UAPI::get_config();
-        if ($existing_config === false) {
-            TNC_cPanel_UAPI::store_config('', '', '');
         }
     }
 

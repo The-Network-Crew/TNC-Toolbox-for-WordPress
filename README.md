@@ -1,4 +1,4 @@
-# TNC Toolbox: Web Performance
+# 🧰 TNC Toolbox: Web Performance 🚀
 
 https://wordpress.org/plugins/tnc-toolbox
 
@@ -8,6 +8,7 @@ https://wordpress.org/plugins/tnc-toolbox
 - Allows you to disable or enable the NGINX User Cache from inside WP
 - Only presents the options to enable/disable/configure for WP Admins
 - For any action, redirects you back to the page you requested it from
+- Shows you whether or not the API is working via diagnostic quota info
 
 > **Will expand to include other features as requested by community & clients!**
 
@@ -30,7 +31,7 @@ https://wordpress.org/plugins/tnc-toolbox
 
 ## 🛠️ (DEPLOY) Loading it onto all WP sites
 
-Use WP-CLI to install **tnc-toolbox** for all relevant accounts.
+Use `WP-CLI` to install **tnc-toolbox** for all relevant accounts.
 
 ## 🆘 (HELP) Getting help with the Plugin
 

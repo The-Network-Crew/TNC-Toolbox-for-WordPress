@@ -1,5 +1,27 @@
 <?php
 
+/*
+    TNC Toolbox: Web Performance (for WordPress)
+    
+    Copyright (C) The Network Crew Pty Ltd (TNC)
+    PO Box 3113 Uki 2484 NSW Australia https://tnc.works
+
+    https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 // Exit if accessed directly.
 if (!defined('ABSPATH')) exit;
 
@@ -27,10 +49,10 @@ class TNC_Settings {
     public function __construct() {
         $this->plugin_name = TNCTOOLBOX_NAME;
         add_action('init', array($this, 'init_settings'));
-        add_action('admin_menu', array($this, 'register_admin_menu'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
     }
 
+    // Enqueue admin styles for settings page
     public function enqueue_admin_styles($hook) {
         if ($hook !== 'settings_page_tnc-toolbox') {
             return;
@@ -45,12 +67,13 @@ class TNC_Settings {
     }
 
     /**
-     * Initialize settings after WordPress is loaded
+     * Initialise settings after WordPress is loaded
      */
     public function init_settings() {
-        if (current_user_can('update_core')) {
-            add_action('admin_menu', array($this, 'register_admin_menu'));
+        if (!current_user_can('manage_options')) {
+            return;
         }
+        add_action('admin_menu', array($this, 'register_admin_menu'));
     }
 
     /**
@@ -78,12 +101,21 @@ class TNC_Settings {
      * Route settings page-loads; save/render
      */
     public function handle_settings_page() {
-        if (isset($_POST['submit_tnc_toolbox_settings']) && 
-            wp_verify_nonce($_POST['tnc_toolbox_settings_nonce'], 'tnc_toolbox_settings')) {
-            $this->save_settings();
-        } else {
-            $this->render_settings_page();
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
         }
+
+        // Verify nonce before processing settings
+        $is_settings_save = isset($_POST['submit_tnc_toolbox_settings']) && 
+            wp_verify_nonce($_POST['tnc_toolbox_settings_nonce'], 'tnc_toolbox_settings');
+            
+        // Process settings submission first so notices show on page load
+        if ($is_settings_save) {
+            $this->save_settings();
+        }
+        
+        // Always render the page - either after save or on fresh load
+        $this->render_settings_page();
     }
 
     /**
@@ -91,29 +123,36 @@ class TNC_Settings {
      */
     private function save_settings() {
         // Sanitise inputs
-        $api_key = sanitize_text_field($_POST['tnc_toolbox_api_key']);
-        $username = sanitize_text_field($_POST['tnc_toolbox_username']);
-        $hostname = sanitize_text_field($_POST['tnc_toolbox_server_hostname']);
+        $api_key = sanitize_text_field($_POST['tnc_toolbox_api_key'] ?? '');
+        $username = sanitize_text_field($_POST['tnc_toolbox_username'] ?? '');
+        $hostname = sanitize_text_field($_POST['tnc_toolbox_server_hostname'] ?? '');
 
-        // Store in WordPress options
-        $saved = TNC_cPanel_UAPI::store_config($username, $api_key, $hostname);
-        if (!$saved) {
-            wp_die('TNC Toolbox: Unable to save settings to database.');
-        }
-
-        // Test the connection
-        $test_result = TNC_cPanel_UAPI::test_connection();
-        TNC_cPanel_UAPI::set_notice(
-            $test_result['message'],
-            $test_result['success'] ? 'success' : 'error'
-        );
-
-        // Check for old config directory and migrate if needed
+        // Try to save the configuration even if empty to ensure options exist
+        TNC_cPanel_UAPI::store_config($username, $api_key, $hostname);
+        
+        // Run file config migration (if needed) after storing new settings
         $this->maybe_migrate_file_config();
 
-        // Show the settings page with any notices
-        $this->render_settings_page();
-        exit;
+        // Test connection if we have all required fields
+        if (!empty($hostname) && !empty($username) && !empty($api_key)) {
+            try {
+                $test_result = TNC_cPanel_UAPI::test_connection();
+                TNC_cPanel_UAPI::set_notice(
+                    $test_result['message'],
+                    $test_result['success'] ? 'success' : 'error'
+                );
+            } catch (Exception $e) {
+                TNC_cPanel_UAPI::set_notice(
+                    'Connection test failed: ' . $e->getMessage(),
+                    'error'
+                );
+            }
+        } else {
+            TNC_cPanel_UAPI::set_notice(
+                'Please fill in all fields to test the connection.',
+                'error'
+            );
+        }
     }
 
     /**
@@ -121,12 +160,6 @@ class TNC_Settings {
      */
     private function maybe_migrate_file_config() {
         if (!is_dir( WP_CONTENT_DIR . '/tnc-toolbox-config/' )) {
-            return;
-        }
-
-        // Only try to migrate if we don't already have DB settings
-        if (TNC_cPanel_UAPI::get_config() !== false) {
-            $this->cleanup_file_config();
             return;
         }
 
@@ -189,7 +222,7 @@ class TNC_Settings {
      * Render the plugin's settings page
      */
     public function render_settings_page() {
-        $config = TNC_cPanel_UAPI::get_config();
+        $stored_config = TNC_cPanel_UAPI::get_config();
         ?>
         <div class="wrap">
             <div class="tnc-toolbox-header">
@@ -198,8 +231,7 @@ class TNC_Settings {
             </div>
 
             <div class="tnc-toolbox-form">
-                <form method="post">
-                    <input type="hidden" name="action" value="tnc_toolbox_settings" />
+                <form method="post" action="">
                     <?php wp_nonce_field('tnc_toolbox_settings', 'tnc_toolbox_settings_nonce'); ?>
                     
                     <table class="form-table" role="presentation">
@@ -212,7 +244,7 @@ class TNC_Settings {
                             </th>
                             <td>
                                 <input type="text" id="tnc_toolbox_api_key" name="tnc_toolbox_api_key"
-                                    value="<?php echo esc_attr($config ? $config['api_key'] : ''); ?>" 
+                                    value="<?php echo esc_attr($stored_config['api_key']); ?>"
                                     placeholder="Enter your cPanel API token"
                                     class="regular-text" />
                             </td>
@@ -224,7 +256,7 @@ class TNC_Settings {
                             </th>
                             <td>
                                 <input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username"
-                                    value="<?php echo esc_attr($config ? $config['username'] : ''); ?>"
+                                    value="<?php echo esc_attr($stored_config['username']); ?>"
                                     placeholder="Enter your cPanel username"
                                     class="regular-text" />
                             </td>
@@ -236,25 +268,30 @@ class TNC_Settings {
                             </th>
                             <td>
                                 <input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname"
-                                    value="<?php echo esc_attr($config ? $config['hostname'] : ''); ?>"
+                                    value="<?php echo esc_attr($stored_config['hostname']); ?>"
                                     placeholder="Enter your server hostname"
                                     class="regular-text" />
                             </td>
                         </tr>
                     </table>
 
-                    <?php submit_button('Save Settings & Test!'); ?>
-                    <input type="hidden" name="submit_tnc_toolbox_settings" value="1">
+                    <p class="submit">
+                        <input type="submit" name="submit_tnc_toolbox_settings" class="button button-primary" 
+                               value="<?php echo esc_attr__('Save Settings & Test!'); ?>" />
+                    </p>
                 </form>
 
-                <?php if ($config): ?>
+                <?php if (!empty($stored_config['hostname']) && !empty($stored_config['username']) && !empty($stored_config['api_key'])): ?>
                     <?php
                     $quota = TNC_cPanel_UAPI::make_api_request('Quota/get_quota_info');
                     if ($quota['success'] && isset($quota['data']['megabytes_used'])):
                     ?>
                         <div class="tnc-toolbox-status success">
-                            <h3>UAPI Status</h3>
-                            <p>Connected OK. Disk Usage: <?php echo number_format($quota['data']['megabytes_used']); ?> MB</p>
+                            <h3>UAPI Status is OK</h3>
+                            <br>
+                            <strong>Inodes</strong>: <code><?php echo number_format($quota['data']['inodes_used']); ?></code> of <code><?php echo number_format($quota['data']['inode_limit']); ?></code><br>
+                            <strong>Disk</strong>: <code><?php echo number_format($quota['data']['megabytes_used']); ?>MB</code> of <code><?php echo number_format($quota['data']['megabyte_limit']); ?>MB</code></p>
+                            <br><small>Note: A limit of 0 indicates there is no set limit.</small>
                         </div>
                     <?php endif; ?>
                 <?php endif; ?>

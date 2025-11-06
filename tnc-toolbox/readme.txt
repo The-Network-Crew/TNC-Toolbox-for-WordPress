@@ -6,7 +6,7 @@ Contributors:
 Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Requires at least: 6.0
 Tested up to: 6.8
-Requires PHP: 8.2
+Requires PHP: 8.0
 Stable tag: 2.0.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -59,13 +59,9 @@ This is only visible if you are logged in as a WP Administrator.
 
 **Yes!** Simply raise an Issue/PR on the [GitHub repository](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/issues) and we'll take a look.
 
-= Why am I getting a cURL Error 3 on my WP-Admin dashboard? =
-
-It's most likely due to newline /n characters in your config files. 
-
 = Is there a way for us to deploy the plugin server-wide? =
 
-**Yes!** You can use WP-CLI to install **tnc-toolbox** for all users!
+**Yes!** You can use `WP-CLI` to install **tnc-toolbox** for all users!
 
 == Installation ==
 
@@ -100,14 +96,16 @@ The key is to purge when stale, so properly configuring your WP Plugin Cache is 
 
 = 2.0.0: Nov 6, 2025 =
 * NOTE: MAJOR REBUILD, PLEASE TEST BEFORE DEPLOYING
-* Feature: Add direct quota info display in settings
-* Security: Move config storage from files to WordPress database
+* Feature: Add direct quota info display re: API connected OK (#5)
+* Security: Move config storage from files to WordPress database (#6)
 * Security: Secure deletion of old config files after migration
-* Improvement: Better API response handling and error messages
+* License: Properly apply GPLv3 to all code files in the repo
+* Improvement: Better API response handling and error messages (#28)
 * Architecture: Complete codebase reorganisation for maintainability
 * Architecture: Move cPanel API functionality to vendor module
-* Architecture: Flatten directory structure for simplicity
 * Architecture: Automatic config migration from old versions
+* Legacy: Requires WP 6.0 & PHP 8.0 to set easy baselines
+* Auto-update: Revert flag from v1.4.2 - was global (#29)
 
 = 1.4.2: Nov 4, 2025 =
 * Config Checker: Add function to iterate over

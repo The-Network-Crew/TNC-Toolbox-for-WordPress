@@ -1,5 +1,27 @@
 <?php
 
+/*
+    TNC Toolbox: Web Performance (for WordPress)
+    
+    Copyright (C) The Network Crew Pty Ltd (TNC)
+    PO Box 3113 Uki 2484 NSW Australia https://tnc.works
+
+    https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 // Exit if accessed directly.
 if (!defined('ABSPATH')) exit;
 
@@ -61,18 +83,21 @@ class TNC_Core {
      * Add plugin action links
      */
     public function add_plugin_action_link($links) {
+        // Link on Plugins page to TNC Toolbox config page
         $settings_link = sprintf(
             '<a href="%s">%s</a>',
             admin_url('options-general.php?page=tnc-toolbox'),
             __('Settings', 'tnc-toolbox')
         );
 
+        // Link on Plugins page to my.Merlot client area
         $links['our_shop'] = sprintf(
             '<a href="%s" title="my.Merlot" style="font-weight:700;">%s</a>',
             'https://my.merlot.digital',
             __('my.Merlot', 'tnc-toolbox')
         );
 
+        // Prepend and return
         array_unshift($links, $settings_link);
         return $links;
     }
@@ -104,6 +129,8 @@ class TNC_Core {
             'href' => admin_url('options-general.php?page=tnc-toolbox'),
             'meta' => array('class' => 'tnc-parent-menu-entry')
         );
+
+        // Add the node
         $wp_admin_bar->add_node($args);
     }
 
@@ -183,6 +210,8 @@ class TNC_Core {
                     esc_attr($type),
                     esc_html($message)
                 );
+                
+                // Clear the transient after displaying
                 delete_transient($transient_key);
             }
         }
