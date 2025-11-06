@@ -131,6 +131,15 @@ class TNC_Toolbox {
                     $config['hostname']
                 );
             }
+
+            // Clean up old config files & directory
+            foreach ($config_files as $file => $key) {
+                $file_path = WP_CONTENT_DIR . '/tnc-toolbox-config/' . $file;
+                if (is_readable($file_path)) {
+                    unlink($file_path);
+                }
+            }
+            rmdir(WP_CONTENT_DIR . '/tnc-toolbox-config/');
         }
     }
 

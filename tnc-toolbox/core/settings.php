@@ -129,9 +129,6 @@ class TNC_Settings {
 
         // Try to save the configuration even if empty to ensure options exist
         TNC_cPanel_UAPI::store_config($username, $api_key, $hostname);
-        
-        // Run file config migration (if needed) after storing new settings
-        $this->maybe_migrate_file_config();
 
         // Test connection if we have all required fields
         if (!empty($hostname) && !empty($username) && !empty($api_key)) {
@@ -153,69 +150,6 @@ class TNC_Settings {
                 'error'
             );
         }
-    }
-
-    /**
-     * Migrate any existing file-based config to database
-     */
-    private function maybe_migrate_file_config() {
-        if (!is_dir( WP_CONTENT_DIR . '/tnc-toolbox-config/' )) {
-            return;
-        }
-
-        // Map old file-names to new database config entry keys
-        $config = array();
-        $config_items = array(
-            'cpanel-username' => 'username',
-            'cpanel-api-key' => 'api_key',
-            'server-hostname' => 'hostname'
-        );
-
-        // Get each config file's contents for DB ingestion
-        foreach ($config_items as $file => $key) {
-            $file_path = TNCTOOLBOX_CONFIG_DIR . $file;
-            if (is_readable($file_path)) {
-                $config[$key] = trim(file_get_contents($file_path));
-            }
-        }
-
-        // If we found all files, store to DB & delete
-        if (count($config) === count($config_items)) {
-            TNC_cPanel_UAPI::store_config(
-                $config['username'],
-                $config['api_key'],
-                $config['hostname']
-            );
-            $this->cleanup_file_config();
-        }
-    }
-
-    /**
-     * Securely remove old config files and directory
-     */
-    private function cleanup_file_config() {
-        if (!is_dir(WP_CONTENT_DIR . '/tnc-toolbox-config/')) {
-            return;
-        }
-
-        // List of config files to delete
-        $files = array(
-            'cpanel-api-key',
-            'cpanel-username',
-            'server-hostname'
-        );
-
-        // Garble and then delete every config file
-        foreach ($files as $file) {
-            $file_path = WP_CONTENT_DIR . '/tnc-toolbox-config/' . $file;
-            if (file_exists($file_path)) {
-                file_put_contents($file_path, random_bytes(256));
-                unlink($file_path);
-            }
-        }
-
-        // Delete the config directory
-        rmdir(WP_CONTENT_DIR . '/tnc-toolbox-config/');
     }
 
     /**
