@@ -65,6 +65,11 @@ class TNC_Core {
 
         // Notices
         add_action('admin_notices', array($this, 'display_admin_notices'));
+
+        // ACF Save
+        if (has_action('acf/options_page/save') === true) {
+            add_action('acf/options_page/save', array($this, 'purge_cache_on_update'), 20, 3);
+        }
     }
 
     /**
