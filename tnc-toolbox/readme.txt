@@ -125,20 +125,3 @@ The key is to purge when stale, so properly configuring your WP Plugin Cache is 
 = 1.4.0: Feb 21, 2025 =
 * Truncate max-length of relayed API error to GUI (#22)
 * Auto-purge when WP Core is successfully upgraded (#23)
-
-= 1.3.9: Dec 31, 2024 =
-* Pass-through error from cP API back to WP GUI (#22)
-* Improve uncaught error wording, and clarify on user type
-
-= 1.3.8: Dec 18, 2024 =
-* Update compatibility to WP 6.7.x sub-major (#20)
-* Slight refinement to wording of not-configured prompt (#21)
-
-= 1.3.7: May 9, 2024 =
-* Declare class firstly, resolve warnings (#18)
-* Slight improvements to GUI/Menu wording
-
-= 1.3.6: May 2, 2024 =
-* Pluggable: Remove dependency, ie. support multi-site (#17)
-* Re-factor: Merge API calls into single function (#16)
-* GPLv3: Consistent, no longer partial v2 & v3
