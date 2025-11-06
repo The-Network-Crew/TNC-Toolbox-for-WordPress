@@ -191,7 +191,7 @@ class TNC_Core {
     /**
      * Set notice helper for admin notices
      */
-    private function set_notice($message, $type = 'error') {
+    public static function set_notice($message, $type = 'error') {
         $transient_key = $type === 'error' ? 
             'tnctoolbox_uapi_action_error' : 
             'tnctoolbox_uapi_action_success';

@@ -134,18 +134,18 @@ class TNC_Settings {
         if (!empty($hostname) && !empty($username) && !empty($api_key)) {
             try {
                 $test_result = TNC_cPanel_UAPI::test_connection();
-                TNC_cPanel_UAPI::set_notice(
+                TNC_Core::set_notice(
                     $test_result['message'],
                     $test_result['success'] ? 'success' : 'error'
                 );
             } catch (Exception $e) {
-                TNC_cPanel_UAPI::set_notice(
+                TNC_Core::set_notice(
                     'Connection test failed: ' . $e->getMessage(),
                     'error'
                 );
             }
         } else {
-            TNC_cPanel_UAPI::set_notice(
+            TNC_Core::set_notice(
                 'Please fill in all fields to test the connection.',
                 'error'
             );
