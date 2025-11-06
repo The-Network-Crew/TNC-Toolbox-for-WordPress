@@ -96,12 +96,12 @@ The key is to purge when stale, so properly configuring your WP Plugin Cache is 
 
 = 2.0.0: Nov 6, 2025 =
 * NOTE: MAJOR REBUILD, PLEASE TEST BEFORE DEPLOYING
-* Feature: Add direct quota info display re: API connected OK (#5)
-* Security: Move config storage from files to WordPress database (#6)
-* Security: Secure deletion of old config files after migration
-* License: Properly apply GPLv3 to all code files in the repo
-* Improvement: Better API response handling and error messages (#28)
-* Architecture: Complete codebase reorganisation for maintainability
+* Feature: Add direct quota info re: API connected OK (#5)
+* Security: Move config from files to WordPress database (#6)
+* Security: Secure deletion of old config after migration
+* License: Properly apply GPLv3 to all code in the repo
+* Improvement: Better API response handling and errors (#28)
+* Architecture: Complete codebase re-build for maintainability
 * Architecture: Move cPanel API functionality to vendor module
 * Architecture: Automatic config migration from old versions
 * Legacy: Requires WP 6.0 & PHP 8.0 to set easy baselines
