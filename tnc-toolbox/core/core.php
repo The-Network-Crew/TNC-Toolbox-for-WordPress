@@ -138,53 +138,111 @@ class TNC_Core {
      * Add cache control buttons to admin bar
      */
     public function add_cache_purge_button($wp_admin_bar) {
+        $current_url = add_query_arg(array());  // Get current URL with all query params
+        $purge_url = add_query_arg(array(
+            'action' => 'nginx_cache_purge',
+            '_wpnonce' => wp_create_nonce('nginx_cache_purge'),
+            '_wp_http_referer' => urlencode($current_url)
+        ), admin_url('admin-post.php'));
+
         $wp_admin_bar->add_node(array(
             'id' => 'nginx_cache_purge',
             'parent' => 'tnc_parent_menu_entry',
             'title' => 'NGINX Cache: Purge!',
-            'href' => admin_url('admin-post.php?action=nginx_cache_purge'),
+            'href' => $purge_url,
             'meta' => array('class' => 'nginx-cache-btn nginx-cache-purge')
         ));
     }
 
     public function add_cache_off_button($wp_admin_bar) {
+        $current_url = add_query_arg(array());  // Get current URL with all query params
+        $off_url = add_query_arg(array(
+            'action' => 'nginx_cache_off',
+            '_wpnonce' => wp_create_nonce('nginx_cache_off'),
+            '_wp_http_referer' => urlencode($current_url)
+        ), admin_url('admin-post.php'));
+
         $wp_admin_bar->add_node(array(
             'id' => 'nginx_cache_off',
             'parent' => 'tnc_parent_menu_entry',
             'title' => 'NGINX Cache: OFF',
-            'href' => admin_url('admin-post.php?action=nginx_cache_off'),
+            'href' => $off_url,
             'meta' => array('class' => 'nginx-cache-btn nginx-cache-off')
         ));
     }
 
     public function add_cache_on_button($wp_admin_bar) {
+        $current_url = add_query_arg(array());  // Get current URL with all query params
+        $on_url = add_query_arg(array(
+            'action' => 'nginx_cache_on',
+            '_wpnonce' => wp_create_nonce('nginx_cache_on'),
+            '_wp_http_referer' => urlencode($current_url)
+        ), admin_url('admin-post.php'));
+
         $wp_admin_bar->add_node(array(
             'id' => 'nginx_cache_on',
             'parent' => 'tnc_parent_menu_entry',
             'title' => 'NGINX Cache: ON',
-            'href' => admin_url('admin-post.php?action=nginx_cache_on'),
+            'href' => $on_url,
             'meta' => array('class' => 'nginx-cache-btn nginx-cache-on')
         ));
+    }
+
+    /**
+     * Set notice helper for admin notices
+     */
+    private function set_notice($message, $type = 'error') {
+        $transient_key = $type === 'error' ? 
+            'tnctoolbox_uapi_action_error' : 
+            'tnctoolbox_uapi_action_success';
+        set_transient($transient_key, $message, 60);
     }
 
     /**
      * Cache control actions
      */
     public function nginx_cache_purge() {
-        $result = TNC_cPanel_UAPI::purge_cache();
-        wp_safe_redirect(wp_get_referer());
+        check_admin_referer('nginx_cache_purge');
+        $response = TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache');
+        $this->set_notice(
+            $response['success'] ? 
+            'TNC Toolbox: NGINX Cache has been Purged!' : 
+            'TNC Toolbox: ' . $response['message'],
+            $response['success'] ? 'success' : 'error'
+        );
+        if (!wp_safe_redirect(wp_get_referer())) {
+            wp_safe_redirect(admin_url());
+        }
         exit;
     }
 
     public function nginx_cache_off() {
-        $result = TNC_cPanel_UAPI::disable_cache();
-        wp_safe_redirect(wp_get_referer());
+        check_admin_referer('nginx_cache_off');
+        $response = TNC_cPanel_UAPI::make_api_request('NginxCaching/disable_cache');
+        $this->set_notice(
+            $response['success'] ? 
+            'TNC Toolbox: NGINX Cache has been Disabled.' : 
+            'TNC Toolbox: ' . $response['message'],
+            $response['success'] ? 'success' : 'error'
+        );
+        if (!wp_safe_redirect(wp_get_referer())) {
+            wp_safe_redirect(admin_url());
+        }
         exit;
     }
 
     public function nginx_cache_on() {
-        $result = TNC_cPanel_UAPI::enable_cache();
-        wp_safe_redirect(wp_get_referer());
+        check_admin_referer('nginx_cache_on');
+        $response = TNC_cPanel_UAPI::make_api_request('NginxCaching/enable_cache');
+        $this->set_notice(
+            $response['success'] ? 
+            'TNC Toolbox: NGINX Cache has been Enabled.' : 
+            'TNC Toolbox: ' . $response['message'],
+            $response['success'] ? 'success' : 'error'
+        );
+        if (!wp_safe_redirect(wp_get_referer())) {
+            wp_safe_redirect(admin_url());
+        }
         exit;
     }
 
