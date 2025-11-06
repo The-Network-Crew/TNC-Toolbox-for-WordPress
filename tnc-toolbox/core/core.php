@@ -53,7 +53,7 @@ class TNC_Core {
         // Plugin row links
         add_filter('plugin_action_links_' . TNCTOOLBOX_PLUGIN_BASE, array($this, 'add_plugin_action_link'), 20);
 
-        // Admin bar customization
+        // Admin bar customisation
         add_action('admin_enqueue_scripts', array($this, 'enqueue_custom_css'));
         add_action('admin_bar_menu', array($this, 'add_parent_menu_entry'), 99);
         add_action('admin_bar_menu', array($this, 'add_cache_purge_button'), 100);
@@ -63,12 +63,12 @@ class TNC_Core {
         add_action('post_updated', array($this, 'purge_cache_on_update'), 10, 3);
         add_action('_core_updated_successfully', array($this, 'nginx_cache_purge'));
 
-        // Notices
+        // Notices (Admin GUI)
         add_action('admin_notices', array($this, 'display_admin_notices'));
 
-        // ACF Save
+        // ACF Save (#24)
         if (has_action('acf/options_page/save') === true) {
-            add_action('acf/options_page/save', array($this, 'purge_cache_on_update'), 20, 3);
+            add_action('acf/options_page/save', TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache'), 10, 3);
         }
     }
 
@@ -257,7 +257,7 @@ class TNC_Core {
     public function purge_cache_on_update($post_id, $post_after, $post_before) {
         if ('publish' === $post_after->post_status || 
             ($post_before->post_status === 'publish' && $post_after->post_status !== 'trash')) {
-            // Use the UAPI directly rather than function, to support automated
+            // Use the UAPI directly rather than function, to support automated (#31)
             TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache');
         }
     }
