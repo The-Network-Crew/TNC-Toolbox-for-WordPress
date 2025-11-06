@@ -54,8 +54,6 @@ class TNC_cPanel_UAPI {
         if (!current_user_can('manage_options')) {
             return false;
         }
-
-        self::maybe_migrate_old_config();
         
         $username = get_option(self::USERNAME_KEY);
         $api_key = get_option(self::API_KEY_KEY);
@@ -231,25 +229,6 @@ class TNC_cPanel_UAPI {
             'success' => false,
             'message' => 'API appears to have connected, but no data retrieved?'
         ];
-    }
-
-    /**
-     * Migrate old config format if needed
-     */
-    private static function maybe_migrate_old_config() {
-        $old_config = get_option('tnc_cpanel_uapi');
-        if (!empty($old_config) && is_array($old_config)) {
-            if (isset($old_config['username'])) {
-                update_option(self::USERNAME_KEY, $old_config['username']);
-            }
-            if (isset($old_config['api_key'])) {
-                update_option(self::API_KEY_KEY, $old_config['api_key']);
-            }
-            if (isset($old_config['hostname'])) {
-                update_option(self::HOSTNAME_KEY, $old_config['hostname']);
-            }
-            delete_option('tnc_cpanel_uapi');
-        }
     }
 
     /**

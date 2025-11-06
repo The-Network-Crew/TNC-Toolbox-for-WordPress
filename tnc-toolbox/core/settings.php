@@ -226,7 +226,7 @@ class TNC_Settings {
         ?>
         <div class="wrap">
             <div class="tnc-toolbox-header">
-                <h1><?php echo esc_html(get_admin_page_title()) . " v" . TNCTOOLBOX_VERSION; ?></h1>
+                <h1><?php echo esc_html(get_admin_page_title()) . " v" . TNCTOOLBOX_VERSION; ?> (by <a href="https://tnc.works" target="_blank">TNC</a> & <a href="https://merlot.digital" target="_blank">Co.</a>)</h1>
                 <p><strong>Configure your cPanel UAPI settings to enable NGINX Cache management.</strong></p>
             </div>
 
