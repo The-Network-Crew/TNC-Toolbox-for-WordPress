@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [2.0.1] - 2025-11-06
+
+### 🐛 Bug Fix
+- Auto-purge: Now calls directly (re: nonce failure) (#31)
+
 ## [2.0.0] - 2025-11-06
 
 ### 🚀 Feature

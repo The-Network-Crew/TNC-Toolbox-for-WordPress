@@ -252,7 +252,8 @@ class TNC_Core {
     public function purge_cache_on_update($post_id, $post_after, $post_before) {
         if ('publish' === $post_after->post_status || 
             ($post_before->post_status === 'publish' && $post_after->post_status !== 'trash')) {
-            $this->nginx_cache_purge();
+            // Use the UAPI directly rather than function, to support automated
+            TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache');
         }
     }
 
