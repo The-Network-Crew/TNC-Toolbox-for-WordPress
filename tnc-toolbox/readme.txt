@@ -4,10 +4,8 @@ Plugin URI: https://merlot.digital
 Donate link: 
 Contributors: 
 Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
-Requires at least: 6.0
 Tested up to: 6.8
-Requires PHP: 8.0
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -22,7 +20,7 @@ TNC Toolbox aims to enhance your WordPress experience with NGINX-on-cPanel (ea-n
 
 With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the plugin aims to help with Website Management, Performance and Security. 
 
-> **FOSS by [The Network Crew Pty Ltd](https://tnc.works) (TNC) for [Merlot Digital](https://merlot.digital) & the world.** ❤️
+> ❤️ **FOSS by [The Network Crew Pty Ltd](https://tnc.works) (TNC) for [Merlot Digital](https://merlot.digital) & the world.** ❤️
 
 == Functionality ==
 
@@ -52,7 +50,7 @@ _Please let us know your ideas on [GitHub](https://github.com/The-Network-Crew/T
 4. API status checker reports OK.
 5. /wp-content/tnc-toolbox-config/ folder is gone.
 
-_(* Change to main plugin file name results in deactivation)_
+_(* Change to main plugin file name may result in deactivation)_
 
 == Screenshots ==
 
@@ -111,6 +109,10 @@ The key is to purge when stale, so properly configuring your WP Plugin Cache is 
 6. Save the config & use WP as-normal!
 
 == Changelog ==
+
+= 2.0.4: Nov 11, 2025 =
+* Remove minimum requirements: Ensure v2 adoption growth
+* Folder Renames: languages to locale; vendors to vendor
 
 = 2.0.3: Nov 6, 2025 =
 * Auto-purge (ACF): When you save ACF config, purge! (#24)

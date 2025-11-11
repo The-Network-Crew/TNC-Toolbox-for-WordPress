@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [2.0.4] - 2025-11-11
+
+### 💅 Polish
+- Remove minimum requirements: Ensure v2 adoption growth
+- Folder Renames: languages to locale; vendors to vendor
+
 ## [2.0.3] - 2025-11-06
 
 ### 🚀 Feature
