@@ -52,6 +52,34 @@ _Please let us know your ideas on [GitHub](https://github.com/The-Network-Crew/T
 
 _(* Change to main plugin file name may result in deactivation)_
 
+== Verifying cP+WHM Logs ==
+
+**If you'd like to ensure actions are firing properly at a deeper level:**
+
+1. WHM > Tweak Settings > Logging > Enable cPanel API Log > On
+2. WHM > Terminal > `tail -f /usr/local/cpanel/logs/api_log`
+3. WordPress > Update a Post/Page, or explicitly Purge
+4. WHM > Terminal > You should see the action fire!
+5. WHM > Terminal > Ctrl+C to close the tail
+
+Note: To do this, you require `root` access to the Server.
+
+== Caching Deployments ==
+
+**Caching ideals:**
+- Don't forget, ea-NGINX (reverse proxy caching) is meant to be 2nd-level
+- ie. Make sure your WP site also has on-site caching, like WP Super Cache
+- You can go further with caching, and should: like browser-caching assets!
+
+**3-layer Cache:**
+1. NGINX Caching Proxy (ahead of Apache)
+2. WP Super Cache, WP Rocket, etc on-site
+3. htaccess/etc rules for Browser Caching
+
+**This way, you can ensure maximum efficiency!**
+
+The key is to purge when stale, so properly configuring your WP Plugin Cache is critical to ensuring that you don't end up with cache misses due to stale data that could've/should've been purged by garbage collection, preloading, etc, rule-sets.
+
 == Screenshots ==
 
 1. Top Menu Bar options for NGINX Caching.
@@ -77,22 +105,6 @@ This is only visible if you are logged in as a WP Administrator.
 
 **Yes!** You can use `WP-CLI` to install **tnc-toolbox** for all users!
 
-== Caching Deployments ==
-
-**Caching ideals:**
-- Don't forget, ea-NGINX (reverse proxy caching) is meant to be 2nd-level
-- ie. Make sure your WP site also has on-site caching, like WP Super Cache
-- You can go further with caching, and should: like browser-caching assets!
-
-**3-layer Cache:**
-1. NGINX Caching Proxy (ahead of Apache)
-2. WP Super Cache, WP Rocket, etc on-site
-3. htaccess/etc rules for Browser Caching
-
-**This way, you can ensure maximum efficiency!**
-
-The key is to purge when stale, so properly configuring your WP Plugin Cache is critical to ensuring that you don't end up with cache misses due to stale data that could've/should've been purged by garbage collection, preloading, etc, rule-sets.
-
 == Installation ==
 
 **Pre-requisites:**
@@ -108,7 +120,7 @@ The key is to purge when stale, so properly configuring your WP Plugin Cache is 
 5. Enter your API Token, User & Hostname
 6. Save the config & use WP as-normal!
 
-https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/
+[cPanel Docs re: API Tokens](https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/)
 
 == Changelog ==
 
@@ -116,7 +128,7 @@ https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/
 * Cache Purge: Loosen required permission (edit_posts)
 
 = 2.0.5: Nov 13, 2025 =
-* Security: Restrict actions to Cron/Hook & via Perms
+* Security: Restrict actions to Cron/Hook & via Permissions
 
 = 2.0.4: Nov 11, 2025 =
 * Remove minimum requirements: Ensure v2 adoption growth

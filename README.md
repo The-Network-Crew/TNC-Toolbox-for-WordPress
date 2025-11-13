@@ -21,19 +21,7 @@ https://wordpress.org/plugins/tnc-toolbox
 > CloudLinux Apache2NGINX (MAx) depends on ea-NGINX so _shouldn't_ cause issues with TNC Toolbox.
 
 - cPanel API Key, cPanel Username & Server Hostname needed in Settings
-- Hosting Environment must be cPanel+WHM, running NGINX + Apache stack!
-
-## ♻️ (UPDATE) v1 to v2.x.x Overhaul
-
-**On every website running the plugin, check that:**
-
-1. Website is reporting v2.x.x plugin version.
-2. Plugin has been activated post-update. *
-3. Config exists in the plugin settings.
-4. API status checker reports OK.
-5. /wp-content/tnc-toolbox-config/ folder is gone.
-
-_(* Change to main plugin file name results in deactivation)_
+- Hosting Server must run cPanel+WHM, with the ea-NGINX & Apache stack!
 
 ## ⚙️ (INSTALL) How to Install the Plugin
 
@@ -46,6 +34,30 @@ _(* Change to main plugin file name results in deactivation)_
 ## 🛠️ (DEPLOY) Loading it onto all WP sites
 
 Use `WP-CLI` to install **tnc-toolbox** for all relevant accounts.
+
+## ♻️ (UPDATE) v1 to v2.x.x Overhaul
+
+**On every website running the plugin, check that:**
+
+1. Website is reporting v2.x.x plugin version.
+2. Plugin has been activated post-update. *
+3. Config exists in the plugin settings.
+4. API status checker reports OK.
+5. /wp-content/tnc-toolbox-config/ folder is gone.
+
+_(* Change to main plugin file name may result in deactivation)_
+
+## 🖥️ (LOGS) Verifying ea-NGINX Actions
+
+**If you'd like to ensure actions are firing properly at a deeper level:**
+
+1. WHM > Tweak Settings > Logging > Enable cPanel API Log > On
+2. WHM > Terminal > `tail -f /usr/local/cpanel/logs/api_log`
+3. WordPress > Update a Post/Page, or explicitly Purge
+4. WHM > Terminal > You should see the action fire!
+5. WHM > Terminal > Ctrl+C to close the tail
+
+Note: To do this, you require `root` access to the Server.
 
 ## 🆘 (HELP) Getting help with the Plugin
 
