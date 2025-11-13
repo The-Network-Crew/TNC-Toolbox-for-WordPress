@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [2.0.6] - 2025-11-14
+
+### 🐛 Bug Fix
+- Cache Purge: Loosen required permission (edit_posts)
+
 ## [2.0.5] - 2025-11-13
 
 ### 🐛 Bug Fix

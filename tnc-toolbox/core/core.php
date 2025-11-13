@@ -208,7 +208,7 @@ class TNC_Core {
      */
     public function nginx_cache_purge() {
         check_admin_referer('nginx_cache_purge');
-        if (!current_user_can('manage_options')) {
+        if (!current_user_can('edit_posts')) {
             wp_die(__('You are not allowed to do that.'));
         }
         $response = TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache');

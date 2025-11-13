@@ -5,7 +5,7 @@ Donate link:
 Contributors: 
 Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Tested up to: 6.8
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -111,6 +111,9 @@ The key is to purge when stale, so properly configuring your WP Plugin Cache is 
 https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/
 
 == Changelog ==
+
+= 2.0.6: Nov 14, 2025 =
+* Cache Purge: Loosen required permission (edit_posts)
 
 = 2.0.5: Nov 13, 2025 =
 * Security: Restrict actions to Cron/Hook & via Perms
