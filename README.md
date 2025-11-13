@@ -18,7 +18,7 @@ https://wordpress.org/plugins/tnc-toolbox
 > [!IMPORTANT]  
 > EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implementations.
 > 
-> CloudLinux Apache2NGINX (A2N) depends on ea-NGINX so _shouldn't_ cause issues with TNC Toolbox.
+> CloudLinux Apache2NGINX (MAx) depends on ea-NGINX so _shouldn't_ cause issues with TNC Toolbox.
 
 - cPanel API Key, cPanel Username & Server Hostname needed in Settings
 - Hosting Environment must be cPanel+WHM, running NGINX + Apache stack!

@@ -108,6 +108,8 @@ The key is to purge when stale, so properly configuring your WP Plugin Cache is 
 5. Enter your API Token, User & Hostname
 6. Save the config & use WP as-normal!
 
+https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/
+
 == Changelog ==
 
 = 2.0.4: Nov 11, 2025 =
