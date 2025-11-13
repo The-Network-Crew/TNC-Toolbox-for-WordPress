@@ -61,14 +61,14 @@ class TNC_Core {
         // Cache purge actions
         add_action('admin_post_nginx_cache_purge', array($this, 'nginx_cache_purge'));
         add_action('post_updated', array($this, 'purge_cache_on_update'), 10, 3);
-        add_action('_core_updated_successfully', array($this, 'nginx_cache_purge'));
+        add_action('_core_updated_successfully', function() { TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache', [], true); });
 
         // Notices (Admin GUI)
         add_action('admin_notices', array($this, 'display_admin_notices'));
 
         // ACF Save (#24)
         if (has_action('acf/options_page/save') === true) {
-            add_action('acf/options_page/save', TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache'), 10, 3);
+            add_action('acf/options_page/save', function() { TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache', [], true); }, 10, 3);
         }
     }
 
@@ -76,7 +76,7 @@ class TNC_Core {
      * Register capability dependent hooks
      */
     public function add_capability_dependent_hooks() {
-        if (current_user_can('update_core')) {
+        if (current_user_can('manage_options')) {
             add_action('admin_bar_menu', array($this, 'add_cache_off_button'), 100);
             add_action('admin_post_nginx_cache_off', array($this, 'nginx_cache_off'));
             add_action('admin_bar_menu', array($this, 'add_cache_on_button'), 100);
@@ -208,6 +208,9 @@ class TNC_Core {
      */
     public function nginx_cache_purge() {
         check_admin_referer('nginx_cache_purge');
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You are not allowed to do that.'));
+        }
         $response = TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache');
         $this->set_notice(
             $response['success'] ? 
@@ -223,6 +226,9 @@ class TNC_Core {
 
     public function nginx_cache_off() {
         check_admin_referer('nginx_cache_off');
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You are not allowed to do that.'));
+        }
         $response = TNC_cPanel_UAPI::make_api_request('NginxCaching/disable_cache');
         $this->set_notice(
             $response['success'] ? 
@@ -238,6 +244,9 @@ class TNC_Core {
 
     public function nginx_cache_on() {
         check_admin_referer('nginx_cache_on');
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You are not allowed to do that.'));
+        }
         $response = TNC_cPanel_UAPI::make_api_request('NginxCaching/enable_cache');
         $this->set_notice(
             $response['success'] ? 
@@ -258,7 +267,7 @@ class TNC_Core {
         if ('publish' === $post_after->post_status || 
             ($post_before->post_status === 'publish' && $post_after->post_status !== 'trash')) {
             // Use the UAPI directly rather than function, to support automated (#31)
-            TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache');
+            TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache', [], true);
         }
     }
 

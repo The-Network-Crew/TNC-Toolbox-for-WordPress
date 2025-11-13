@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [2.0.5] - 2025-11-13
+
+### 🐛 Bug Fix
+- Security: Restrict actions to Cron/Hook & via Perms
+
 ## [2.0.4] - 2025-11-11
 
 ### 💅 Polish

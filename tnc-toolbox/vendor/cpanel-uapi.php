@@ -47,11 +47,12 @@ class TNC_cPanel_UAPI {
     /**
      * Get stored API configuration
      *
+     * @param bool $skip_cap_check Skip capability check for internal requests
      * @return array|false API config, or false if not set
      */
-    public static function get_config() {
-        // Cleanly return if user can't edit post
-        if (!current_user_can('manage_options')) {
+    public static function get_config($skip_cap_check = false) {
+        // Cleanly return if user can't edit post and not skipping check
+        if (!$skip_cap_check && !current_user_can('manage_options')) {
             return false;
         }
         
@@ -100,11 +101,12 @@ class TNC_cPanel_UAPI {
      *
      * @param string $endpoint API endpoint (e.g. 'NginxCaching/clear_cache')
      * @param array $body Request body parameters
+     * @param bool $skip_cap_check Skip capability check for internal requests
      * @return array Response data array with 'success', 'message', and optional 'data'
      */
-    public static function make_api_request($endpoint, $body = []) {
+    public static function make_api_request($endpoint, $body = [], $skip_cap_check = false) {
         try {
-            $config = self::get_config();
+            $config = self::get_config($skip_cap_check);
             if (!$config) {
                 self::log_error('API configuration not set');
                 return [
