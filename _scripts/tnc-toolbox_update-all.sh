@@ -47,7 +47,6 @@ do
     echo "UPDATING ${user}: tnc-toolbox found within WP"
     su - ${user} -c "cd public_html && wp plugin update tnc-toolbox && wp plugin activate tnc-toolbox"
     fixperms -a ${user}
-    chown ${user}:${user} -R ${homedir}/public_html/wp-content/plugins/tnc-toolbox/
   fi
 
   # Alert if the old config dir exists
