@@ -20,9 +20,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# NOTE: This script assumes a properly functional CageFS set-up on your server.
-# CageFS: If you do not have this set-up, change/comment "wp" & install separately.
-# fixperms: You need https://github.com/PeachFlame/cPanel-fixperms in /usr/local/sbin
+# PRE-REQS: Shell must be enabled for accounts. WP-CLI must be installed.
+# PRE-REQS: PeachFlame's fixperms must be installed in /usr/local/sbin etc.
+# DELETION: This script will RETAIN configs it can, then DELETE any artifacts.
 
 # Require root to run
 if [ "$EUID" -ne 0 ]
@@ -36,21 +36,18 @@ do
   # Capture the home directory
   homedir=$(getent passwd ${user} | cut -d : -f 6)
 
-  # Skip account if it isn't WordPress
-  if [[ ! -f ${homedir}"/public_html/wp-includes/version.php" ]] ; then
-    echo "SKIPPING: ${user} does not run WordPress"
-    continue
-  fi
-
-  # Update plugin, if it exists; deploy config
+  # Update then re-activate & fix perms.
   if [[ -d ${homedir}"/public_html/wp-content/plugins/tnc-toolbox/" ]] ; then
     echo "UPDATING ${user}: tnc-toolbox found within WP"
     su - ${user} -c "cd public_html && wp plugin update tnc-toolbox && wp plugin activate tnc-toolbox"
     fixperms -a ${user}
   fi
 
-  # Alert if the old config dir exists
+  # Delete any remaining artifact config directories
   if [[ -d ${homedir}"/public_html/wp-content/tnc-toolbox-config/" ]] ; then
-    echo "PROBLEM ${user}: Legacy Config Directory - RESOLVE ASAP"
+    echo "ARTIFACT FOUND, DELETING FOR: ${user}"
+    echo "You have 3 seconds to Ctrl+C (abort)..."
+    sleep 3
+    rm -rf ${homedir}"/public_html/wp-content/tnc-toolbox-config/"
   fi
 done

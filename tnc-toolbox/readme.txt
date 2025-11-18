@@ -5,7 +5,7 @@ Donate link:
 Contributors: 
 Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Tested up to: 6.8
-Stable tag: 2.0.6
+Stable tag: 2.0.7
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -107,12 +107,14 @@ This is only visible if you are logged in as a WP Administrator.
 
 == Installation ==
 
-**Pre-requisites:**
+**Pre-reqs:**
+
 1. To use ea-NGINX features, your Hosting needs to be on cPanel
 2. Acquire a cPanel API Token (cPanel > Manage API Tokens)
 3. Configure the TNC Toolbox plugin inside WordPress
 
 **How to install:**
+
 1. Go to `Plugins` in WP-Admin
 2. Click on the button `Add New`
 3. Search for `TNC Toolbox` then click `Install Now`
@@ -122,10 +124,26 @@ This is only visible if you are logged in as a WP Administrator.
 
 [cPanel Docs re: API Tokens](https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/)
 
+** Updating from v1 to v2:**
+
+On every website running the plugin, check that:
+
+1. Website is reporting v2.x.x plugin version.
+2. Plugin has been activated post-update. *
+3. Config exists in the plugin settings.
+4. API status checker reports OK.
+5. /wp-content/tnc-toolbox-config/ folder is gone.
+
+_(* Change to main plugin file name may result in deactivation)_
+
 == Changelog ==
 
+= 2.0.7: Nov 18, 2025 =
+* Global Script: Update tool now purges artifact configs.
+* Off/On: Fix conditional display only in Admin Area (#33)
+
 = 2.0.6: Nov 14, 2025 =
-* Cache Purge: Loosen required permission (edit_posts)
+* Cache Purge: Loosen required permission (to: edit_posts)
 
 = 2.0.5: Nov 13, 2025 =
 * Security: Restrict actions to Cron/Hook & via Permissions
@@ -144,7 +162,7 @@ This is only visible if you are logged in as a WP Administrator.
 * Fix: Auto-purge now calls directly (re: nonce failure) (#31)
 
 = 2.0.0: Nov 6, 2025 =
-* NOTE: MAJOR REBUILD, PLEASE TEST BEFORE DEPLOYING
+* MAJOR REBUILD: You may need to RE-ACTIVATE POST-UPDATE
 * Feature: Add direct quota info re: API connected OK (#5)
 * Security: Move config from files to WordPress database (#6)
 * Security: Secure deletion of old config after migration

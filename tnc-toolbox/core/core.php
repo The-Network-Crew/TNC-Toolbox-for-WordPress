@@ -42,8 +42,8 @@ class TNC_Core {
         // Register basic hooks
         add_action('init', array($this, 'add_hooks'));
         
-        // Register capability-dependent hooks after WP is fully loaded
-        add_action('admin_init', array($this, 'add_capability_dependent_hooks'));
+        // Register capability-dependent hooks
+        add_action('init', array($this, 'add_capability_dependent_hooks'));
     }
 
     /**
