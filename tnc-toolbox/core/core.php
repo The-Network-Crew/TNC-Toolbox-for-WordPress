@@ -61,6 +61,7 @@ class TNC_Core {
         // Cache purge actions
         add_action('admin_post_nginx_cache_purge', array($this, 'nginx_cache_purge'));
         add_action('post_updated', array($this, 'purge_cache_on_update'), 10, 3);
+        add_action('transition_post_status', array($this, 'purge_cache_on_transition'), 10, 3);
         add_action('_core_updated_successfully', function() { TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache', [], true); });
 
         // Notices (Admin GUI)
@@ -261,12 +262,22 @@ class TNC_Core {
     }
 
     /**
-     * Automatic cache purging
+     * Automatic cache purging on post update
      */
     public function purge_cache_on_update($post_id, $post_after, $post_before) {
         if ('publish' === $post_after->post_status || 
             ($post_before->post_status === 'publish' && $post_after->post_status !== 'trash')) {
             // Use the UAPI directly rather than function, to support automated (#31)
+            TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache', [], true);
+        }
+    }
+
+    /**
+     * Automatic cache purging on post status transition
+     */
+    public function purge_cache_on_transition($new_status, $old_status, $post) {
+        if ( 'publish' === $new_status && 'publish' !== $old_status ) {
+            // This hook also fires on-update, so we verify status change has occurred
             TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache', [], true);
         }
     }

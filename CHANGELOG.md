@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [2.0.8] - 2025-12-03
+
+### 🚀 Feature
+- Scheduled Posts: Support scheduled post go-lives (#34)
+
+### 💅 Polish
+- WordPress 6.9: Bump tested-to version from major v6.8
+
 ## [2.0.7] - 2025-11-18
 
 ### 💅 Polish

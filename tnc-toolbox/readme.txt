@@ -4,12 +4,12 @@ Plugin URI: https://merlot.digital
 Donate link: 
 Contributors: 
 Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
-Tested up to: 6.8
-Stable tag: 2.0.7
+Tested up to: 6.9
+Stable tag: 2.0.8
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Made to help you fly online! Adds functionality (cache purge, etc) to WP - designed for NGINX-powered Servers on cPanel+WHM.
+Designed for ea-NGINX (Cache/Proxy) on cPanel+WHM. Made to help you fly online! 🚀
 
 
 == Description ==
@@ -33,12 +33,29 @@ With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the
 - Only allows Admins to enable/disable caching & edit configs
 - Shows you the status of cP UAPI via disk usage info
 - Purge when any ACF config options are saved
+- Supports scheduled post publishing!
 
 **Eager for even more capabilities?**
 
 We plan to add further features as clients & the community request it. 
 
 _Please let us know your ideas on [GitHub](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/) - we'd love to hear from you!_
+
+== Caching Deployments ==
+
+**Caching ideals:**
+- Don't forget, ea-NGINX (reverse proxy caching) is meant to be 2nd-level
+- ie. Make sure your WP site also has on-site caching, like WP Super Cache
+- You can go further with caching, and should: like browser-caching assets!
+
+**3-layer Cache:**
+1. NGINX Caching Proxy (ahead of Apache)
+2. WP Super Cache, WP Rocket, etc on-site
+3. htaccess/etc rules for Browser Caching
+
+**This way, you can ensure maximum efficiency!**
+
+The key is to purge when stale, so properly configuring your WP Plugin Cache is critical to ensuring that you don't end up with cache misses due to stale data that could've/should've been purged by garbage collection, preloading, etc, rule-sets.
 
 == Updating from v1 to v2.x.x ==
 
@@ -63,22 +80,6 @@ _(* Change to main plugin file name may result in deactivation)_
 5. WHM > Terminal > Ctrl+C to close the tail
 
 Note: To do this, you require `root` access to the Server.
-
-== Caching Deployments ==
-
-**Caching ideals:**
-- Don't forget, ea-NGINX (reverse proxy caching) is meant to be 2nd-level
-- ie. Make sure your WP site also has on-site caching, like WP Super Cache
-- You can go further with caching, and should: like browser-caching assets!
-
-**3-layer Cache:**
-1. NGINX Caching Proxy (ahead of Apache)
-2. WP Super Cache, WP Rocket, etc on-site
-3. htaccess/etc rules for Browser Caching
-
-**This way, you can ensure maximum efficiency!**
-
-The key is to purge when stale, so properly configuring your WP Plugin Cache is critical to ensuring that you don't end up with cache misses due to stale data that could've/should've been purged by garbage collection, preloading, etc, rule-sets.
 
 == Screenshots ==
 
@@ -110,7 +111,7 @@ This is only visible if you are logged in as a WP Administrator.
 **Pre-reqs:**
 
 1. To use ea-NGINX features, your Hosting needs to be on cPanel
-2. Acquire a cPanel API Token (cPanel > Manage API Tokens)
+2. Acquire a [cPanel API Token](https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/) (cPanel > Manage API Tokens)
 3. Configure the TNC Toolbox plugin inside WordPress
 
 **How to install:**
@@ -122,12 +123,9 @@ This is only visible if you are logged in as a WP Administrator.
 5. Enter your API Token, User & Hostname
 6. Save the config & use WP as-normal!
 
-[cPanel Docs re: API Tokens](https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/)
-
-** Updating from v1 to v2:**
+**Updating from v1 to v2:**
 
 On every website running the plugin, check that:
-
 1. Website is reporting v2.x.x plugin version.
 2. Plugin has been activated post-update. *
 3. Config exists in the plugin settings.
@@ -137,6 +135,10 @@ On every website running the plugin, check that:
 _(* Change to main plugin file name may result in deactivation)_
 
 == Changelog ==
+
+= 2.0.8: Dec 3, 2025 =
+* Scheduled Posts: Support scheduled post go-lives (#34)
+* WordPress 6.9: Bump tested-to version from major v6.8
 
 = 2.0.7: Nov 18, 2025 =
 * Global Script: Update tool now purges artifact configs.
@@ -186,3 +188,11 @@ _(* Change to main plugin file name may result in deactivation)_
 = 1.4.0: Feb 21, 2025 =
 * Truncate max-length of relayed API error to GUI (#22)
 * Auto-purge when WP Core is successfully upgraded (#23)
+
+== Upgrade Notice ==
+
+= 2.0.5 =
+This release contains a security fix. It is of minor severity.
+
+= 2.0.0 =
+This release contains a security fix. Upgrade v1 to v2 immediately.
