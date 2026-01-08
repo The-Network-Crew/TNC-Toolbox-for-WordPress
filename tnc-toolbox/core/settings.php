@@ -2,7 +2,7 @@
 
 /*
     TNC Toolbox: Web Performance (for WordPress)
-    
+
     Copyright (C) The Network Crew Pty Ltd (TNC)
     PO Box 3113 Uki 2484 NSW Australia https://tnc.works
 
@@ -43,7 +43,7 @@ class TNC_Settings {
 
     /**
      * Constructor.
-     * 
+     *
      * @since 2.0.0
      */
     public function __construct() {
@@ -106,14 +106,14 @@ class TNC_Settings {
         }
 
         // Verify nonce before processing settings
-        $is_settings_save = isset($_POST['submit_tnc_toolbox_settings']) && 
+        $is_settings_save = isset($_POST['submit_tnc_toolbox_settings']) &&
             wp_verify_nonce($_POST['tnc_toolbox_settings_nonce'], 'tnc_toolbox_settings');
-            
+
         // Process settings submission first so notices show on page load
         if ($is_settings_save) {
             $this->save_settings();
         }
-        
+
         // Always render the page - either after save or on fresh load
         $this->render_settings_page();
     }
@@ -127,6 +127,10 @@ class TNC_Settings {
         $username = sanitize_text_field($_POST['tnc_toolbox_username'] ?? '');
         $hostname = sanitize_text_field($_POST['tnc_toolbox_server_hostname'] ?? '');
 
+        // Handle selective purge setting - use the POST value directly to avoid race conditions
+        $selective_purge_enabled = isset($_POST['tnc_selective_purge']);
+        TNC_Cache_Purge::set_enabled($selective_purge_enabled);
+
         // Try to save the configuration even if empty to ensure options exist
         TNC_cPanel_UAPI::store_config($username, $api_key, $hostname);
 
@@ -134,8 +138,12 @@ class TNC_Settings {
         if (!empty($hostname) && !empty($username) && !empty($api_key)) {
             try {
                 $test_result = TNC_cPanel_UAPI::test_connection();
+                $message = $test_result['message'];
+                if ($selective_purge_enabled && $test_result['success']) {
+                    $message .= ' Selective cache purging enabled.';
+                }
                 TNC_Core::set_notice(
-                    $test_result['message'],
+                    $message,
                     $test_result['success'] ? 'success' : 'error'
                 );
             } catch (Exception $e) {
@@ -146,7 +154,7 @@ class TNC_Settings {
             }
         } else {
             TNC_Core::set_notice(
-                'Please fill in all fields to test the connection.',
+                'Please fill in all cPanel API fields to enable cache management.',
                 'error'
             );
         }
@@ -167,7 +175,7 @@ class TNC_Settings {
             <div class="tnc-toolbox-form">
                 <form method="post" action="">
                     <?php wp_nonce_field('tnc_toolbox_settings', 'tnc_toolbox_settings_nonce'); ?>
-                    
+
                     <table class="form-table" role="presentation">
                         <tr>
                             <th scope="row">
@@ -207,12 +215,14 @@ class TNC_Settings {
                                     class="regular-text" />
                             </td>
                         </tr>
+                        <?php $this->render_cache_purge_settings(); ?>
                     </table>
 
                     <p class="submit">
-                        <input type="submit" name="submit_tnc_toolbox_settings" class="button button-primary" 
+                        <input type="submit" name="submit_tnc_toolbox_settings" class="button button-primary"
                                value="<?php echo esc_attr__('Save Settings & Test!'); ?>" />
                     </p>
+
                 </form>
 
                 <?php if (!empty($stored_config['hostname']) && !empty($stored_config['username']) && !empty($stored_config['api_key'])): ?>
@@ -221,7 +231,7 @@ class TNC_Settings {
                     if ($quota['success'] && isset($quota['data']['megabytes_used'])):
                     ?>
                         <div class="tnc-toolbox-status success">
-                            <h3>UAPI Status is OK</h3>
+                            <h3>cPanel API Connected</h3>
                             <br>
                             <strong>Inodes</strong>: <code><?php echo number_format($quota['data']['inodes_used']); ?></code> of <code><?php echo number_format($quota['data']['inode_limit']); ?></code><br>
                             <strong>Disk</strong>: <code><?php echo number_format($quota['data']['megabytes_used']); ?>MB</code> of <code><?php echo number_format($quota['data']['megabyte_limit']); ?>MB</code></p>
@@ -231,6 +241,31 @@ class TNC_Settings {
                 <?php endif; ?>
             </div>
         </div>
+        <?php
+    }
+
+    /**
+     * Render cache-purge module settings row
+     */
+    private function render_cache_purge_settings() {
+        $status = TNC_Cache_Purge::get_status();
+        ?>
+        <tr>
+            <th scope="row">
+                <label for="tnc_selective_purge">Selective Cache Purging</label>
+            </th>
+            <td>
+                <label>
+                    <input type="checkbox" id="tnc_selective_purge" name="tnc_selective_purge"
+                           <?php checked($status['enabled']); ?> />
+                    Enable selective URL purging
+                </label>
+                <p class="description">
+                    Only purge affected URLs when content changes (post, archives, home) instead of clearing the entire cache.<br>
+                    <strong>Requires:</strong> <code>ea-nginx-cache-purge</code> module installed on your server.
+                </p>
+            </td>
+        </tr>
         <?php
     }
 }

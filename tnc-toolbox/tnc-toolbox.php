@@ -5,13 +5,13 @@
  * @package           TNCTOOLBOX
  * @author            The Network Crew Pty Ltd (Merlot Digital)
  * @license           gplv3
- * @version           2.0.8
+ * @version           2.1.0
  *
  * @wordpress-plugin
  * Plugin Name:       TNC Toolbox: Web Performance
  * Plugin URI:        https://merlot.digital
- * Description:       Designed for ea-NGINX (Cache/Proxy) on cPanel+WHM. Made to help you fly online!
- * Version:           2.0.8
+ * Description:       Designed for ea-NGINX (Cache/Proxy) on cPanel+WHM. Now with selective cache purging support!
+ * Version:           2.1.0
  * Author:            The Network Crew Pty Ltd (Merlot Digital)
  * Author URI:        https://tnc.works
  * Domain Path:       /locale
@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) exit;
 define('TNCTOOLBOX_NAME', 'TNC Toolbox');
 
 // Plugin version
-define('TNCTOOLBOX_VERSION', '2.0.8');
+define('TNCTOOLBOX_VERSION', '2.1.0');
 
 // Plugin Root File
 define('TNCTOOLBOX_PLUGIN_FILE', __FILE__);
@@ -47,6 +47,7 @@ define('TNCTOOLBOX_PLUGIN_URL', plugin_dir_url(TNCTOOLBOX_PLUGIN_FILE));
 require_once TNCTOOLBOX_PLUGIN_DIR . 'core/core.php';
 require_once TNCTOOLBOX_PLUGIN_DIR . 'core/settings.php';
 require_once TNCTOOLBOX_PLUGIN_DIR . 'vendor/cpanel-uapi.php';
+require_once TNCTOOLBOX_PLUGIN_DIR . 'vendor/cache-purge.php';
 
 /**
  * Main plugin class for initialisation and hooks
@@ -111,7 +112,7 @@ class TNC_Toolbox {
                 'cpanel-api-key' => 'api_key',
                 'server-hostname' => 'hostname'
             );
-            
+
             // Load each config file's contents
             $config = array();
             foreach ($config_files as $file => $key) {
@@ -146,7 +147,7 @@ class TNC_Toolbox {
      */
     public function handle_version_updates() {
         $stored_version = get_option('tnc_toolbox_version', '1.0.0');
-        
+
         // If this is a pre-2.0.0 version and we have config files, migrate them
         if (version_compare($stored_version, '2.0.0', '<')) {
             $this->handle_activation();

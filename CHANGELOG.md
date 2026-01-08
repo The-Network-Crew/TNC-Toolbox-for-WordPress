@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [2.1.0] - 2026-01-08
+
+### 🚀 Feature
+- **Selective Cache Purging**: Integration with `ea-nginx-cache-purge` module
+  - When updating a post, only that page and related archives are purged
+  - New "⚡ Purge This Page" button in admin bar when viewing posts on frontend
+  - Falls back to full cache purge via cPanel API when module not available
+- **Settings**: New checkbox to enable selective cache purging
+
 ## [2.0.8] - 2025-12-03
 
 ### 🚀 Feature
