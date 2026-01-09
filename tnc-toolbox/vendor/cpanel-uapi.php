@@ -220,7 +220,7 @@ class TNC_cPanel_UAPI {
             return [
                 'success' => true,
                 'message' => sprintf(
-                    'Saved Config & Tested OK. Disk Usage: %s MB',
+                    'Saved Config & Tested OK. Disk Usage: %s MB.',
                     number_format($response['data']['megabytes_used'])
                 ),
                 'data' => $response['data']
