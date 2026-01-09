@@ -86,6 +86,7 @@ Note: To do this, you require `root` access to the Server.
 1. Top Menu Bar options for NGINX Caching.
 2. Configuration in the WP Admin GUI.
 3. Front-end per-page cache option.
+4. Result of Selective Purging.
 
 == Frequently Asked Questions ==
 
