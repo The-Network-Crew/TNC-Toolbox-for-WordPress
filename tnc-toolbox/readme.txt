@@ -85,6 +85,7 @@ Note: To do this, you require `root` access to the Server.
 
 1. Top Menu Bar options for NGINX Caching.
 2. Configuration in the WP Admin GUI.
+3. Front-end per-page cache option.
 
 == Frequently Asked Questions ==
 
@@ -122,6 +123,20 @@ This is only visible if you are logged in as a WP Administrator.
 4. Click on `Activate plugin` then `Settings`
 5. Enter your API Token, User & Hostname
 6. Save the config & use WP as-normal!
+
+**Selective Purging:**
+
+**Starting with v2.1.0, you can leverage Selective Cache Purging rather than the entire cache.**
+
+To do this, you need to complete some steps - else it will not work. You must be root.
+
+0. Install the GetPageSpeed repository (dnf/yum) onto the Server:<br>
+`dnf -y install https://extras.getpagespeed.com/release-latest.rpm`
+1. Install ea-nginx-cache-purge module from GetPageSpeed repo:<br>
+`dnf -y install ea-nginx-cache-purge`
+2. Add `/etc/nginx/conf.d/server-includes/cache-purge.conf`<br>
+File Contents: `proxy_cache_purge PURGE from 127.0.0.1;`
+3. Rebuild & Reload: `nginx -t && systemctl reload nginx`
 
 **Updating from v1 to v2:**
 
