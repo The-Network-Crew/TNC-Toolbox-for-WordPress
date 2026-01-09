@@ -12,6 +12,7 @@ https://wordpress.org/plugins/tnc-toolbox
 - Only presents the options to enable/disable/configure for WP Admins
 - For any action, redirects you back to the page you requested it from
 - Shows you whether or not the API is working via diagnostic quota info
+- **v2.1.0**: Selective cache purging with `ea-nginx-cache-purge` (optional)
 
 ## 🖥️ (PLUGIN) System Requirements
 

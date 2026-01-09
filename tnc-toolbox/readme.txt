@@ -5,7 +5,7 @@ Donate link:
 Contributors: 
 Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Tested up to: 6.9
-Stable tag: 2.0.8
+Stable tag: 2.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -135,6 +135,11 @@ On every website running the plugin, check that:
 _(* Change to main plugin file name may result in deactivation)_
 
 == Changelog ==
+
+= 2.1.0: Jan 8, 2026 =
+* Feature: Selective Cache Purging with ea-nginx-cache-purge integration
+* Feature: "Purge This Page" button in admin bar when viewing posts
+* Improvement: Optional selective purging via Settings > TNC Toolbox
 
 = 2.0.8: Dec 3, 2025 =
 * Scheduled Posts: Support scheduled post go-lives (#34)
