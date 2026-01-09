@@ -215,7 +215,20 @@ class TNC_Settings {
                                     class="regular-text" />
                             </td>
                         </tr>
-                        <?php $this->render_cache_purge_settings(); ?>
+                        <?php $status = TNC_Cache_Purge::get_status(); ?>
+                        <tr>
+                            <th scope="row">
+                                <label for="tnc_selective_purge">Selective Purging?</label>
+                                <p class="description">Requires Module & Config:<br><code>ea-nginx-cache-purge</code></p>
+                            </th>
+                            <td>
+                                <label>
+                                    <input type="checkbox" id="tnc_selective_purge" name="tnc_selective_purge"
+                                           <?php checked($status['enabled']); ?> />
+                                    Only purge affected URLs when content changes.<br>If disabled, the entire user cache is purged instead.
+                                </label>
+                            </td>
+                        </tr>
                     </table>
 
                     <p class="submit">
@@ -241,31 +254,6 @@ class TNC_Settings {
                 <?php endif; ?>
             </div>
         </div>
-        <?php
-    }
-
-    /**
-     * Render cache-purge module settings row
-     */
-    private function render_cache_purge_settings() {
-        $status = TNC_Cache_Purge::get_status();
-        ?>
-        <tr>
-            <th scope="row">
-                <label for="tnc_selective_purge">Selective Cache Purging</label>
-            </th>
-            <td>
-                <label>
-                    <input type="checkbox" id="tnc_selective_purge" name="tnc_selective_purge"
-                           <?php checked($status['enabled']); ?> />
-                    Enable selective URL purging
-                </label>
-                <p class="description">
-                    Only purge affected URLs when content changes (post, archives, home) instead of clearing the entire cache.<br>
-                    <strong>Requires:</strong> <code>ea-nginx-cache-purge</code> module installed on your server.
-                </p>
-            </td>
-        </tr>
         <?php
     }
 }
