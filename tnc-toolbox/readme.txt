@@ -1,11 +1,11 @@
 === TNC Toolbox: Web Performance ===
 Author URI: https://tnc.works
 Plugin URI: https://merlot.digital
-Donate link: 
-Contributors: 
+Donate link:
+Contributors:
 Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Tested up to: 6.9
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -14,11 +14,11 @@ Designed for ea-NGINX (Cache/Proxy) on cPanel+WHM. Made to help you fly online! 
 
 == Description ==
 
-TNC Toolbox aims to enhance your WordPress experience with NGINX-on-cPanel (ea-nginx). 
+TNC Toolbox aims to enhance your WordPress experience with NGINX-on-cPanel (ea-nginx).
 
 **Built for our Managed Server clients, we've open-sourced it so others can enjoy it too!**
 
-With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the plugin aims to help with Website Management, Performance and Security. 
+With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the plugin aims to help with Website Management, Performance and Security.
 
 > ❤️ **FOSS by [The Network Crew Pty Ltd](https://tnc.works) (TNC) for [Merlot Digital](https://merlot.digital) & the world.** ❤️
 
@@ -37,7 +37,7 @@ With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the
 
 **Eager for even more capabilities?**
 
-We plan to add further features as clients & the community request it. 
+We plan to add further features as clients & the community request it.
 
 _Please let us know your ideas on [GitHub](https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress/) - we'd love to hear from you!_
 
@@ -151,6 +151,9 @@ On every website running the plugin, check that:
 _(* Change to main plugin file name may result in deactivation)_
 
 == Changelog ==
+
+= 2.1.1: Jan 10, 2026 =
+* Bug Fix: Fix false positive cache-purge module detection
 
 = 2.1.0: Jan 8, 2026 =
 * Feature: Selective Cache Purging with ea-nginx-cache-purge integration

@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [2.1.1] - 2026-01-10
+
+### 🐛 Bug Fix
+- **Cache Purge Detection**: Fix false positive module detection when `ea-nginx-cache-purge` is not installed
+  - Detection now requires specific response signatures from the cache-purge module
+  - Generic NGINX 301/404/405 responses no longer trigger false detection
+- **Detection Caching**: Fix stale detection cache preventing module discovery
+  - Settings page now always performs fresh detection check
+  - No HTTP requests on regular page loads (uses cached result)
+
 ## [2.1.0] - 2026-01-08
 
 ### 🚀 Feature

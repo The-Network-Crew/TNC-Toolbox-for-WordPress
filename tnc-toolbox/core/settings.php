@@ -215,7 +215,7 @@ class TNC_Settings {
                                     class="regular-text" />
                             </td>
                         </tr>
-                        <?php $status = TNC_Cache_Purge::get_status(); ?>
+                        <?php $status = TNC_Cache_Purge::get_status( true ); // Force recheck on settings page ?>
                         <tr>
                             <th scope="row">
                                 <label for="tnc_selective_purge">Selective Purging?</label>
