@@ -5,13 +5,13 @@
  * @package           TNCTOOLBOX
  * @author            The Network Crew Pty Ltd (Merlot Digital)
  * @license           gplv3
- * @version           2.1.0
+ * @version           2.1.1
  *
  * @wordpress-plugin
  * Plugin Name:       TNC Toolbox: Web Performance
  * Plugin URI:        https://merlot.digital
  * Description:       Designed for ea-NGINX (Cache/Proxy) on cPanel+WHM. Now with selective cache purging support!
- * Version:           2.1.0
+ * Version:           2.1.1
  * Author:            The Network Crew Pty Ltd (Merlot Digital)
  * Author URI:        https://tnc.works
  * Domain Path:       /locale

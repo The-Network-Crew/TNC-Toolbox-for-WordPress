@@ -82,6 +82,12 @@ class TNC_Cache_Purge {
 	 * PURGE requests must be sent to localhost (127.0.0.1) with the Host header
 	 * set to the actual domain. This is how ea-nginx-cache-purge is configured.
 	 *
+	 * The module returns specific signatures in the response body:
+	 * - HTTP 200 with body containing "Successful purge" = module working.
+	 * - HTTP 412 can occur when item not in cache, but we need body signature.
+	 *
+	 * Without the module, nginx may return 301/404/405 with generic HTML.
+	 *
 	 * @return bool True if PURGE is supported.
 	 */
 	private static function test_purge_capability() {
@@ -111,36 +117,40 @@ class TNC_Cache_Purge {
 		$code = wp_remote_retrieve_response_code( $response );
 		$body = wp_remote_retrieve_body( $response );
 
-		// ea-nginx-cache-purge returns:
-		// - 200 OK with "Successful purge" if entry existed.
-		// - 404 Not Found if entry didn't exist (but PURGE is supported).
-		// - 412 Precondition Failed if entry wasn't in cache.
-		// - 405 Method Not Allowed if PURGE is not configured.
-		if ( 200 === $code || 404 === $code || 412 === $code ) {
-			// Check for cache-purge signature in body.
-			if ( stripos( $body, 'purge' ) !== false || stripos( $body, 'cache' ) !== false ) {
-				self::log( 'PURGE test successful: module detected' );
-				return true;
-			}
-			// Even without body, 200/404/412 on PURGE is a good sign.
-			self::log( 'PURGE test: got ' . $code . ', assuming module available' );
+		// ea-nginx-cache-purge module returns specific signatures:
+		// - 200 OK with body "Successful purge" and "Key :" when purged.
+		// - 412 Precondition Failed when item wasn't in cache.
+		//
+		// Without module: 301 redirect, 404 generic HTML, or 405 Method Not Allowed.
+		//
+		// We MUST check body for "Successful purge" signature to confirm module.
+		if ( 200 === $code && stripos( $body, 'Successful purge' ) !== false ) {
+			self::log( 'PURGE test successful: module detected (200 + signature)' );
 			return true;
 		}
 
-		self::log( 'PURGE test: got ' . $code . ', module not available' );
+		// 412 from module still indicates it's working (item just wasn't cached).
+		// But generic nginx 412 doesn't have our signature, so check for module output.
+		if ( 412 === $code && stripos( $body, 'Precondition Failed' ) !== false ) {
+			// This is likely the module - generic nginx rarely returns 412 for PURGE.
+			self::log( 'PURGE test successful: module detected (412 Precondition Failed)' );
+			return true;
+		}
+
+		self::log( 'PURGE test: got HTTP ' . $code . ', module not detected' );
 		return false;
 	}
 
 	/**
 	 * Check if selective purging is enabled.
 	 *
-	 * @return bool True if enabled and available.
+	 * Returns true if the user has enabled selective purging via checkbox.
+	 * Module availability is checked separately during actual purge operations.
+	 *
+	 * @return bool True if enabled by user.
 	 */
 	public static function is_enabled() {
-		$enabled   = get_option( self::OPTION_ENABLED, 'yes' );
-		$available = get_option( self::OPTION_AVAILABLE, 'unknown' );
-
-		return 'yes' === $enabled && 'yes' === $available;
+		return 'yes' === get_option( self::OPTION_ENABLED, 'no' );
 	}
 
 	/**
@@ -207,10 +217,15 @@ class TNC_Cache_Purge {
 		}
 
 		$code = wp_remote_retrieve_response_code( $response );
+		$body = wp_remote_retrieve_body( $response );
 
-		// 200 = successfully purged, 404 = wasn't in cache (ok), 412 = wasn't in cache.
-		if ( 200 === $code || 404 === $code || 412 === $code ) {
-			self::log( 'Purged: ' . $url . ' (HTTP ' . $code . ')' );
+		// ea-nginx-cache-purge module returns:
+		// - 200 with "Successful purge" = item was in cache and purged.
+		// - 412 Precondition Failed = item wasn't in cache (still success).
+		//
+		// Without module: 301/404/405 with generic nginx HTML (not a real purge).
+		if ( 200 === $code && stripos( $body, 'Successful purge' ) !== false ) {
+			self::log( 'Purged: ' . $url . ' (HTTP 200)' );
 			return array(
 				'success' => true,
 				'message' => 'Purged successfully',
@@ -218,10 +233,38 @@ class TNC_Cache_Purge {
 			);
 		}
 
+		// 412 means item wasn't cached - that's fine, nothing to purge.
+		if ( 412 === $code ) {
+			self::log( 'Not in cache: ' . $url . ' (HTTP 412)' );
+			return array(
+				'success' => true,
+				'message' => 'Not in cache (already clean)',
+				'code'    => $code,
+			);
+		}
+
+		// Got a 200 but without cache-purge signature = module not working.
+		if ( 200 === $code ) {
+			self::log( 'Purge returned 200 but without module signature for ' . $url );
+			return array(
+				'success' => false,
+				'message' => 'Cache purge module not responding correctly',
+				'code'    => $code,
+			);
+		}
+
+		// 301/404/405 = module not installed or not configured for this domain.
+		$error_msg = 'Purge failed (HTTP ' . $code . ')';
+		if ( 404 === $code || 301 === $code ) {
+			$error_msg = 'Cache purge module not detected - install ea-nginx-cache-purge';
+		} elseif ( 405 === $code ) {
+			$error_msg = 'PURGE method not allowed - cache purge module not configured';
+		}
+
 		self::log( 'Purge failed for ' . $url . ': HTTP ' . $code );
 		return array(
 			'success' => false,
-			'message' => 'Unexpected response: HTTP ' . $code,
+			'message' => $error_msg,
 			'code'    => $code,
 		);
 	}
@@ -466,28 +509,38 @@ class TNC_Cache_Purge {
 	/**
 	 * Get availability status for display.
 	 *
+	 * Detection only runs on settings page (force_recheck=true) to avoid
+	 * HTTP requests on every page load. Admin bar uses cached result.
+	 *
+	 * @param bool $force_recheck Force a fresh detection check (use on settings page).
 	 * @return array Status info with 'available', 'enabled', 'message' keys.
 	 */
-	public static function get_status() {
+	public static function get_status( $force_recheck = false ) {
+		$enabled   = self::is_enabled();
 		$available = get_option( self::OPTION_AVAILABLE, 'unknown' );
-		$enabled   = get_option( self::OPTION_ENABLED, 'yes' );
 
-		if ( 'unknown' === $available ) {
-			$available = self::is_available() ? 'yes' : 'no';
+		// Only recheck on settings page (force_recheck=true).
+		// This avoids HTTP requests on every page load.
+		if ( $force_recheck && $enabled ) {
+			$available = self::is_available( true ) ? 'yes' : 'no';
 		}
 
 		$message = '';
-		if ( 'yes' === $available && 'yes' === $enabled ) {
-			$message = 'Selective purging active — only changed pages are purged for maximum efficiency';
-		} elseif ( 'yes' === $available && 'no' === $enabled ) {
-			$message = 'Selective purging available but disabled';
+		if ( $enabled ) {
+			if ( 'yes' === $available ) {
+				$message = 'Selective purging active — only changed pages are purged for maximum efficiency';
+			} elseif ( 'no' === $available ) {
+				$message = 'Selective purging enabled but module not detected — purges may fail';
+			} else {
+				$message = 'Selective purging enabled — checking module availability...';
+			}
 		} else {
-			$message = 'nginx-module-cache-purge not detected — using full cache purge via cPanel API';
+			$message = 'Selective purging disabled — using full cache purge via cPanel API';
 		}
 
 		return array(
 			'available' => 'yes' === $available,
-			'enabled'   => 'yes' === $enabled,
+			'enabled'   => $enabled,
 			'message'   => $message,
 		);
 	}
