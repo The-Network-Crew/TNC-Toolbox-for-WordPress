@@ -50,6 +50,7 @@ class TNC_Settings {
         $this->plugin_name = TNCTOOLBOX_NAME;
         add_action('init', array($this, 'init_settings'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
+        add_action('wp_ajax_tnc_test_slack_webhook', array($this, 'ajax_test_slack_webhook'));
     }
 
     // Enqueue admin styles for settings page
@@ -126,10 +127,14 @@ class TNC_Settings {
         $api_key = sanitize_text_field($_POST['tnc_toolbox_api_key'] ?? '');
         $username = sanitize_text_field($_POST['tnc_toolbox_username'] ?? '');
         $hostname = sanitize_text_field($_POST['tnc_toolbox_server_hostname'] ?? '');
+        $slack_webhook = sanitize_url($_POST['tnc_toolbox_slack_webhook'] ?? '');
 
         // Handle selective purge setting - use the POST value directly to avoid race conditions
         $selective_purge_enabled = isset($_POST['tnc_selective_purge']);
         TNC_Cache_Purge::set_enabled($selective_purge_enabled);
+
+        // Save Slack webhook URL
+        TNC_Slack_Alerts::store_webhook_url($slack_webhook);
 
         // Try to save the configuration even if empty to ensure options exist
         TNC_cPanel_UAPI::store_config($username, $api_key, $hostname);
@@ -229,6 +234,21 @@ class TNC_Settings {
                                 </label>
                             </td>
                         </tr>
+                        <tr>
+                            <th scope="row">
+                                <label for="tnc_toolbox_slack_webhook">Slack Webhook URL</label>
+                                <p class="description">For mail failure alerts.<br><a href="https://api.slack.com/messaging/webhooks" target="_blank">Create Webhook</a>.</p>
+                            </th>
+                            <td>
+                                <input type="url" id="tnc_toolbox_slack_webhook" name="tnc_toolbox_slack_webhook"
+                                    value="<?php echo esc_attr(TNC_Slack_Alerts::get_webhook_url()); ?>"
+                                    placeholder="https://hooks.slack.com/services/..."
+                                    class="regular-text" />
+                                <button type="button" id="tnc_test_slack_webhook" class="button button-secondary">Test Webhook</button>
+                                <span id="tnc_slack_test_result" style="margin-left: 10px;"></span>
+                                <p class="description">Receive alerts when WordPress fails to send emails.</p>
+                            </td>
+                        </tr>
                     </table>
 
                     <p class="submit">
@@ -254,6 +274,72 @@ class TNC_Settings {
                 <?php endif; ?>
             </div>
         </div>
+        <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $('#tnc_test_slack_webhook').on('click', function() {
+                var $button = $(this);
+                var $result = $('#tnc_slack_test_result');
+                var webhookUrl = $('#tnc_toolbox_slack_webhook').val();
+                
+                if (!webhookUrl) {
+                    $result.html('<span style="color: #dc3232;">Please enter a webhook URL first.</span>');
+                    return;
+                }
+                
+                $button.prop('disabled', true).text('Testing...');
+                $result.html('');
+                
+                $.post(ajaxurl, {
+                    action: 'tnc_test_slack_webhook',
+                    webhook_url: webhookUrl,
+                    nonce: '<?php echo wp_create_nonce('tnc_test_slack_webhook'); ?>'
+                }, function(response) {
+                    if (response.success) {
+                        $result.html('<span style="color: #46b450;">✓ ' + response.data.message + '</span>');
+                    } else {
+                        $result.html('<span style="color: #dc3232;">✗ ' + response.data.message + '</span>');
+                    }
+                }).fail(function() {
+                    $result.html('<span style="color: #dc3232;">✗ Request failed</span>');
+                }).always(function() {
+                    $button.prop('disabled', false).text('Test Webhook');
+                });
+            });
+        });
+        </script>
         <?php
+    }
+
+    /**
+     * AJAX handler for testing Slack webhook
+     */
+    public function ajax_test_slack_webhook() {
+        // Verify nonce
+        if (!wp_verify_nonce($_POST['nonce'] ?? '', 'tnc_test_slack_webhook')) {
+            wp_send_json_error(array('message' => 'Invalid nonce'));
+        }
+
+        // Check permissions
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Permission denied'));
+        }
+
+        // Get and validate webhook URL
+        $webhook_url = sanitize_url($_POST['webhook_url'] ?? '');
+        if (empty($webhook_url)) {
+            wp_send_json_error(array('message' => 'No webhook URL provided'));
+        }
+
+        // Temporarily store the URL for testing
+        TNC_Slack_Alerts::store_webhook_url($webhook_url);
+
+        // Run the test
+        $result = TNC_Slack_Alerts::test_webhook();
+
+        if ($result['success']) {
+            wp_send_json_success(array('message' => $result['message']));
+        } else {
+            wp_send_json_error(array('message' => $result['message']));
+        }
     }
 }

@@ -5,13 +5,13 @@
  * @package           TNCTOOLBOX
  * @author            The Network Crew Pty Ltd (Merlot Digital)
  * @license           gplv3
- * @version           2.1.1
+ * @version           2.1.2
  *
  * @wordpress-plugin
  * Plugin Name:       TNC Toolbox: Web Performance
  * Plugin URI:        https://merlot.digital
  * Description:       Designed for ea-NGINX (Cache/Proxy) on cPanel+WHM. Now with selective cache purging support!
- * Version:           2.1.1
+ * Version:           2.1.2
  * Author:            The Network Crew Pty Ltd (Merlot Digital)
  * Author URI:        https://tnc.works
  * Domain Path:       /locale
@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) exit;
 define('TNCTOOLBOX_NAME', 'TNC Toolbox');
 
 // Plugin version
-define('TNCTOOLBOX_VERSION', '2.1.0');
+define('TNCTOOLBOX_VERSION', '2.1.2');
 
 // Plugin Root File
 define('TNCTOOLBOX_PLUGIN_FILE', __FILE__);
@@ -48,6 +48,7 @@ require_once TNCTOOLBOX_PLUGIN_DIR . 'core/core.php';
 require_once TNCTOOLBOX_PLUGIN_DIR . 'core/settings.php';
 require_once TNCTOOLBOX_PLUGIN_DIR . 'vendor/cpanel-uapi.php';
 require_once TNCTOOLBOX_PLUGIN_DIR . 'vendor/cache-purge.php';
+require_once TNCTOOLBOX_PLUGIN_DIR . 'vendor/alerts-slack.php';
 
 /**
  * Main plugin class for initialisation and hooks

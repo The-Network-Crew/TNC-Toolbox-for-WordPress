@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [2.1.2] - 2026-01-13
+
+### 🚀 Feature
+- **Slack Alerts for Mail Failures**: Receive Slack notifications when `wp_mail` fails
+  - New "Slack Webhook URL" field in plugin settings
+  - Alerts include site name, recipient, subject, and error details
+  - Uses WordPress `wp_mail_failed` hook for reliable detection
+
 ## [2.1.1] - 2026-01-10
 
 ### 🐛 Bug Fix

@@ -5,7 +5,7 @@ Donate link:
 Contributors:
 Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
 Tested up to: 6.9
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -151,6 +151,9 @@ On every website running the plugin, check that:
 _(* Change to main plugin file name may result in deactivation)_
 
 == Changelog ==
+
+= 2.1.2: Jan 13, 2026 =
+* Feature: Slack alerts when wp_mail fails (Webhook field)
 
 = 2.1.1: Jan 10, 2026 =
 * Bug Fix: Fix false positive cache-purge module detection

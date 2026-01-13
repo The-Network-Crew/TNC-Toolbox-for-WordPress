@@ -13,6 +13,7 @@ https://wordpress.org/plugins/tnc-toolbox
 - For any action, redirects you back to the page you requested it from
 - Shows you whether or not the API is working via diagnostic quota info
 - Selective cache purging with `ea-nginx-cache-purge` module (optional)
+- Slack alert (via Webhook) if WordPress fails to send an email to you
 
 ## 🖥️ (PLUGIN) System Requirements
 
