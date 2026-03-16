@@ -5,6 +5,10 @@ https://wordpress.org/plugins/tnc-toolbox
 > [!TIP]
 > **Will expand to include other features as requested by community & clients!**
 
+## ✨ Features
+
+- **Multi-Stack Support**: ea-NGINX (cPanel/WHM) and LiteSpeed (OpenLS/Enterprise)
+- **Auto-Detection**: Automatically detects your web server and configures appropriately
 - Allows you to purge the EA-NGINX User Cache from within WP
 - Automatically purges the cache when a post or page is updated
 - Does the same when the WP Core has been successfully upgraded :)
@@ -14,8 +18,11 @@ https://wordpress.org/plugins/tnc-toolbox
 - Shows you whether or not the API is working via diagnostic quota info
 - Selective cache purging with `ea-nginx-cache-purge` module (optional)
 - Slack alert (via Webhook) if WordPress fails to send an email to you
+- **LiteSpeed**: Recommends LiteSpeed Cache plugin for optimal performance
 
 ## 🖥️ (PLUGIN) System Requirements
+
+### For NGINX Stack (cPanel/WHM)
 
 > [!IMPORTANT]  
 > EA-NGINX (Reverse Proxy) by cPanel is supported, not "old school" implementations.
@@ -24,6 +31,13 @@ https://wordpress.org/plugins/tnc-toolbox
 
 - cPanel API Key, cPanel Username & Server Hostname needed in Settings
 - Hosting Server must run cPanel+WHM, with the ea-NGINX & Apache stack!
+
+### For LiteSpeed Stack (OpenLiteSpeed/Enterprise)
+
+- Works with DirectAdmin, CyberPanel, and other LiteSpeed-based control panels
+- Automatically detects LiteSpeed server and switches stack configuration
+- Recommends installing the [LiteSpeed Cache plugin](https://wordpress.org/plugins/litespeed-cache/)
+- See [LiteSpeed Cache documentation](https://docs.openlitespeed.org/config/lscache/) for configuration
 
 ### 🔨 (HOLE PUNCH) Selective Purging how-to
 
@@ -47,7 +61,7 @@ We'd like to say a huge thank-you to Danila (GitHub: dvershinin) for this contri
 2. Click "Install" for the resulting plugin (this one)
 3. Once installed, click "Activate" to make it live
 4. Done! Head to Settings > TNC Toolbox for config
-5. Configure your API Key, Username & Hostname
+5. Configure your Web Stack and relevant settings
 
 ## 🛠️ (DEPLOY) Loading it onto all WP sites
 
@@ -55,7 +69,7 @@ Use `WP-CLI` to install **tnc-toolbox** for all relevant accounts.
 
 This repo includes scripts for server-wide deploying & updating.
 
-Note: You will need to configure UAPI creds per-website afterwards.
+Note: You will need to configure UAPI creds per-website afterwards (NGINX stack).
 
 ## ♻️ (UPDATE) v1 to v2.x.x Overhaul
 

@@ -44,6 +44,38 @@ class TNC_Core {
         
         // Register capability-dependent hooks
         add_action('init', array($this, 'add_capability_dependent_hooks'));
+
+        // Auto-detect web stack on init
+        add_action('init', array($this, 'auto_detect_web_stack'));
+    }
+
+    /**
+     * Auto-detect web stack and switch if necessary
+     *
+     * Only runs once per day to avoid repeated checks.
+     */
+    public function auto_detect_web_stack() {
+        // Only check once per day
+        $last_check = get_transient('tnc_web_stack_check');
+        if ($last_check) {
+            return;
+        }
+
+        $result = TNC_Detection::auto_detect_and_switch_stack();
+        if ($result) {
+            // Log the auto-switch
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log(sprintf(
+                    'TNC Toolbox: Auto-switched web stack from %s to %s (detected: %s)',
+                    $result['previous'],
+                    $result['switched_to'],
+                    $result['detected']
+                ));
+            }
+        }
+
+        // Set transient for 24 hours
+        set_transient('tnc_web_stack_check', true, DAY_IN_SECONDS);
     }
 
     /**
@@ -57,23 +89,62 @@ class TNC_Core {
         add_action('admin_enqueue_scripts', array($this, 'enqueue_custom_css'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_custom_css'));
         add_action('admin_bar_menu', array($this, 'add_parent_menu_entry'), 99);
-        add_action('admin_bar_menu', array($this, 'add_cache_purge_button'), 100);
-        add_action('admin_bar_menu', array($this, 'add_purge_this_page_button'), 101);
-        add_action('admin_bar_menu', array($this, 'add_cache_purge_status'), 105);
 
-        // Cache purge actions
-        add_action('admin_post_nginx_cache_purge', array($this, 'nginx_cache_purge'));
-        add_action('admin_post_nginx_purge_this_page', array($this, 'nginx_purge_this_page'));
-        add_action('post_updated', array($this, 'purge_cache_on_update'), 10, 3);
-        add_action('transition_post_status', array($this, 'purge_cache_on_transition'), 10, 3);
-        add_action('_core_updated_successfully', function() { TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache', [], true); });
+        // Only add NGINX-specific admin bar items if not using LiteSpeed
+        if (!TNC_Detection::is_litespeed_stack()) {
+            add_action('admin_bar_menu', array($this, 'add_cache_purge_button'), 100);
+            add_action('admin_bar_menu', array($this, 'add_purge_this_page_button'), 101);
+            add_action('admin_bar_menu', array($this, 'add_cache_purge_status'), 105);
+
+            // Cache purge actions (NGINX/cPanel only)
+            add_action('admin_post_nginx_cache_purge', array($this, 'nginx_cache_purge'));
+            add_action('admin_post_nginx_purge_this_page', array($this, 'nginx_purge_this_page'));
+            add_action('post_updated', array($this, 'purge_cache_on_update'), 10, 3);
+            add_action('transition_post_status', array($this, 'purge_cache_on_transition'), 10, 3);
+            add_action('_core_updated_successfully', function() { TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache', [], true); });
+
+            // ACF Save (#24)
+            if (has_action('acf/options_page/save') === true) {
+                add_action('acf/options_page/save', function() { TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache', [], true); }, 10, 3);
+            }
+        } else {
+            // LiteSpeed stack - add settings link only
+            add_action('admin_bar_menu', array($this, 'add_litespeed_status'), 100);
+        }
 
         // Notices (Admin GUI)
         add_action('admin_notices', array($this, 'display_admin_notices'));
+    }
 
-        // ACF Save (#24)
-        if (has_action('acf/options_page/save') === true) {
-            add_action('acf/options_page/save', function() { TNC_cPanel_UAPI::make_api_request('NginxCaching/clear_cache', [], true); }, 10, 3);
+    /**
+     * Add LiteSpeed stack status to admin bar
+     */
+    public function add_litespeed_status($wp_admin_bar) {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        $wp_admin_bar->add_node(array(
+            'id' => 'tnc_litespeed_status',
+            'parent' => 'tnc_parent_menu_entry',
+            'title' => '<span style="color: #46b450; font-size: 11px;">🚀 LiteSpeed Stack</span>',
+            'href' => admin_url('options-general.php?page=tnc-toolbox'),
+            'meta' => array(
+                'title' => 'Using LiteSpeed stack - cache managed by LiteSpeed Cache plugin'
+            )
+        ));
+
+        // Check if LiteSpeed Cache plugin is active
+        if (!is_plugin_active('litespeed-cache/litespeed-cache.php')) {
+            $wp_admin_bar->add_node(array(
+                'id' => 'tnc_litespeed_notice',
+                'parent' => 'tnc_parent_menu_entry',
+                'title' => '<span style="color: #d63638; font-size: 11px;">⚠ Install LSCache Plugin</span>',
+                'href' => admin_url('plugin-install.php?s=litespeed-cache&tab=search&type=term'),
+                'meta' => array(
+                    'title' => 'Install the LiteSpeed Cache plugin for optimal performance'
+                )
+            ));
         }
     }
 
@@ -81,6 +152,11 @@ class TNC_Core {
      * Register capability dependent hooks
      */
     public function add_capability_dependent_hooks() {
+        // Skip NGINX cache on/off controls for LiteSpeed stack
+        if (TNC_Detection::is_litespeed_stack()) {
+            return;
+        }
+
         if (current_user_can('manage_options')) {
             add_action('admin_bar_menu', array($this, 'add_cache_off_button'), 100);
             add_action('admin_post_nginx_cache_off', array($this, 'nginx_cache_off'));
@@ -417,10 +493,16 @@ class TNC_Core {
      *
      * Uses selective purging via nginx-module-cache-purge when available,
      * falls back to full cache clear via cPanel UAPI otherwise.
+     * No-op for LiteSpeed stack (handled by LSCache plugin).
      *
      * @param int $post_id Post ID to purge cache for.
      */
     private function smart_purge_for_post($post_id) {
+        // LiteSpeed stack - cache managed by LSCache plugin
+        if (TNC_Detection::is_litespeed_stack()) {
+            return;
+        }
+
         // Check if selective purging is enabled
         if (TNC_Cache_Purge::is_enabled()) {
             $result = TNC_Cache_Purge::purge_post($post_id);
@@ -442,10 +524,19 @@ class TNC_Core {
      * Perform a full cache purge.
      *
      * Tries selective purge wildcard first, falls back to cPanel UAPI.
+     * For LiteSpeed stack, this is a no-op (handled by LSCache plugin).
      *
      * @return array Result array with success and message.
      */
     public static function full_cache_purge() {
+        // LiteSpeed stack - cache managed by LSCache plugin
+        if (TNC_Detection::is_litespeed_stack()) {
+            return array(
+                'success' => true,
+                'message' => 'LiteSpeed stack - cache managed by LiteSpeed Cache plugin'
+            );
+        }
+
         // Try selective purge wildcard if enabled
         if (TNC_Cache_Purge::is_enabled()) {
             $result = TNC_Cache_Purge::purge_all();
@@ -469,7 +560,7 @@ class TNC_Core {
                 printf(
                     '<div class="notice notice-%s is-dismissible"><p>%s</p></div>',
                     esc_attr($type),
-                    esc_html($message)
+                    wp_kses_post($message)
                 );
 
                 // Clear the transient after displaying

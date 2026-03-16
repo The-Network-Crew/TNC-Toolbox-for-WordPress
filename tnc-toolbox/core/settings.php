@@ -123,7 +123,11 @@ class TNC_Settings {
      * Save updated settings to database and test the connection
      */
     private function save_settings() {
-        // Sanitise inputs
+        // Web stack selection
+        $web_stack = sanitize_text_field($_POST['tnc_web_stack'] ?? 'nginx');
+        TNC_Detection::set_web_stack($web_stack);
+
+        // Sanitise inputs (always save these to preserve credentials)
         $api_key = sanitize_text_field($_POST['tnc_toolbox_api_key'] ?? '');
         $username = sanitize_text_field($_POST['tnc_toolbox_username'] ?? '');
         $hostname = sanitize_text_field($_POST['tnc_toolbox_server_hostname'] ?? '');
@@ -136,32 +140,41 @@ class TNC_Settings {
         // Save Slack webhook URL
         TNC_Slack_Alerts::store_webhook_url($slack_webhook);
 
-        // Try to save the configuration even if empty to ensure options exist
+        // Always save cPanel config (preserves credentials when switching stacks)
         TNC_cPanel_UAPI::store_config($username, $api_key, $hostname);
 
-        // Test connection if we have all required fields
-        if (!empty($hostname) && !empty($username) && !empty($api_key)) {
-            try {
-                $test_result = TNC_cPanel_UAPI::test_connection();
-                $message = $test_result['message'];
-                if ($selective_purge_enabled && $test_result['success']) {
-                    $message .= ' Selective cache purging enabled.';
+        // Handle based on web stack type
+        if (TNC_Detection::is_litespeed_stack()) {
+            // LiteSpeed stack - no cPanel connection needed
+            TNC_Core::set_notice(
+                'Settings saved. Using LiteSpeed stack - please install the <a href="https://wordpress.org/plugins/litespeed-cache/" target="_blank">LiteSpeed Cache plugin</a> for optimal performance.',
+                'success'
+            );
+        } else {
+            // Test connection if we have all required fields
+            if (!empty($hostname) && !empty($username) && !empty($api_key)) {
+                try {
+                    $test_result = TNC_cPanel_UAPI::test_connection();
+                    $message = $test_result['message'];
+                    if ($selective_purge_enabled && $test_result['success']) {
+                        $message .= ' Selective cache purging enabled.';
+                    }
+                    TNC_Core::set_notice(
+                        $message,
+                        $test_result['success'] ? 'success' : 'error'
+                    );
+                } catch (Exception $e) {
+                    TNC_Core::set_notice(
+                        'Connection test failed: ' . $e->getMessage(),
+                        'error'
+                    );
                 }
+            } else {
                 TNC_Core::set_notice(
-                    $message,
-                    $test_result['success'] ? 'success' : 'error'
-                );
-            } catch (Exception $e) {
-                TNC_Core::set_notice(
-                    'Connection test failed: ' . $e->getMessage(),
+                    'Please fill in all cPanel API fields to enable cache management.',
                     'error'
                 );
             }
-        } else {
-            TNC_Core::set_notice(
-                'Please fill in all cPanel API fields to enable cache management.',
-                'error'
-            );
         }
     }
 
@@ -170,12 +183,32 @@ class TNC_Settings {
      */
     public function render_settings_page() {
         $stored_config = TNC_cPanel_UAPI::get_config();
+        $web_stack = TNC_Detection::get_web_stack();
+        $detected_server = TNC_Detection::detect_web_server();
+        $is_litespeed = TNC_Detection::is_litespeed_stack();
+
+        // Check for auto-detection mismatch and notify
+        $auto_switch = TNC_Detection::auto_detect_and_switch_stack();
+        if ($auto_switch) {
+            $web_stack = $auto_switch['switched_to']; // Update for display
+            $is_litespeed = true;
+        }
         ?>
         <div class="wrap">
             <div class="tnc-toolbox-header">
                 <h1><?php echo esc_html(get_admin_page_title()) . " v" . TNCTOOLBOX_VERSION; ?> (by <a href="https://tnc.works" target="_blank">TNC</a> & <a href="https://merlot.digital" target="_blank">Co.</a>)</h1>
-                <p><strong>Configure your cPanel UAPI settings to enable NGINX Cache management.</strong><br>Note: To use Selective Purging, module install & config is required. See <a href="https://github.com/The-Network-Crew/TNC-Toolbox-for-WordPress" target="_blank">README</a>.</p>
+                <p><strong>Configure your web stack settings. Supports ea-NGINX (cPanel) and LiteSpeed (OpenLiteSpeed/Enterprise).</strong><br>
+                <?php if ($detected_server): ?>
+                    Detected server: <code><?php echo esc_html(ucfirst($detected_server)); ?></code>
+                <?php endif; ?>
+                </p>
             </div>
+
+            <?php if ($auto_switch): ?>
+            <div class="notice notice-info is-dismissible">
+                <p><strong>Web stack auto-switched!</strong> Detected LiteSpeed server but was configured for NGINX. Automatically switched to LiteSpeed stack. Your cPanel credentials are preserved if you need to switch back.</p>
+            </div>
+            <?php endif; ?>
 
             <div class="tnc-toolbox-form">
                 <form method="post" action="">
@@ -184,56 +217,96 @@ class TNC_Settings {
                     <table class="form-table" role="presentation">
                         <tr>
                             <th scope="row">
-                                <label for="tnc_toolbox_api_key">cPanel API Token</label>
+                                <label for="tnc_web_stack">Web Stack</label>
                                 <p class="description">
-                                    Key only, not the name. <br><a href="https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/" target="_blank">View documentation</a>.
+                                    Select your hosting environment.
                                 </p>
                             </th>
                             <td>
-                                <input type="text" id="tnc_toolbox_api_key" name="tnc_toolbox_api_key"
-                                    value="<?php echo esc_attr($stored_config['api_key']); ?>"
-                                    placeholder="Enter your cPanel API token"
-                                    class="regular-text" />
+                                <select id="tnc_web_stack" name="tnc_web_stack" class="regular-text">
+                                    <option value="nginx" <?php selected($web_stack, 'nginx'); ?>>
+                                        ea-NGINX (cPanel/WHM)
+                                    </option>
+                                    <option value="litespeed" <?php selected($web_stack, 'litespeed'); ?>>
+                                        LiteSpeed (OpenLS/Enterprise)
+                                    </option>
+                                </select>
+                                <?php if ($detected_server && $detected_server !== $web_stack): ?>
+                                    <p class="description" style="color: #d63638;">
+                                        ⚠ Detected <strong><?php echo esc_html(ucfirst($detected_server)); ?></strong> but configured for <strong><?php echo esc_html(ucfirst($web_stack)); ?></strong>
+                                    </p>
+                                <?php endif; ?>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row">
-                                <label for="tnc_toolbox_username">cPanel Username</label>
-                                <p class="description">Plain-text username. <br>Not the API user.</p>
-                            </th>
-                            <td>
-                                <input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username"
-                                    value="<?php echo esc_attr($stored_config['username']); ?>"
-                                    placeholder="Enter your cPanel username"
-                                    class="regular-text" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <label for="tnc_toolbox_server_hostname">Server Hostname</label>
-                                <p class="description">FQDN of Server, like:<br><code>server.example.com</code></p>
-                            </th>
-                            <td>
-                                <input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname"
-                                    value="<?php echo esc_attr($stored_config['hostname']); ?>"
-                                    placeholder="Enter your server hostname"
-                                    class="regular-text" />
-                            </td>
-                        </tr>
-                        <?php $status = TNC_Cache_Purge::get_status( true ); // Force recheck on settings page ?>
-                        <tr>
-                            <th scope="row">
-                                <label for="tnc_selective_purge">Selective Purging?</label>
-                                <p class="description">Requires Module & Config:<br><code>ea-nginx-cache-purge</code></p>
-                            </th>
-                            <td>
-                                <label>
-                                    <input type="checkbox" id="tnc_selective_purge" name="tnc_selective_purge"
-                                           <?php checked($status['enabled']); ?> />
-                                    Only purge affected URLs when content changes.<br>If disabled, the entire user cache is purged instead.
-                                </label>
-                            </td>
-                        </tr>
+                    </table>
+
+                    <!-- LiteSpeed Stack Notice -->
+                    <div id="tnc-litespeed-notice" class="tnc-toolbox-status" style="<?php echo $is_litespeed ? '' : 'display: none;'; ?> background: #e7f3ff; border-left-color: #0073aa;">
+                        <h3 style="margin-top: 0;">🚀 LiteSpeed Stack</h3>
+                        <p>For LiteSpeed servers (OpenLiteSpeed or LiteSpeed Enterprise), we recommend using the official <strong>LiteSpeed Cache</strong> plugin for optimal performance.</p>
+                        <p><a href="https://wordpress.org/plugins/litespeed-cache/" target="_blank" class="button button-primary">Install LiteSpeed Cache Plugin</a></p>
+                        <p><small>The LSCache plugin provides built-in cache management tailored for LiteSpeed servers. See <a href="https://docs.openlitespeed.org/config/lscache/" target="_blank">LiteSpeed Cache documentation</a> for configuration details.</small></p>
+                    </div>
+
+                    <!-- NGINX Stack Settings (cPanel UAPI) -->
+                    <div id="tnc-nginx-settings" style="<?php echo $is_litespeed ? 'display: none;' : ''; ?>">
+                        <table class="form-table" role="presentation">
+                            <tr>
+                                <th scope="row">
+                                    <label for="tnc_toolbox_api_key">cPanel API Token</label>
+                                    <p class="description">
+                                        Key only, not the name. <br><a href="https://docs.cpanel.net/cpanel/security/manage-api-tokens-in-cpanel/" target="_blank">View documentation</a>.
+                                    </p>
+                                </th>
+                                <td>
+                                    <input type="text" id="tnc_toolbox_api_key" name="tnc_toolbox_api_key"
+                                        value="<?php echo esc_attr($stored_config['api_key']); ?>"
+                                        placeholder="Enter your cPanel API token"
+                                        class="regular-text" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label for="tnc_toolbox_username">cPanel Username</label>
+                                    <p class="description">Plain-text username. <br>Not the API user.</p>
+                                </th>
+                                <td>
+                                    <input type="text" id="tnc_toolbox_username" name="tnc_toolbox_username"
+                                        value="<?php echo esc_attr($stored_config['username']); ?>"
+                                        placeholder="Enter your cPanel username"
+                                        class="regular-text" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label for="tnc_toolbox_server_hostname">Server Hostname</label>
+                                    <p class="description">FQDN of Server, like:<br><code>server.example.com</code></p>
+                                </th>
+                                <td>
+                                    <input type="text" id="tnc_toolbox_server_hostname" name="tnc_toolbox_server_hostname"
+                                        value="<?php echo esc_attr($stored_config['hostname']); ?>"
+                                        placeholder="Enter your server hostname"
+                                        class="regular-text" />
+                                </td>
+                            </tr>
+                            <?php $status = TNC_Cache_Purge::get_status( true ); // Force recheck on settings page ?>
+                            <tr>
+                                <th scope="row">
+                                    <label for="tnc_selective_purge">Selective Purging?</label>
+                                    <p class="description">Requires Module & Config:<br><code>ea-nginx-cache-purge</code></p>
+                                </th>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" id="tnc_selective_purge" name="tnc_selective_purge"
+                                               <?php checked($status['enabled']); ?> />
+                                        Only purge affected URLs when content changes.<br>If disabled, the entire user cache is purged instead.
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <table class="form-table" role="presentation">
                         <tr>
                             <th scope="row">
                                 <label for="tnc_toolbox_slack_webhook">Slack Webhook URL</label>
@@ -253,12 +326,12 @@ class TNC_Settings {
 
                     <p class="submit">
                         <input type="submit" name="submit_tnc_toolbox_settings" class="button button-primary"
-                               value="<?php echo esc_attr__('Save Settings & Test!'); ?>" />
+                               value="<?php echo esc_attr__('Save Settings'); ?>" />
                     </p>
 
                 </form>
 
-                <?php if (!empty($stored_config['hostname']) && !empty($stored_config['username']) && !empty($stored_config['api_key'])): ?>
+                <?php if (!$is_litespeed && !empty($stored_config['hostname']) && !empty($stored_config['username']) && !empty($stored_config['api_key'])): ?>
                     <?php
                     $quota = TNC_cPanel_UAPI::make_api_request('Quota/get_quota_info');
                     if ($quota['success'] && isset($quota['data']['megabytes_used'])):
@@ -276,6 +349,21 @@ class TNC_Settings {
         </div>
         <script type="text/javascript">
         jQuery(document).ready(function($) {
+            // Toggle visibility based on web stack selection
+            function toggleStackSettings() {
+                var stack = $('#tnc_web_stack').val();
+                if (stack === 'litespeed') {
+                    $('#tnc-litespeed-notice').show();
+                    $('#tnc-nginx-settings').hide();
+                } else {
+                    $('#tnc-litespeed-notice').hide();
+                    $('#tnc-nginx-settings').show();
+                }
+            }
+
+            $('#tnc_web_stack').on('change', toggleStackSettings);
+            toggleStackSettings(); // Initial state
+
             $('#tnc_test_slack_webhook').on('click', function() {
                 var $button = $(this);
                 var $result = $('#tnc_slack_test_result');

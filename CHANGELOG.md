@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
+## [2.1.3] - 2026-03-16
+
+### 🚀 Feature
+- **Multi-Stack Support**: Supports ea-NGINX (cPanel) & LiteSpeed stacks
+
+### 💅 Polish
+- **Auto-Detection**: Automatically detects LiteSpeed & switches configs
+- **Credential Preservation**: UAPI credentials preserved when switching
+
 ## [2.1.2] - 2026-01-13
 
 ### 🚀 Feature

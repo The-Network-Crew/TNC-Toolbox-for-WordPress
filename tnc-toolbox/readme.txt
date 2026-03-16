@@ -3,22 +3,22 @@ Author URI: https://tnc.works
 Plugin URI: https://merlot.digital
 Donate link:
 Contributors:
-Tags: NGINX, Cache Purge, Web Performance, Automatic Purge, Freeware
+Tags: NGINX, LiteSpeed, Cache Purge, Web Performance, Automatic Purge, Freeware
 Tested up to: 6.9
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Designed for ea-NGINX (Cache/Proxy) on cPanel+WHM. Made to help you fly online! 🚀
+Multi-stack caching for WordPress: ea-NGINX (cPanel) and LiteSpeed (OpenLS/Enterprise). Auto-detects web server!
 
 
 == Description ==
 
-TNC Toolbox aims to enhance your WordPress experience with NGINX-on-cPanel (ea-nginx).
+TNC Toolbox enhances your WordPress experience with multi-stack caching support.
 
 **Built for our Managed Server clients, we've open-sourced it so others can enjoy it too!**
 
-With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the plugin aims to help with Website Management, Performance and Security.
+Now supporting both **ea-NGINX (cPanel/WHM)** and **LiteSpeed (OpenLiteSpeed/Enterprise)** web stacks, with automatic server detection!
 
 > ❤️ **FOSS by [The Network Crew Pty Ltd](https://tnc.works) (TNC) for [Merlot Digital](https://merlot.digital) & the world.** ❤️
 
@@ -26,6 +26,8 @@ With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the
 
 **At the moment, TNC Toolbox:**
 
+- **Multi-Stack Support**: ea-NGINX (cPanel) and LiteSpeed (OpenLS/Enterprise)
+- **Auto-Detection**: Automatically detects your web server and configures appropriately
 - Allows you to enable, disable and purge the NGINX User Cache
 - Purges the NGINX Cache magically on post/page publish/update!
 - Also purges the Cache when the WP Core is successfully updated
@@ -34,6 +36,7 @@ With a heavy focus on the Apache + NGINX as Reverse Caching Proxy web stack, the
 - Shows you the status of cP UAPI via disk usage info
 - Purge when any ACF config options are saved
 - Supports scheduled post publishing!
+- **LiteSpeed**: Recommends LiteSpeed Cache plugin for optimal performance
 
 **Eager for even more capabilities?**
 
@@ -43,12 +46,16 @@ _Please let us know your ideas on [GitHub](https://github.com/The-Network-Crew/T
 
 == Caching Deployments ==
 
-**Caching ideals:**
-- Don't forget, ea-NGINX (reverse proxy caching) is meant to be 2nd-level
-- ie. Make sure your WP site also has on-site caching, like WP Super Cache
-- You can go further with caching, and should: like browser-caching assets!
+**For NGINX Stack (cPanel/WHM):**
+- ea-NGINX (reverse proxy caching) is meant to be 2nd-level
+- Make sure your WP site also has on-site caching, like WP Super Cache
+- You can go further with caching: browser-caching assets!
 
-**3-layer Cache:**
+**For LiteSpeed Stack:**
+- Use the [LiteSpeed Cache plugin](https://wordpress.org/plugins/litespeed-cache/)
+- See [LiteSpeed Cache documentation](https://docs.openlitespeed.org/config/lscache/) for configuration
+
+**3-layer Cache (NGINX):**
 1. NGINX Caching Proxy (ahead of Apache)
 2. WP Super Cache, WP Rocket, etc on-site
 3. htaccess/etc rules for Browser Caching
@@ -151,6 +158,11 @@ On every website running the plugin, check that:
 _(* Change to main plugin file name may result in deactivation)_
 
 == Changelog ==
+
+= 2.1.3: Mar 16, 2026 =
+* **Multi-Stack**: Now supports ea-NGINX (cPanel) & LiteSpeed web stacks
+* **Auto-Detection**: Automatically detects LiteSpeed & switches config
+* **Credential Preservation**: UAPI credentials preserved when switching
 
 = 2.1.2: Jan 13, 2026 =
 * Feature: Slack alerts when wp_mail fails (Webhook field)
