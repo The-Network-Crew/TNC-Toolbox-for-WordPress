@@ -5,7 +5,7 @@ Donate link:
 Contributors:
 Tags: NGINX, LiteSpeed, Cache Purge, Web Performance, Automatic Purge, Freeware
 Tested up to: 6.9
-Stable tag: 2.1.3
+Stable tag: 2.1.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -159,7 +159,12 @@ _(* Change to main plugin file name may result in deactivation)_
 
 == Changelog ==
 
-= 2.1.3: Mar 16, 2026 =
+= 2.1.4: Mar 27, 2026 =
+* Auto-switch: Bidirectional, rather than "to LSWS only"
+* Auto-switch: Don't switch if user has overridden stack
+* Auto-switch: Refine detection to Server identifier only
+
+= 2.1.3: Mar 23, 2026 =
 * **Multi-Stack**: Now supports ea-NGINX (cPanel) & LiteSpeed web stacks
 * **Auto-Detection**: Automatically detects LiteSpeed & switches config
 * **Credential Preservation**: UAPI credentials preserved when switching

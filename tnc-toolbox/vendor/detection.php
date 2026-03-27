@@ -30,6 +30,11 @@ class TNC_Detection {
 	const WEB_STACK_KEY = 'tnc_web_stack';
 
 	/**
+	 * Option name to track if user has explicitly chosen a stack
+	 */
+	const STACK_SET_BY_USER_KEY = 'tnc_web_stack_user_set';
+
+	/**
 	 * Web stack constants
 	 */
 	const STACK_NGINX = 'nginx';
@@ -52,54 +57,56 @@ class TNC_Detection {
 	/**
 	 * Set the web stack type
 	 *
-	 * @param string $stack Stack type ('nginx' or 'litespeed')
+	 * @param string $stack    Stack type ('nginx' or 'litespeed')
+	 * @param bool   $by_user  Whether this was explicitly set by the user via settings
 	 * @return bool True on success
 	 */
-	public static function set_web_stack( $stack ) {
+	public static function set_web_stack( $stack, $by_user = false ) {
 		$valid_stacks = array( self::STACK_NGINX, self::STACK_LITESPEED );
 		if ( ! in_array( $stack, $valid_stacks, true ) ) {
 			$stack = self::STACK_NGINX;
+		}
+		if ( $by_user ) {
+			update_option( self::STACK_SET_BY_USER_KEY, true );
 		}
 		return update_option( self::WEB_STACK_KEY, $stack );
 	}
 
 	/**
+	 * Check whether the user has ever explicitly saved a stack choice
+	 *
+	 * @return bool True if the user has explicitly chosen a stack
+	 */
+	public static function is_user_configured() {
+		return (bool) get_option( self::STACK_SET_BY_USER_KEY, false );
+	}
+
+	/**
 	 * Detect current web server software
 	 *
-	 * Checks multiple indicators for LiteSpeed since OpenLiteSpeed
-	 * may report as Apache in SERVER_SOFTWARE while using LSAPI for PHP.
+	 * Uses SERVER_SOFTWARE header only — this is a reliable indicator.
+	 *
+	 * - LiteSpeed/OpenLiteSpeed: SERVER_SOFTWARE contains "LiteSpeed"
+	 * - ea-NGINX (cPanel): SERVER_SOFTWARE is "Apache" (PHP runs under
+	 *   Apache behind the NGINX reverse proxy — this is expected)
 	 *
 	 * @return string|false Returns 'litespeed', 'nginx', 'apache', or false if unknown
 	 */
 	public static function detect_web_server() {
 		$server_software = isset( $_SERVER['SERVER_SOFTWARE'] ) ? strtolower( $_SERVER['SERVER_SOFTWARE'] ) : '';
 
-		// Check SERVER_SOFTWARE for litespeed first
+		// LiteSpeed/OpenLiteSpeed identify themselves in SERVER_SOFTWARE
 		if ( strpos( $server_software, 'litespeed' ) !== false ) {
 			return 'litespeed';
 		}
 
-		// LiteSpeed SAPI check - php_sapi_name() returns 'litespeed' when using LSPHP/LSAPI
-		// This is the most reliable check for OpenLiteSpeed
-		$sapi_name = strtolower( php_sapi_name() );
-		if ( strpos( $sapi_name, 'litespeed' ) !== false ) {
-			return 'litespeed';
-		}
-
-		// Check for LITESPEED constant (set by LiteSpeed Cache plugin or LSAPI)
-		if ( defined( 'LITESPEED' ) || defined( 'LSCACHE_ADV' ) ) {
-			return 'litespeed';
-		}
-
-		// Check for LiteSpeed-specific server variables
-		if ( isset( $_SERVER['X_LSCACHE'] ) || isset( $_SERVER['HTTP_X_LSCACHE'] ) ) {
-			return 'litespeed';
-		}
-
-		// Now check other servers
+		// NGINX as primary server (not ea-NGINX, which proxies to Apache)
 		if ( strpos( $server_software, 'nginx' ) !== false ) {
 			return 'nginx';
 		}
+
+		// Apache — this also covers ea-NGINX (cPanel) where PHP runs
+		// under Apache behind the NGINX reverse proxy
 		if ( strpos( $server_software, 'apache' ) !== false ) {
 			return 'apache';
 		}
@@ -108,24 +115,46 @@ class TNC_Detection {
 	}
 
 	/**
-	 * Auto-detect and update web stack if mismatched
+	 * Auto-detect and correct web stack configuration
 	 *
-	 * If server is LiteSpeed but config says nginx, auto-switch to litespeed.
-	 * Credentials are preserved - not deleted.
+	 * Only switches automatically if the user has never explicitly saved
+	 * a stack choice. Once a user saves settings, their choice is respected
+	 * and auto-detection becomes advisory only (shown on the settings page).
+	 *
+	 * Handles both directions:
+	 * - LiteSpeed detected + configured nginx → switch to litespeed
+	 * - Non-LiteSpeed detected + configured litespeed → switch back to nginx
+	 *   (fixes sites wrongly auto-switched by earlier buggy detection)
 	 *
 	 * @return array|false Returns change info if stack was auto-switched, false otherwise
 	 */
 	public static function auto_detect_and_switch_stack() {
+		// Never override an explicit user choice
+		if ( self::is_user_configured() ) {
+			return false;
+		}
+
 		$detected   = self::detect_web_server();
 		$configured = self::get_web_stack();
 
-		// If LiteSpeed detected but configured for nginx, auto-switch
+		// LiteSpeed detected but configured for nginx → switch to litespeed
 		if ( $detected === 'litespeed' && $configured === self::STACK_NGINX ) {
-			self::set_web_stack( self::STACK_LITESPEED );
+			self::set_web_stack( self::STACK_LITESPEED, false );
 			return array(
 				'detected'    => $detected,
 				'previous'    => $configured,
 				'switched_to' => self::STACK_LITESPEED,
+			);
+		}
+
+		// Not LiteSpeed but configured as litespeed → switch back to nginx
+		// This corrects sites wrongly auto-switched by earlier detection logic
+		if ( $detected !== 'litespeed' && $configured === self::STACK_LITESPEED ) {
+			self::set_web_stack( self::STACK_NGINX, false );
+			return array(
+				'detected'    => $detected ? $detected : 'unknown',
+				'previous'    => $configured,
+				'switched_to' => self::STACK_NGINX,
 			);
 		}
 
@@ -148,6 +177,38 @@ class TNC_Detection {
 	 */
 	public static function is_nginx_stack() {
 		return self::get_web_stack() === self::STACK_NGINX;
+	}
+
+	/**
+	 * Check if the detected server matches the configured stack
+	 *
+	 * On ea-NGINX (cPanel), PHP runs under Apache behind the NGINX reverse
+	 * proxy, so detection returns 'apache'. This is a known expected mismatch
+	 * and should NOT trigger a warning.
+	 *
+	 * @return bool True if detection and config are compatible
+	 */
+	public static function is_detection_compatible() {
+		$detected   = self::detect_web_server();
+		$configured = self::get_web_stack();
+
+		// No detection = no mismatch to warn about
+		if ( ! $detected ) {
+			return true;
+		}
+
+		// Direct match
+		if ( $detected === $configured ) {
+			return true;
+		}
+
+		// ea-NGINX: PHP reports Apache because it runs behind NGINX reverse proxy
+		// This is expected and not a mismatch
+		if ( $detected === 'apache' && $configured === self::STACK_NGINX ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

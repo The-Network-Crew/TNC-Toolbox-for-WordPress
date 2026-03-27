@@ -123,9 +123,9 @@ class TNC_Settings {
      * Save updated settings to database and test the connection
      */
     private function save_settings() {
-        // Web stack selection
+        // Web stack selection - mark as explicit user choice
         $web_stack = sanitize_text_field($_POST['tnc_web_stack'] ?? 'nginx');
-        TNC_Detection::set_web_stack($web_stack);
+        TNC_Detection::set_web_stack($web_stack, true);
 
         // Sanitise inputs (always save these to preserve credentials)
         $api_key = sanitize_text_field($_POST['tnc_toolbox_api_key'] ?? '');
@@ -186,12 +186,14 @@ class TNC_Settings {
         $web_stack = TNC_Detection::get_web_stack();
         $detected_server = TNC_Detection::detect_web_server();
         $is_litespeed = TNC_Detection::is_litespeed_stack();
+        $is_compatible = TNC_Detection::is_detection_compatible();
 
-        // Check for auto-detection mismatch and notify
+        // Only auto-switch on first run if user has never saved settings
         $auto_switch = TNC_Detection::auto_detect_and_switch_stack();
         if ($auto_switch) {
-            $web_stack = $auto_switch['switched_to']; // Update for display
+            $web_stack = $auto_switch['switched_to'];
             $is_litespeed = true;
+            $is_compatible = true;
         }
         ?>
         <div class="wrap">
@@ -199,14 +201,17 @@ class TNC_Settings {
                 <h1><?php echo esc_html(get_admin_page_title()) . " v" . TNCTOOLBOX_VERSION; ?> (by <a href="https://tnc.works" target="_blank">TNC</a> & <a href="https://merlot.digital" target="_blank">Co.</a>)</h1>
                 <p><strong>Configure your web stack settings. Supports ea-NGINX (cPanel) and LiteSpeed (OpenLiteSpeed/Enterprise).</strong><br>
                 <?php if ($detected_server): ?>
-                    Detected server: <code><?php echo esc_html(ucfirst($detected_server)); ?></code>
+                    Detected Server: <code><?php echo esc_html($detected_server); ?></code>
+                    <?php if ($detected_server === 'apache' && $web_stack === 'nginx'): ?>
+                        <em>(expected for ea-NGINX — PHP runs under Apache behind NGINX reverse proxy)</em>
+                    <?php endif; ?>
                 <?php endif; ?>
                 </p>
             </div>
 
             <?php if ($auto_switch): ?>
             <div class="notice notice-info is-dismissible">
-                <p><strong>Web stack auto-switched!</strong> Detected LiteSpeed server but was configured for NGINX. Automatically switched to LiteSpeed stack. Your cPanel credentials are preserved if you need to switch back.</p>
+                <p><strong>Web stack auto-detected!</strong> LiteSpeed server detected — configured for LiteSpeed stack. You can change this below if needed.</p>
             </div>
             <?php endif; ?>
 
@@ -231,9 +236,9 @@ class TNC_Settings {
                                         LiteSpeed (OpenLS/Enterprise)
                                     </option>
                                 </select>
-                                <?php if ($detected_server && $detected_server !== $web_stack): ?>
+                                <?php if (!$is_compatible): ?>
                                     <p class="description" style="color: #d63638;">
-                                        ⚠ Detected <strong><?php echo esc_html(ucfirst($detected_server)); ?></strong> but configured for <strong><?php echo esc_html(ucfirst($web_stack)); ?></strong>
+                                        ⚠ Detected <strong><?php echo esc_html($detected_server); ?></strong> but configured for <strong><?php echo esc_html(TNC_Detection::get_stack_name($web_stack)); ?></strong>. Please verify your selection.
                                     </p>
                                 <?php endif; ?>
                             </td>

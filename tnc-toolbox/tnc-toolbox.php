@@ -5,13 +5,13 @@
  * @package           TNCTOOLBOX
  * @author            The Network Crew Pty Ltd (Merlot Digital)
  * @license           gplv3
- * @version           2.1.3
+ * @version           2.1.4
  *
  * @wordpress-plugin
  * Plugin Name:       TNC Toolbox: Web Performance
  * Plugin URI:        https://merlot.digital
  * Description:       Multi-stack caching for WordPress: ea-NGINX (cPanel) and LiteSpeed. Auto-detects web server!
- * Version:           2.1.3
+ * Version:           2.1.4
  * Author:            The Network Crew Pty Ltd (Merlot Digital)
  * Author URI:        https://tnc.works
  * Domain Path:       /locale
@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) exit;
 define('TNCTOOLBOX_NAME', 'TNC Toolbox');
 
 // Plugin version
-define('TNCTOOLBOX_VERSION', '2.1.3');
+define('TNCTOOLBOX_VERSION', '2.1.4');
 
 // Plugin Root File
 define('TNCTOOLBOX_PLUGIN_FILE', __FILE__);

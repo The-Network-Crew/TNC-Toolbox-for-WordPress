@@ -50,23 +50,39 @@ class TNC_Core {
     }
 
     /**
-     * Auto-detect web stack and switch if necessary
+     * Auto-detect web stack and correct if needed
      *
-     * Only runs once per day to avoid repeated checks.
+     * Only runs if the user has never explicitly saved a stack choice.
+     * Once the user saves settings, their choice is always respected.
+     *
+     * On plugin update to v2.1.3+, runs immediately to correct sites
+     * that were wrongly auto-switched to LiteSpeed by earlier detection.
      */
     public function auto_detect_web_stack() {
-        // Only check once per day
-        $last_check = get_transient('tnc_web_stack_check');
-        if ($last_check) {
+        // Never override an explicit user choice
+        if (TNC_Detection::is_user_configured()) {
             return;
+        }
+
+        // Run once immediately after update to fix wrongly-switched sites,
+        // then check once per day after that
+        $check_version = get_option('tnc_web_stack_check_version', '');
+        if ($check_version !== TNCTOOLBOX_VERSION) {
+            // Version changed — run detection now and update marker
+            delete_transient('tnc_web_stack_check');
+            update_option('tnc_web_stack_check_version', TNCTOOLBOX_VERSION);
+        } else {
+            $last_check = get_transient('tnc_web_stack_check');
+            if ($last_check) {
+                return;
+            }
         }
 
         $result = TNC_Detection::auto_detect_and_switch_stack();
         if ($result) {
-            // Log the auto-switch
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log(sprintf(
-                    'TNC Toolbox: Auto-switched web stack from %s to %s (detected: %s)',
+                    'TNC Toolbox: Auto-corrected web stack from %s to %s (detected: %s)',
                     $result['previous'],
                     $result['switched_to'],
                     $result['detected']

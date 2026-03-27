@@ -1,7 +1,16 @@
 # Changelog
 All notable changes to TNC Toolbox for WordPress will be documented in this file.
 
-## [2.1.3] - 2026-03-16
+## [2.1.4] - 2026-03-27
+
+### 💅 Polish
+- Auto-switch: Bidirectional, rather than "to LSWS only"
+- Auto-switch: Don't switch if user has overridden stack
+
+### 🐛 Bug Fix
+- Auto-switch: Refine detection to Server identifier only
+
+## [2.1.3] - 2026-03-23
 
 ### 🚀 Feature
 - **Multi-Stack Support**: Supports ea-NGINX (cPanel) & LiteSpeed stacks
